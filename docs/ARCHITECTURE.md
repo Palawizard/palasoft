@@ -18,6 +18,7 @@ src/
                          software rows, download button, mod picker, screenshot gallery,
                          SmartScreen help...)
   assets/software/<slug>/  icon and screenshots of each program, optimised by Astro at build
+public/                  PalaSoft site icons (favicon.svg, apple-touch-icon.png); the same logo is inlined in the header by components/Logo.astro
   server/                glue between Astro and lib/ (catalog instance, entry lookup, responses)
   lib/                   code that does not depend on Astro
     config.ts            environment variables
@@ -81,6 +82,10 @@ Files are never served by this site. `/software/dl/<slug>` answers `302` to the 
 Every program gets a generic page built from the shared components. A program can have its own page instead by adding `src/pages/<slug>.astro`: a static route takes priority over the dynamic one, and the custom page still uses the shared layout so the site keeps one look. This was checked on a build with a temporary `src/pages/timestamper.astro`: `/software/timestamper` served the custom page while `/software/palaclips` kept the generic one.
 
 The download routes are Astro pages without markup rather than endpoints, so that a `404` without body renders `404.astro`. The mod page posts a plain HTML form (`loader` plus `mc-<loader>`) to `/software/dl/<slug>`, which redirects to the matching jar; it works without JavaScript.
+
+On the home page, the other programs alternate between two row layouts, capture on the right then on the left; a program whose first capture is taller than wide gets the compact row.
+
+Motion: only the bubbles drift. The quick download dock and the featured window use `glass-still`, a glass panel without backdrop blur: they sit on the plain sky next to the drifting bubbles, where the blur is invisible but was recomputed on every frame and made the drift stutter. The sun rays are still for the same reason.
 
 When GitHub is down, every page still renders: with a saved copy it shows the saved release details and the date of that copy, without one it shows the programs without release details and the buttons lead to GitHub.
 

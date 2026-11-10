@@ -7,7 +7,7 @@ import ReleaseFacts from './ReleaseFacts.astro';
 import { formatSize } from '../lib/format.ts';
 import SoftwareIcon from './SoftwareIcon.astro';
 
-export type RowLayout = 'overlap' | 'overlap-flip' | 'stacked' | 'compact';
+export type RowLayout = 'overlap' | 'overlap-flip' | 'compact';
 
 interface Props {
   item: SoftwareWithRelease;
@@ -63,8 +63,8 @@ const isMod = entry.data.kind === 'minecraft-mod';
             <Image
               src={screenshot.src}
               alt={screenshot.alt}
-              widths={layout === 'stacked' ? [640, 960, 1280] : [400, 640, 880]}
-              sizes={layout === 'stacked' ? '(min-width: 76rem) 70rem, 92vw' : '(min-width: 64rem) 38rem, 92vw'}
+              widths={[400, 640, 880]}
+              sizes="(min-width: 64rem) 38rem, 92vw"
             />
           </figure>
         ) : (
@@ -173,58 +173,6 @@ const isMod = entry.data.kind === 'minecraft-mod';
     margin: calc(var(--space-8) * -1) 0 calc(var(--space-8) * -1) calc(var(--space-6) * -1);
     transform: perspective(90rem) rotateY(5deg);
     transform-origin: right center;
-  }
-
-  @media (min-width: 56.0625rem) {
-    .stacked {
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      grid-template-areas:
-        'media media'
-        'copy copy';
-      padding-top: var(--space-3);
-    }
-
-    .stacked .row-media {
-      grid-area: media;
-    }
-
-    .stacked .row-copy {
-      grid-area: copy;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      grid-template-areas:
-        'head facts'
-        'tagline actions'
-        'tagline file';
-      align-items: start;
-      column-gap: var(--space-6);
-      width: 100%;
-    }
-
-    .stacked .row-head {
-      grid-area: head;
-    }
-
-    .stacked .row-tagline {
-      grid-area: tagline;
-      max-width: 44ch;
-    }
-
-    .stacked .row-copy > :global(.ticket) {
-      grid-area: facts;
-      align-self: center;
-    }
-
-    .stacked .row-actions {
-      grid-area: actions;
-    }
-
-    .stacked .row-file {
-      grid-area: file;
-    }
-
-    .stacked .row-media .shot {
-      width: 100%;
-    }
   }
 
   .compact {
