@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -18,10 +19,21 @@ const itemClear: SoftwareSource = {
   repo: 'Palawizard/PalasItemClear',
   kind: 'minecraft-mod',
   versionMatrix: 'versions/version-matrix.json',
+  modrinthSlug: 'palas-item-clear',
+  curseforgeId: 123456,
 };
+
+const curseForgeRefusal = readFileSync(
+  new URL('./fixtures/curseforge/mods-search-without-key-403.txt', import.meta.url),
+  'utf8',
+);
 
 const recordedGitHub = vi.fn<typeof fetch>(async (input) => {
   const url = new URL(String(input));
+  if (url.host === 'api.modrinth.test' && url.pathname === '/v2/project/palas-item-clear') {
+    return jsonResponse(readFixture('modrinth/project-palas-item-clear.json'));
+  }
+  if (url.host === 'api.curseforge.test') return new Response(curseForgeRefusal, { status: 403 });
   const releases = /^\/repos\/(Palawizard\/[^/]+)\/releases$/.exec(url.pathname);
   if (releases?.[1] !== undefined) return jsonResponse(releasesFixture(releases[1]));
   if (url.pathname === '/repos/Palawizard/PalasItemClear/contents/versions/version-matrix.json' && url.searchParams.get('ref') === 'v0.1.2') {
@@ -42,8 +54,19 @@ describe('createCatalog', () => {
     await rm(dataDir, { recursive: true, force: true });
   });
 
-  const catalog = (fetchImpl: typeof fetch) =>
-    createCatalog({ ...readConfig({ DATA_DIR: dataDir }), githubApiUrl: 'https://api.example.test' }, { fetch: fetchImpl, onError: () => {} });
+  const catalog = (fetchImpl: typeof fetch, env: Record<string, string> = {}) =>
+    createCatalog(
+      readConfig({
+        DATA_DIR: dataDir,
+        GITHUB_API_URL: 'https://api.example.test',
+        MODRINTH_API_URL: 'https://api.modrinth.test/v2',
+        CURSEFORGE_API_URL: 'https://api.curseforge.test',
+        ...env,
+      }),
+      { fetch: fetchImpl, onError: () => {} },
+    );
+
+  const hosts = (): string[] => recordedGitHub.mock.calls.map((call) => new URL(String(call[0])).host);
 
   it('describes the latest Windows release and its installer', async () => {
     const view = await catalog(recordedGitHub).release(palaclips);
@@ -83,5 +106,43 @@ describe('createCatalog', () => {
       throw new TypeError('fetch failed');
     }).release(itemClear);
     expect(view).toEqual({ state: 'unavailable', historyUrl: 'https://github.com/Palawizard/PalasItemClear/releases' });
+  });
+
+  it('counts the real GitHub downloads of a Windows program', async () => {
+    expect(await catalog(recordedGitHub).downloads(palaclips)).toBe(33);
+    expect(hosts()).not.toContain('api.modrinth.test');
+  });
+
+  it('adds Modrinth to GitHub for the mod and never calls CurseForge without a key', async () => {
+    expect(await catalog(recordedGitHub).downloads(itemClear)).toBe(168 + 4132);
+    expect(hosts()).not.toContain('api.curseforge.test');
+  });
+
+  it('leaves CurseForge out without a trace when it refuses the key', async () => {
+    const onError = vi.fn();
+    const withKey = createCatalog(
+      readConfig({
+        DATA_DIR: dataDir,
+        GITHUB_API_URL: 'https://api.example.test',
+        MODRINTH_API_URL: 'https://api.modrinth.test/v2',
+        CURSEFORGE_API_URL: 'https://api.curseforge.test',
+        CURSEFORGE_API_KEY: 'invalid-key',
+      }),
+      { fetch: recordedGitHub, onError },
+    );
+    expect(await withKey.downloads(itemClear)).toBe(168 + 4132);
+    expect(hosts()).toContain('api.curseforge.test');
+    expect(onError).toHaveBeenCalled();
+  });
+
+  it('keeps counting GitHub when Modrinth is down', async () => {
+    const modrinthDown = vi.fn<typeof fetch>(async (input) =>
+      new URL(String(input)).host === 'api.modrinth.test' ? jsonResponse({}, 503) : recordedGitHub(input),
+    );
+    expect(await catalog(modrinthDown).downloads(itemClear)).toBe(168);
+  });
+
+  it('has no count when GitHub is down and nothing was saved', async () => {
+    expect(await catalog(async () => jsonResponse({}, 503)).downloads(palaclips)).toBeUndefined();
   });
 });

@@ -23,7 +23,9 @@ src/
     cache.ts             memory cache with a copy on disk
     assets.ts            file selection (Windows installer, mod jars)
     catalog.ts           release data of one program, ready for the pages
-    format.ts            French formatting of sizes, dates and Minecraft versions
+    counts.ts            GitHub download count, without update manifests, signatures and checksums
+    stores.ts            Modrinth and CurseForge download counts
+    format.ts            French formatting of sizes, dates, counts and Minecraft versions
   styles/                global styles and design tokens
 tests/                   unit tests
   fixtures/github/       real GitHub responses, reduced to the fields in use
@@ -50,6 +52,10 @@ The answer is kept in memory for 10 minutes and saved to `DATA_DIR/software-<slu
 
 Mod jars are named `<artifact>-<version>.jar`, where `artifact` comes from the matrix and `version` is the tag without its leading `v`. Only the jars present in the release are offered.
 
+## Download counts
+
+The count shown for a program is the sum of the `download_count` of its GitHub files, over every published release (the client follows the `Link` pagination of the releases list, up to 10 pages, on the API host only). Update manifests (`latest.json`, `latest.yml`), signatures (`.sig`), `.blockmap` files and checksum files are never counted: the auto-updaters fetch them on every start. For the mod, the Modrinth project `downloads` is added (slug read from the `modrinth` link of the entry), and the CurseForge `downloadCount` only when `CURSEFORGE_API_KEY` is set and the entry has a `curseforgeId`. Store counts use the same cache and saved copies as the releases (`DATA_DIR/modrinth-<slug>.json`, `DATA_DIR/curseforge-<id>.json`); a store that fails is left out of the sum without any message. Without release data, no count is shown.
+
 ## Downloads
 
 Files are never served by this site. `/software/dl/<slug>` answers `302` to the GitHub download URL of the recommended installer, and `/software/dl/<slug>/<file>` to a file of the latest release, checked against its file list (`404` otherwise). The mod has no single recommended file: its short link leads to its page. When GitHub is down and nothing is saved, both routes send the visitor to the GitHub releases page of the program.
@@ -61,7 +67,10 @@ Files are never served by this site. `/software/dl/<slug>` answers `302` to the 
 | `HOST`, `PORT` | address of the Node server |
 | `GITHUB_TOKEN` | optional token, raises the GitHub API rate limit |
 | `DATA_DIR` | folder for the saved copies (default `./data`) |
+| `CURSEFORGE_API_KEY` | optional CurseForge API key; without it CurseForge is never called |
 | `GITHUB_API_URL` | GitHub API base URL (default `https://api.github.com`), pointed at a local fake by the end-to-end tests |
+| `MODRINTH_API_URL` | Modrinth API base URL (default `https://api.modrinth.com/v2`), same use |
+| `CURSEFORGE_API_URL` | CurseForge API base URL (default `https://api.curseforge.com`), same use |
 
 ## Pages
 

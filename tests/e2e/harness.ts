@@ -32,6 +32,7 @@ const fixtureFor = (path: string, ref: string | null, withoutReleases: Set<strin
   if (path === '/repos/Palawizard/PalasItemClear/contents/versions/version-matrix.json' && ref === 'v0.1.2') {
     return readFixture('github/palasitemclear-version-matrix-v0.1.2.json');
   }
+  if (path === '/modrinth/v2/project/palas-item-clear') return readFixture('modrinth/project-palas-item-clear.json');
   return undefined;
 };
 
@@ -81,7 +82,19 @@ export const startSite = async (env: Record<string, string>): Promise<Site> => {
   const port = await freePort();
   let output = '';
   const child = spawn(process.execPath, [entryPoint], {
-    env: { PATH: process.env['PATH'] ?? '', NODE_ENV: 'production', HOST: '127.0.0.1', PORT: String(port), ...env },
+    env: {
+      PATH: process.env['PATH'] ?? '',
+      NODE_ENV: 'production',
+      HOST: '127.0.0.1',
+      PORT: String(port),
+      ...(env['GITHUB_API_URL'] === undefined
+        ? {}
+        : {
+            MODRINTH_API_URL: `${env['GITHUB_API_URL']}/modrinth/v2`,
+            CURSEFORGE_API_URL: `${env['GITHUB_API_URL']}/curseforge`,
+          }),
+      ...env,
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   child.stdout?.on('data', (chunk: Buffer) => (output += chunk.toString()));

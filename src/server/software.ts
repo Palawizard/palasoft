@@ -1,6 +1,7 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { createCatalog, type ReleaseView, type SoftwareSource } from '../lib/catalog.ts';
 import { readConfig } from '../lib/config.ts';
+import { modrinthSlug } from '../lib/stores.ts';
 
 export type SoftwareEntry = CollectionEntry<'software'>;
 
@@ -13,17 +14,32 @@ export const catalog = createCatalog(readConfig(process.env), {
 export const toSource = (entry: SoftwareEntry): SoftwareSource =>
   entry.data.kind === 'windows'
     ? { slug: entry.id, repo: entry.data.repo, kind: 'windows', installerPattern: entry.data.installerPattern }
-    : { slug: entry.id, repo: entry.data.repo, kind: 'minecraft-mod', versionMatrix: entry.data.versionMatrix };
+    : {
+        slug: entry.id,
+        repo: entry.data.repo,
+        kind: 'minecraft-mod',
+        versionMatrix: entry.data.versionMatrix,
+        modrinthSlug: modrinthSlug(entry.data.modrinth),
+        curseforgeId: entry.data.curseforgeId,
+      };
 
 export const releaseOf = (entry: SoftwareEntry): Promise<ReleaseView> => catalog.release(toSource(entry));
+
+export const downloadsOf = (entry: SoftwareEntry): Promise<number | undefined> => catalog.downloads(toSource(entry));
 
 export interface SoftwareWithRelease {
   entry: SoftwareEntry;
   view: ReleaseView;
+  downloads: number | undefined;
 }
 
 export const allSoftwareWithReleases = async (): Promise<SoftwareWithRelease[]> =>
-  Promise.all((await allSoftware()).map(async (entry) => ({ entry, view: await releaseOf(entry) })));
+  Promise.all(
+    (await allSoftware()).map(async (entry) => {
+      const [view, downloads] = await Promise.all([releaseOf(entry), downloadsOf(entry)]);
+      return { entry, view, downloads };
+    }),
+  );
 
 export const findSoftware = async (slug: string | undefined): Promise<SoftwareEntry | undefined> =>
   slug === undefined ? undefined : getEntry('software', slug);

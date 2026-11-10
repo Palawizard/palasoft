@@ -5,6 +5,7 @@ import {
   GitHubRequestError,
   isBeta,
   latestRelease,
+  nextPageUrl,
   releasesSchema,
   versionLabel,
 } from '../src/lib/github.ts';
@@ -122,5 +123,47 @@ describe('isBeta', () => {
     const [release] = releasesSchema.parse(releasesFixture('Palawizard/PalaClips'));
     if (release === undefined) throw new Error('fixture changed');
     expect(isBeta({ ...release, prerelease: true })).toBe(true);
+  });
+});
+
+describe('fetchReleases pagination', () => {
+  const pages = [1, 2].map(
+    (page) => readFixture(`github/palaclips-releases-per-page-5-page-${page}.json`) as { link: string; body: unknown },
+  );
+
+  it('follows the next links GitHub sends', async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async (input) => {
+      const page = String(input).includes('page=2') ? pages[1] : pages[0];
+      return new Response(JSON.stringify(page?.body), { headers: { link: page?.link ?? '' } });
+    });
+    const releases = await fetchReleases('Palawizard/PalaClips', {
+      apiUrl: 'https://api.github.com',
+      token: undefined,
+      timeoutMs: 1000,
+      fetch: fetchImpl,
+    });
+    expect(releases.map((release) => release.tag_name)).toEqual([
+      'v1.4.1',
+      'v1.4.0',
+      'v1.3.1',
+      'v1.3.0',
+      'v1.2.0',
+      'v1.1.1',
+      'v1.1.0',
+      'v1.0.0',
+    ]);
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+    expect(String(fetchImpl.mock.calls[1]?.[0])).toBe(
+      'https://api.github.com/repositories/1420928030/releases?per_page=5&page=2',
+    );
+  });
+
+  it('never follows a next link to another host', () => {
+    expect(nextPageUrl(pages[0]?.link ?? null, 'https://api.github.com')).toBe(
+      'https://api.github.com/repositories/1420928030/releases?per_page=5&page=2',
+    );
+    expect(nextPageUrl('<https://evil.example/releases?page=2>; rel="next"', 'https://api.github.com')).toBeUndefined();
+    expect(nextPageUrl(pages[1]?.link ?? null, 'https://api.github.com')).toBeUndefined();
+    expect(nextPageUrl(null, 'https://api.github.com')).toBeUndefined();
   });
 });
