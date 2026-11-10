@@ -1,0 +1,137 @@
+---
+// The sun (the moon at dusk) of the scene is the theme switch. The scene itself stays
+// aria-hidden; this button sits on top of the sun and carries the label.
+---
+
+<button class="sky-toggle" type="button" data-sky-toggle aria-label="Passer au thème sombre" title="Passer au thème sombre">
+  <span class="ring" aria-hidden="true"></span>
+</button>
+
+<script>
+  const KEY = 'palasoft-theme';
+  const COLORS = { light: '#0b4fa3', dark: '#050d1f' } as const;
+  type Theme = keyof typeof COLORS;
+
+  const root = document.documentElement;
+  const button = document.querySelector<HTMLButtonElement>('[data-sky-toggle]');
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const current = (): Theme => (root.dataset['theme'] === 'dark' ? 'dark' : 'light');
+
+  const readChoice = (): Theme | null => {
+    try {
+      const value = window.localStorage.getItem(KEY);
+      return value === 'light' || value === 'dark' ? value : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const saveChoice = (theme: Theme): void => {
+    try {
+      window.localStorage.setItem(KEY, theme);
+    } catch {
+      // Private browsing can refuse storage: the switch still works for this page.
+    }
+  };
+
+  const apply = (theme: Theme): void => {
+    root.dataset['theme'] = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', COLORS[theme]);
+    const label = theme === 'dark' ? 'Passer au thème clair' : 'Passer au thème sombre';
+    button?.setAttribute('aria-label', label);
+    button?.setAttribute('title', label);
+  };
+
+  const switchTo = (theme: Theme): void => {
+    if (button === null || reducedMotion.matches || typeof document.startViewTransition !== 'function') {
+      apply(theme);
+      return;
+    }
+    const box = button.getBoundingClientRect();
+    const x = box.left + box.width / 2;
+    const y = box.top + box.height / 2;
+    const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    const transition = document.startViewTransition(() => apply(theme));
+    transition.ready
+      .then(() => {
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 700, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', pseudoElement: '::view-transition-new(root)' },
+        );
+      })
+      .catch(() => undefined);
+  };
+
+  apply(current());
+
+  button?.addEventListener('click', () => {
+    const next: Theme = current() === 'dark' ? 'light' : 'dark';
+    saveChoice(next);
+    switchTo(next);
+  });
+
+  systemDark.addEventListener('change', (event) => {
+    if (readChoice() === null) apply(event.matches ? 'dark' : 'light');
+  });
+</script>
+
+<style>
+  .sky-toggle {
+    position: absolute;
+    top: calc(var(--sun-y) - 2.5rem);
+    right: calc(var(--sun-x) - 2.5rem);
+    z-index: 0;
+    display: grid;
+    place-items: center;
+    width: 5rem;
+    height: 5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 160ms var(--ease-out);
+  }
+
+  .ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 46%, rgb(255 255 255 / 0.32) 54%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.9);
+    transition:
+      opacity 200ms ease,
+      transform 200ms var(--ease-out);
+  }
+
+  .sky-toggle:active {
+    transform: scale(0.97);
+  }
+
+  .sky-toggle:focus-visible .ring {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sky-toggle:hover .ring {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sky-toggle,
+    .ring {
+      transition: none;
+    }
+
+    .sky-toggle:active {
+      transform: none;
+    }
+  }
+</style>

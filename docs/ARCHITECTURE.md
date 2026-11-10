@@ -85,7 +85,9 @@ The download routes are Astro pages without markup rather than endpoints, so tha
 
 On the home page, the other programs alternate between two row layouts, capture on the right then on the left; a program whose first capture is taller than wide gets the compact row.
 
-Motion: only the bubbles drift. The quick download dock and the featured window use `glass-still`, a glass panel without backdrop blur: they sit on the plain sky next to the drifting bubbles, where the blur is invisible but was recomputed on every frame and made the drift stutter. The sun rays are still for the same reason.
+Theme: `<html data-theme="light|dark">` drives every dark rule (`:root[data-theme='dark'] ...`). An inline script in the head sets it before the first paint, from the visitor's saved choice (`localStorage` key `palasoft-theme`) or else the system setting. `components/SkyToggle.astro` is a button over the sun of the scene: it saves the other theme and, with the View Transitions API, reveals it as a circle growing from the sun (700 ms); without that API or under reduced motion the theme switches at once. The sun position is shared through `--sun-size`, `--sun-x` and `--sun-y` so the button, the sun and the lens flares stay aligned.
+
+Motion: only the bubbles drift. The quick download dock and the featured window use `glass-still`, a glass panel without backdrop blur: they sit on the plain sky next to the drifting bubbles, where the blur is invisible but was recomputed on every frame and made the drift stutter. The sun rays are still for the same reason. The drift keyframes carry a 0.01 degree rotation: a translation-only animation that slow was snapped to whole pixels and moved in visible steps.
 
 When GitHub is down, every page still renders: with a saved copy it shows the saved release details and the date of that copy, without one it shows the programs without release details and the buttons lead to GitHub.
 
