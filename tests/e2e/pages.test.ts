@@ -112,4 +112,16 @@ describe('pages on the built server', () => {
     const home = await html(site, '/software/');
     expect(home.body).toContain('version 1.4.1');
   });
+
+  it('puts the theme switch on the sun of every page and sets the theme before paint', async () => {
+    github.down = false;
+    const site = await start();
+    for (const path of PAGES) {
+      const { body } = await html(site, path);
+      expect(body, path).toMatch(/<button[^>]*data-sky-toggle[^>]*aria-label="Passer au thème sombre"/);
+      const head = body.slice(0, body.indexOf('</head>'));
+      expect(head, path).toContain("localStorage.getItem('palasoft-theme')");
+      expect(head, path).toContain('document.documentElement.dataset.theme');
+    }
+  });
 });
