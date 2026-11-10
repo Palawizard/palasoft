@@ -169,6 +169,22 @@ describe('pages on the built server', () => {
     await site.stop();
   });
 
+  it('serves the own page of chest counter, featured first on the home', async () => {
+    github.down = false;
+    const site = await start();
+    const page = await html(site, '/software/chest-counter');
+    expect(page.status).toBe(200);
+    expect(page.body).toContain('Comment ton total se construit');
+    expect(page.body).toContain('Et les autres moyens de compter ?');
+    expect(page.body).toContain('Palawi.ChestCounter-win-Setup.exe');
+    // Velopack's RELEASES and releases.win.json are left out: 23 real downloads in the fixture.
+    expect(page.body).toContain('23 téléchargements');
+    expect(page.body).toContain('id="smartscreen-title"');
+    const home = await html(site, '/software/');
+    expect(home.body.indexOf('Chest Counter')).toBeLessThan(home.body.indexOf('PalaClips'));
+    expect(home.body).toMatch(/<h2 id="showcase-title"[^>]*><a href="\/software\/chest-counter"/);
+  });
+
   it('leads back to palawi.fr from the header of every page', async () => {
     const site = await start();
     for (const path of PAGES) {
