@@ -4,6 +4,7 @@ tagline: Nettoie les objets au sol pour réduire le lag de ton serveur, avec des
 order: 6
 repo: Palawizard/PalasItemClear
 color: emerald
+category: GameApplication
 icon: ../../assets/software/palas-item-clear/icon.svg
 screenshots:
   - src: ../../assets/software/palas-item-clear/recovery-bin.png

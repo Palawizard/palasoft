@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:S;src:url("../../node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2") format("woff2-variations");font-weight:200 900}
+*{box-sizing:border-box}html,body{margin:0}
+.c{position:relative;width:1200px;height:630px;overflow:hidden;font-family:S;color:#fff;
+background:radial-gradient(520px 360px at 1080px 40px,rgb(255 251 224/.75),rgb(255 251 224/0) 70%),
+linear-gradient(to bottom,#0b4fa3 0,#1a74cf 26%,#4aa8ea 48%,#a9dcf8 62%,#e6f6ff 66.6%,#fff 67%,#6fd0dd 67.6%,#1c9bb3 84%,#0b6d88 100%)}
+.sun{position:absolute;right:30px;top:-70px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,#fff 0 30%,rgb(255 248 214/.9) 42%,rgb(255 244 200/0) 70%)}
+.brand{position:absolute;left:84px;top:78px;display:flex;align-items:center;gap:30px}
+.brand svg{width:150px;height:150px;filter:drop-shadow(0 8px 14px rgb(6 48 74/.45))}
+.name{font-size:132px;font-weight:700;letter-spacing:-.015em;line-height:1;text-shadow:0 2px 3px rgb(6 48 74/.4),0 10px 30px rgb(6 48 74/.35)}
+.sub{position:absolute;left:88px;top:236px;margin:0;max-width:1040px;font-size:46px;font-weight:600;line-height:1.2;text-shadow:0 2px 4px rgb(6 48 74/.55)}
+.sea{position:absolute;left:88px;top:356px;display:flex;gap:30px}
+.b{display:grid;place-items:center;width:124px;height:124px;border:2px solid rgb(255 255 255/.85);border-radius:50%;
+background:radial-gradient(circle at 34% 24%,rgb(255 255 255/.95) 0 9%,rgb(255 255 255/.2) 26%,transparent 46%),
+radial-gradient(circle at 50% 60%,color-mix(in srgb,var(--t) 35%,rgb(255 255 255/.5)),color-mix(in srgb,var(--t) 55%,rgb(20 90 160/.4)));
+box-shadow:inset 0 -8px 18px rgb(255 255 255/.35),0 22px 36px -14px rgb(6 48 74/.65)}
+.b:nth-child(even){margin-top:64px}
+.b img{width:64px;height:64px;border-radius:14px;box-shadow:0 4px 10px rgb(6 48 74/.35)}
+.url{position:absolute;right:56px;bottom:34px;font-size:30px;font-weight:650;text-shadow:0 2px 4px rgb(6 48 74/.6)}
+</style></head><body><div class="c"><div class="sun"></div>
+<div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="body" cx="50%" cy="72%" r="62%">
+      <stop offset="0" stop-color="#9be87a"/><stop offset="0.55" stop-color="#2f9a22"/><stop offset="1" stop-color="#195f10"/>
+    </radialGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fd0dd" stop-opacity="0.9"/><stop offset="1" stop-color="#1c9bb3" stop-opacity="0.95"/>
+    </linearGradient>
+    <clipPath id="c"><circle cx="32" cy="32" r="29"/></clipPath>
+  </defs>
+  <circle cx="32" cy="33.5" r="29" fill="#06304a" opacity="0.18"/>
+  <circle cx="32" cy="32" r="29" fill="url(#body)"/>
+  <g clip-path="url(#c)">
+    <path d="M0 45 C 10 41, 20 49, 32 45 S 54 41, 64 45 V64 H0Z" fill="url(#water)"/>
+    <path d="M0 45 C 10 41, 20 49, 32 45 S 54 41, 64 45" fill="none" stroke="#fff" stroke-opacity="0.85" stroke-width="1.6"/>
+  </g>
+  <path d="M32 15 V37 M22.5 28.5 L32 38 L41.5 28.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="32" cy="16" rx="21" ry="11.5" fill="url(#shine)"/>
+  <circle cx="32" cy="32" r="28.5" fill="none" stroke="#0b3d10" stroke-opacity="0.45" stroke-width="1"/>
+</svg>
+<span class="name">PalaSoft</span></div>
+<p class="sub">Les logiciels gratuits de Palawi, en un clic.</p>
+<div class="sea"><span class="b" style="--t:#e0475f"><img src="../../src/assets/software/palaclips/icon.svg"></span><span class="b" style="--t:#d64ea8"><img src="../../src/assets/software/slbs-soundboard/icon.svg"></span><span class="b" style="--t:#3a7bf0"><img src="../../src/assets/software/layout-manager/icon.svg"></span><span class="b" style="--t:#19b3a6"><img src="../../src/assets/software/silence-splitter/icon.svg"></span><span class="b" style="--t:#8a63f0"><img src="../../src/assets/software/timestamper/icon.svg"></span><span class="b" style="--t:#3fbf5a"><img src="../../src/assets/software/palas-item-clear/icon.svg"></span></div><span class="url">palawi.fr/software</span></div></body></html>

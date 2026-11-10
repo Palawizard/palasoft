@@ -13,6 +13,8 @@ const common = {
   order: z.number().int().nonnegative(),
   repo: z.string().regex(/^Palawizard\/[\w.-]+$/),
   color: z.enum(['crimson', 'magenta', 'cobalt', 'teal', 'violet', 'emerald']),
+  // schema.org application category, for search engines.
+  category: z.enum(['MultimediaApplication', 'UtilitiesApplication', 'DesktopEnhancementApplication', 'GameApplication']),
 };
 
 const isValidRegExp = (pattern: string): boolean => {

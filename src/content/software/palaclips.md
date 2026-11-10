@@ -4,6 +4,7 @@ tagline: Enregistre tes meilleurs moments en jeu après coup, avec une piste aud
 order: 1
 repo: Palawizard/PalaClips
 color: crimson
+category: MultimediaApplication
 icon: ../../assets/software/palaclips/icon.svg
 screenshots:
   - src: ../../assets/software/palaclips/player.png
