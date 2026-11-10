@@ -5,6 +5,13 @@ order: 3
 repo: Palawizard/layout-manager-2
 color: cobalt
 icon: ../../assets/software/layout-manager/icon.svg
+screenshots:
+  - src: ../../assets/software/layout-manager/layouts-list.png
+    alt: "Tes dispositions enregistrées, prêtes à être lancées d’un clic."
+  - src: ../../assets/software/layout-manager/layout-editor.png
+    alt: "Tu choisis l’écran et la zone de chaque appli, et l’aperçu te montre où elle va se placer."
+  - src: ../../assets/software/layout-manager/layout-running.png
+    alt: "Une disposition en train de se mettre en place, appli après appli."
 kind: windows
 installerPattern: '^Layout\.Manager\.2_.+_x64-setup\.exe$'
 unsignedInstaller: true

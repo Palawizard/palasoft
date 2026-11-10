@@ -5,6 +5,13 @@ order: 4
 repo: Palawizard/silence-splitter
 color: teal
 icon: ../../assets/software/silence-splitter/icon.svg
+screenshots:
+  - src: ../../assets/software/silence-splitter/timeline-preview.png
+    alt: "Les silences de ta partie sont repérés tout seuls : en vert ce qu’on garde, en rose ce qui saute."
+  - src: ../../assets/software/silence-splitter/presets-and-tracks.png
+    alt: "Tu choisis ta vidéo, les pistes audio à écouter et un préréglage tout prêt pour le gaming."
+  - src: ../../assets/software/silence-splitter/export-timeline.png
+    alt: "Un clic et ta timeline part dans DaVinci Resolve ou Premiere Pro, prête à monter."
 kind: windows
 installerPattern: '^Silence-Splitter-.+-x64-setup\.exe$'
 unsignedInstaller: true

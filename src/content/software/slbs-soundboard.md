@@ -5,6 +5,13 @@ order: 2
 repo: Palawizard/slbs-soundboard
 color: magenta
 icon: ../../assets/software/slbs-soundboard/icon.png
+screenshots:
+  - src: ../../assets/software/slbs-soundboard/soundboard.png
+    alt: "Ta soundboard : tous tes sons en tuiles, chacun avec son raccourci clavier, et un son en train de jouer."
+  - src: ../../assets/software/slbs-soundboard/audio-setup.png
+    alt: "La page Audio : tu choisis ton micro et le câble virtuel, puis tu règles le volume de ta voix et de tes sons."
+  - src: ../../assets/software/slbs-soundboard/sound-settings.png
+    alt: "Les réglages d’un son : son nom, son raccourci, son volume, sa hauteur et sa vitesse."
 kind: windows
 installerPattern: '^slbs-soundboard_.+_x64\.msi$'
 unsignedInstaller: true

@@ -5,6 +5,11 @@ order: 5
 repo: Palawizard/timestamper
 color: violet
 icon: ../../assets/software/timestamper/icon.svg
+screenshots:
+  - src: ../../assets/software/timestamper/live-marks.png
+    alt: "Pendant ton live, tu appuies sur un raccourci et l’appli note le moment exact à retrouver plus tard."
+  - src: ../../assets/software/timestamper/stream-history.png
+    alt: "Après le live, tu retrouves tous tes streams et tu copies ou exportes tes moments en un clic."
 kind: windows
 installerPattern: '^Timestamper_.+_x64-setup\.exe$'
 unsignedInstaller: true
