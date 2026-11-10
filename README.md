@@ -1,6 +1,6 @@
 # PalaSoft
 
-Download site for the software I publish: one page per program, a direct download button and installation help written for people who never use GitHub. Served at [palawi.fr/software](https://palawi.fr/software).
+Download site for the software I publish: one page per program, a direct download button and installation help written for people who never use GitHub, in French and in English. Served at [palawi.fr/software](https://palawi.fr/software).
 
 Files are not hosted here. The server reads the GitHub releases of each program and sends the visitor to the right file.
 
@@ -55,4 +55,4 @@ The container is healthy once `docker compose ps` shows `(healthy)`.
 
 ## Adding a program
 
-Add a Markdown file to `src/content/software/`. Its frontmatter is validated at build time by the schema in `src/content.config.ts`. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Add a Markdown file to `src/content/software/` and its English text, under the same name, to `src/content/software-en/`. Their frontmatter is validated at build time by the schema in `src/content.config.ts`. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
