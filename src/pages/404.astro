@@ -1,18 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { homePath } from '../server/software.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+// One page for both languages: an address under /en gets the English text.
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
 ---
 
-<Layout title="Page introuvable | PalaSoft" description="Cette page n’existe pas sur PalaSoft." noindex>
+<Layout title={`${t.notFound.title} | PalaSoft`} description={t.notFound.description} noindex>
   <section class="page lost">
     <div class="glass window rise">
-      <h1>Page introuvable</h1>
-      <p>Le lien est peut-être ancien. Tous les logiciels sont sur l’accueil.</p>
-      <a class="gel gel-aqua" href={homePath}>Revenir à l’accueil</a>
+      <h1>{t.notFound.title}</h1>
+      <p>{t.notFound.text}</p>
+      <a class="gel gel-aqua" href={homePath(locale)}>{t.notFound.back}</a>
     </div>
   </section>
 </Layout>
-
 <style>
   .lost {
     padding-block: var(--space-8);

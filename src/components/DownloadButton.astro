@@ -3,6 +3,7 @@ import type { ReleaseView } from '../lib/catalog.ts';
 import { formatSize } from '../lib/format.ts';
 import { downloadPath, thanksAttributes, type SoftwareEntry } from '../server/software.ts';
 import IconDownload from './IconDownload.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   entry: SoftwareEntry;
@@ -13,21 +14,23 @@ interface Props {
 
 const { entry, view, compact = false, showFile = true } = Astro.props;
 const installer = view.state === 'ready' ? view.installer : undefined;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
 ---
 
 {
   view.state === 'none' ? (
-    <p class="none">Aucune version n’est publiée pour l’instant.</p>
+    <p class="none">{t.download.none}</p>
   ) : (
     <div class="download">
-      <a class:list={['gel', { 'gel-small': compact }]} href={downloadPath(entry.id)} {...thanksAttributes(entry, view)}>
+      <a class:list={['gel', { 'gel-small': compact }]} href={downloadPath(entry.id)} {...thanksAttributes(entry, view, locale)}>
         <IconDownload />
-        {view.state === 'unavailable' ? 'Télécharger sur GitHub' : `Télécharger ${compact ? '' : entry.data.name}`.trim()}
+        {view.state === 'unavailable' ? t.download.onGitHub : compact ? t.download.short : t.download.named(entry.data.name)}
       </a>
       {showFile && installer !== undefined && (
         <p class="file numbers">
-          <span class="visually-hidden">Fichier : </span>
-          {installer.name} · {formatSize(installer.size)}
+          <span class="visually-hidden">{t.program.file}</span>
+          {installer.name} · {formatSize(installer.size, locale)}
         </p>
       )}
     </div>

@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import type { SoftwareWithRelease } from '../server/software.ts';
-import { softwarePath } from '../server/software.ts';
+import { localText, softwarePath } from '../server/software.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 import DownloadButton from './DownloadButton.astro';
 import ReleaseFacts from './ReleaseFacts.astro';
 import { formatSize } from '../lib/format.ts';
@@ -16,7 +17,10 @@ interface Props {
 
 const { item, layout } = Astro.props;
 const { entry, view, downloads } = item;
-const screenshot = entry.data.screenshots[0];
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const text = await localText(entry, locale);
+const screenshot = text.screenshots[0];
 const installer = view.state === 'ready' ? view.installer : undefined;
 const isMod = entry.data.kind === 'minecraft-mod';
 ---
@@ -28,31 +32,31 @@ const isMod = entry.data.kind === 'minecraft-mod';
         <SoftwareIcon entry={entry} size={56} class="row-icon" />
         <div>
           <h3 id={`row-${entry.id}`} class="row-name">
-            <a href={softwarePath(entry.id)}>{entry.data.name}</a>
+            <a href={softwarePath(entry.id, locale)}>{entry.data.name}</a>
           </h3>
-          <p class="row-kind">{isMod ? 'Mod Minecraft pour serveur' : 'Pour Windows'}</p>
+          <p class="row-kind">{isMod ? t.program.forServer : t.program.forWindows}</p>
         </div>
       </div>
-      <p class="row-tagline">{entry.data.tagline}</p>
+      <p class="row-tagline">{text.tagline}</p>
       <ReleaseFacts view={view} downloads={downloads} showDate />
       <div class="row-actions">
         {
           isMod ? (
-            <a class="gel gel-small" href={`${softwarePath(entry.id)}#telecharger`}>
-              Choisir ma version
+            <a class="gel gel-small" href={`${softwarePath(entry.id, locale)}#telecharger`}>
+              {t.program.chooseVersion}
             </a>
           ) : (
             <DownloadButton entry={entry} view={view} compact showFile={false} />
           )
         }
-        <a class="gel gel-aqua gel-small" href={softwarePath(entry.id)}>
-          Comment l’installer
+        <a class="gel gel-aqua gel-small" href={softwarePath(entry.id, locale)}>
+          {t.program.installHelp}
         </a>
       </div>
       {installer !== undefined && (
         <p class="row-file numbers">
-          <span class="visually-hidden">Fichier : </span>
-          {installer.name} · {formatSize(installer.size)}
+          <span class="visually-hidden">{t.program.file}</span>
+          {installer.name} · {formatSize(installer.size, locale)}
         </p>
       )}
     </div>
@@ -71,7 +75,7 @@ const isMod = entry.data.kind === 'minecraft-mod';
         ) : (
           <div class="no-shot">
             <SoftwareIcon entry={entry} size={120} class="no-shot-icon" />
-            <p>Pas encore de capture de ce logiciel.</p>
+            <p>{t.program.noShot}</p>
           </div>
         )
       }

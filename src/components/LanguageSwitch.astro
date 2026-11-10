@@ -1,0 +1,81 @@
+---
+import { LOCALES } from '../lib/locale.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+import { localizedPath } from '../server/software.ts';
+
+// French or English. Each choice goes through /lang/<language>, which remembers it, then shows this page in that
+// language; the search part of the URL is kept.
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const pagePath = Astro.locals.pagePath ?? '/';
+const names = { fr: 'Français', en: 'English' } as const;
+const choices = LOCALES.map((code) => ({
+  code,
+  name: names[code],
+  href: `${base}/lang/${code}?next=${encodeURIComponent(`${localizedPath(pagePath, code)}${Astro.url.search}`)}`,
+}));
+---
+
+<div class="switch" role="group" aria-label={t.layout.language}>
+  {
+    choices.map((choice) => (
+      <a
+        class:list={['choice', { current: choice.code === locale }]}
+        href={choice.href}
+        lang={choice.code}
+        hreflang={choice.code}
+        aria-current={choice.code === locale ? 'true' : undefined}
+        title={choice.name}
+      >
+        <span aria-hidden="true">{choice.code.toUpperCase()}</span>
+        <span class="visually-hidden">{choice.name}</span>
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .switch {
+    display: inline-flex;
+    overflow: hidden;
+    border: 1px solid rgb(11 42 68 / 0.25);
+    border-radius: var(--radius-control);
+    box-shadow: 0 3px 8px -3px rgb(6 48 74 / 0.35);
+  }
+
+  .choice {
+    display: grid;
+    place-items: center;
+    min-width: 2.75rem;
+    min-height: 2.25rem;
+    padding: 0 0.7rem;
+    background: linear-gradient(to bottom, var(--pill-0) 0%, var(--pill-1) 50%, var(--pill-2) 51%, var(--pill-1) 100%);
+    color: var(--ink);
+    font-size: var(--text-small);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+
+  .choice + .choice {
+    border-left: 1px solid rgb(11 42 68 / 0.18);
+  }
+
+  .current {
+    background: linear-gradient(to bottom, var(--gel-aqua-0) 0%, var(--gel-aqua-1) 49%, var(--gel-aqua-2) 50%, var(--gel-aqua-3) 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.4);
+  }
+
+  .choice:focus-visible {
+    outline: 3px solid var(--gel-aqua-1);
+    outline-offset: -3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .choice:not(.current):hover {
+      color: var(--gel-aqua-1);
+    }
+  }
+</style>

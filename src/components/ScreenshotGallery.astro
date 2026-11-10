@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   name: string;
@@ -8,10 +9,11 @@ interface Props {
 }
 
 const { name, shots } = Astro.props;
+const t = stringsFor(localeOf(Astro));
 ---
 
 <section class="gallery" aria-labelledby="gallery-title">
-  <h2 id="gallery-title" class="gallery-title">{name} en images</h2>
+  <h2 id="gallery-title" class="gallery-title">{t.program.gallery(name)}</h2>
   <ul class="strip">
     {
       shots.map((shot) => (

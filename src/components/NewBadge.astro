@@ -1,5 +1,6 @@
 ---
 import type { SoftwareEntry } from '../server/software.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   entry: SoftwareEntry;
@@ -8,6 +9,7 @@ interface Props {
 const { newUntil } = Astro.props.entry.data;
 // Pages render on each request, so the badge goes away on its own once the date has passed.
 const isNew = newUntil !== undefined && Date.now() < newUntil.getTime();
+const t = stringsFor(localeOf(Astro));
 ---
 
-{isNew && <span class="badge">Nouveau</span>}
+{isNew && <span class="badge">{t.program.newBadge}</span>}

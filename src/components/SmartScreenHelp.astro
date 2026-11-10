@@ -1,5 +1,8 @@
 ---
 import SmartScreenSteps from './SmartScreenSteps.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+const t = stringsFor(localeOf(Astro));
 ---
 
 <section class="glass smartscreen" aria-labelledby="smartscreen-title">
@@ -8,7 +11,7 @@ import SmartScreenSteps from './SmartScreenSteps.astro';
       <path d="M12 2 3 5.5v6c0 5 3.8 9.3 9 10.5 5.2-1.2 9-5.5 9-10.5v-6L12 2Z" fill="#2c86c9" />
       <path d="M12 7v6M12 16v.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
     </svg>
-    <h2 id="smartscreen-title">Si Windows t’avertit</h2>
+    <h2 id="smartscreen-title">{t.smartscreen.title}</h2>
   </header>
   <div class="dialog-body">
     <SmartScreenSteps />

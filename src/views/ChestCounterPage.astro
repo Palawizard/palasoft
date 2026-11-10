@@ -1,0 +1,338 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Comparison from '../components/chest-counter/Comparison.astro';
+import TotalBreakdown from '../components/chest-counter/TotalBreakdown.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+import NewBadge from '../components/NewBadge.astro';
+import ReleaseFacts from '../components/ReleaseFacts.astro';
+import RemoteDataNotice from '../components/RemoteDataNotice.astro';
+import Requirements from '../components/Requirements.astro';
+import SmartScreenHelp from '../components/SmartScreenHelp.astro';
+import SoftwareIcon from '../components/SoftwareIcon.astro';
+import WindowTitle from '../components/WindowTitle.astro';
+import { homePath, type SoftwareEntry } from '../server/software.ts';
+import { programPage } from '../server/program-page.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+// Chest Counter's own page, in the language of its route (pages/chest-counter.astro, pages/en/chest-counter.astro).
+interface Props {
+  entry: SoftwareEntry;
+}
+
+const { entry } = Astro.props;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const { view, downloads, title, shareImage, jsonLd, text } = await programPage(entry, locale, Astro.site);
+const { Content } = await render(text.body);
+const { data } = entry;
+const [light, dark] = text.screenshots;
+---
+
+<Layout title={title} description={text.tagline} image={shareImage} jsonLd={jsonLd}>
+  <article class="page software">
+    <a class="pill back" href={homePath(locale)}>
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      {t.program.back}
+    </a>
+    <RemoteDataNotice views={[view]} />
+
+    <section class="glass hero rise" data-color={data.color} aria-labelledby="software-title">
+      <WindowTitle entry={entry} caption={data.name} />
+      <div class="hero-body">
+        <div id="telecharger" class="hero-copy">
+          <div class="identity">
+            <SoftwareIcon entry={entry} size={88} class="hero-icon" />
+            <div>
+              <h1 id="software-title">{data.name}</h1>
+              <p class="kind">{t.program.forWindows} <NewBadge entry={entry} /></p>
+            </div>
+          </div>
+          <p class="tagline">{text.tagline}</p>
+          <p class="season">{t.chestCounter.season}</p>
+          <ReleaseFacts view={view} downloads={downloads} showDate showSize={false} />
+          <DownloadButton entry={entry} view={view} />
+          {view.state !== 'none' && <p class="host">{t.program.host}</p>}
+        </div>
+        {
+          light !== undefined && dark !== undefined && (
+            <div class="windows">
+              <figure class="shot window-light">
+                <Image src={light.src} alt={light.alt} widths={[460, 920]} sizes="(min-width: 64rem) 22rem, 70vw" quality={90} loading="eager" />
+              </figure>
+              <figure class="shot window-dark">
+                <Image src={dark.src} alt={dark.alt} widths={[460, 920]} sizes="(min-width: 64rem) 22rem, 70vw" quality={90} loading="eager" />
+              </figure>
+            </div>
+          )
+        }
+      </div>
+    </section>
+
+    <TotalBreakdown />
+
+    <section class="glass start" aria-labelledby="start-title">
+      <h2 id="start-title">{t.chestCounter.start.title}</h2>
+      <ol>
+        {t.chestCounter.start.steps.map((step) => <li>{step}</li>)}
+      </ol>
+      <p class="note">{t.chestCounter.start.note}</p>
+    </section>
+
+    <Comparison />
+
+    <div class="columns">
+      <div class="glass prose">
+        <Content />
+      </div>
+      <aside class="side" aria-label={t.program.asideLabel}>
+        <Requirements items={text.requirements} />
+        {data.kind === 'windows' && data.unsignedInstaller && <SmartScreenHelp />}
+        <p class="glass history">
+          <a href={view.historyUrl}>{t.program.history}</a>
+        </p>
+      </aside>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .software {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+  }
+
+  .back {
+    justify-self: start;
+    padding-left: 0.7rem;
+  }
+
+  .hero {
+    overflow: hidden;
+  }
+
+  .hero-body {
+    display: grid;
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+    padding: var(--space-4);
+  }
+
+  .hero-copy {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+    scroll-margin-top: var(--space-3);
+  }
+
+  .identity {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+  }
+
+  :global(.hero-icon) {
+    width: 5.5rem;
+    height: 5.5rem;
+    filter: drop-shadow(0 8px 14px rgb(6 48 74 / 0.35));
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 1.6rem + 1.8vw, 3rem);
+    font-weight: 700;
+  }
+
+  .kind {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .tagline {
+    font-size: var(--text-lead);
+    line-height: 1.4;
+  }
+
+  .season {
+    max-width: 44ch;
+  }
+
+  .host {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  /* The window in light and in dark, as Windows shows it; the page's own theme decides which one is in front. */
+  .windows {
+    display: grid;
+    grid-template-areas: 'stack';
+    justify-items: center;
+    padding: var(--space-2) var(--space-6) var(--space-4) 0;
+  }
+
+  .windows .shot {
+    grid-area: stack;
+    width: min(100%, 22rem);
+  }
+
+  .window-light {
+    z-index: 2;
+    transform: translate(-2.5rem, 1.5rem) rotate(-3deg);
+  }
+
+  .window-dark {
+    z-index: 1;
+    transform: translate(3rem, -1rem) rotate(4deg);
+  }
+
+  :global(:root[data-theme='dark']) .window-light {
+    z-index: 1;
+  }
+
+  :global(:root[data-theme='dark']) .window-dark {
+    z-index: 2;
+  }
+
+  h2 {
+    font-size: var(--text-subtitle);
+  }
+
+  .start {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  .start ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .start li {
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    counter-increment: step;
+  }
+
+  .start li::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid rgb(0 0 0 / 0.2);
+    border-radius: 50%;
+    background: linear-gradient(to bottom, var(--gel-aqua-0) 0%, var(--gel-aqua-1) 49%, var(--gel-aqua-2) 50%, var(--gel-aqua-3) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.4);
+  }
+
+  .note {
+    color: var(--ink-soft);
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .prose {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  .prose > :global(*) {
+    max-width: var(--measure);
+  }
+
+  .prose :global(h2) {
+    margin-top: var(--space-3);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(ul) {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding-left: 1.4em;
+  }
+
+  .prose :global(p:last-child) {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  .side {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .history {
+    padding: var(--space-2) var(--space-3);
+    font-weight: 600;
+  }
+
+  @media (max-width: 64rem) {
+    .hero-body,
+    .columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .start ol {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 56rem) {
+    .hero-body {
+      padding: var(--space-3);
+    }
+
+    .windows {
+      order: -1;
+      padding: var(--space-1) var(--space-4) var(--space-3);
+    }
+
+    .windows .shot {
+      width: min(78%, 18rem);
+    }
+
+    .window-light {
+      transform: translate(-1.5rem, 1rem) rotate(-3deg);
+    }
+
+    .window-dark {
+      transform: translate(1.5rem, -0.5rem) rotate(4deg);
+    }
+
+    .start,
+    .prose {
+      padding: var(--space-3);
+    }
+
+    .start ol {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import type { ReleaseView } from '../lib/catalog.ts';
 import { formatDateTime } from '../lib/format.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   views: readonly ReleaseView[];
@@ -10,6 +11,8 @@ const { views } = Astro.props;
 const staleTimes = views.flatMap((view) => (view.state === 'ready' && view.stale ? [view.fetchedAt] : []));
 const oldest = staleTimes.length > 0 ? Math.min(...staleTimes) : undefined;
 const missing = views.some((view) => view.state === 'unavailable');
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
 ---
 
 {
@@ -20,9 +23,9 @@ const missing = views.some((view) => view.state === 'unavailable');
         <path d="M12 7v6M12 16.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
       </svg>
       <p>
-        GitHub, qui héberge les fichiers, ne répond pas en ce moment.
-        {oldest !== undefined && ` Les infos de version affichées datent du ${formatDateTime(oldest)}.`}
-        {missing && " Les boutons sans version t’emmènent directement sur GitHub."}
+        {t.notice.down}
+        {oldest !== undefined && t.notice.since(formatDateTime(oldest, locale))}
+        {missing && t.notice.direct}
       </p>
     </div>
   )
