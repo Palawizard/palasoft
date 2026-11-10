@@ -1,0 +1,186 @@
+---
+// Chest Counter against the other ways to know how many chests you opened, as checked in November 2026.
+type Answer = { ok: boolean; text: string };
+
+const columns = ['Chest Counter', 'Compteur du jeu (onglet Quêtes)', 'Sites de stats (Fortnite Tracker et autres)'];
+const rows: { label: string; answers: [Answer, Answer, Answer] }[] = [
+  {
+    label: 'Compte les coffres ouverts',
+    answers: [
+      { ok: true, text: 'Oui' },
+      { ok: true, text: 'Oui, en un seul total' },
+      { ok: false, text: 'Aucun compteur de coffres trouvé' },
+    ],
+  },
+  {
+    label: 'Détail par partie',
+    answers: [
+      { ok: true, text: 'Oui' },
+      { ok: false, text: 'Non' },
+      { ok: false, text: 'Pas pour les coffres' },
+    ],
+  },
+  {
+    label: 'Sépare le mesuré de l’estimé',
+    answers: [
+      { ok: true, text: 'Oui' },
+      { ok: false, text: 'Non' },
+      { ok: false, text: 'Non' },
+    ],
+  },
+  {
+    label: 'Sans lancer le jeu ni créer de compte',
+    answers: [
+      { ok: true, text: 'Oui' },
+      { ok: false, text: 'Non, dans le jeu' },
+      { ok: false, text: 'Non, stats publiques à activer' },
+    ],
+  },
+  {
+    label: 'Marche sans internet',
+    answers: [
+      { ok: true, text: 'Oui' },
+      { ok: false, text: 'Non' },
+      { ok: false, text: 'Non' },
+    ],
+  },
+];
+---
+
+<section class="glass comparison" aria-labelledby="comparison-title">
+  <h2 id="comparison-title">Et les autres moyens de compter ?</h2>
+  <p class="lead-in">
+    Le compteur du jeu reste la référence : compare-le à la ligne « Lu dans les replays ». Chest Counter montre en plus
+    comment ce nombre est atteint, et tu peux le garder ouvert à côté du jeu.
+  </p>
+  <div class="scroll" role="region" aria-labelledby="comparison-title" tabindex="0">
+    <table>
+      <thead>
+        <tr>
+          <td></td>
+          {columns.map((column) => <th scope="col">{column}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              {row.answers.map((answer) => (
+                <td class:list={{ yes: answer.ok }}>
+                  <span class="answer">
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+                      {answer.ok ? (
+                        <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+                      ) : (
+                        <path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                      )}
+                    </svg>
+                    {answer.text}
+                  </span>
+                </td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="as-of">Comparaison faite en novembre 2026.</p>
+</section>
+
+<style>
+  .comparison {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  h2 {
+    font-size: var(--text-subtitle);
+  }
+
+  .lead-in {
+    max-width: var(--measure);
+  }
+
+  .scroll {
+    overflow-x: auto;
+    margin-top: var(--space-1);
+    border-radius: 10px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 38rem;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.7rem var(--space-2);
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    font-size: var(--text-small);
+    font-weight: 650;
+    color: var(--ink-soft);
+  }
+
+  thead th:first-of-type {
+    color: var(--ink);
+    font-size: 1.0625rem;
+  }
+
+  tbody th {
+    font-weight: 600;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  .answer {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    color: var(--ink-soft);
+  }
+
+  .answer svg {
+    flex: none;
+    margin-top: 0.15rem;
+  }
+
+  .yes .answer {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .yes .answer svg {
+    color: var(--gel-green-1);
+  }
+
+  /* The Chest Counter column, lit by the program's tint. */
+  thead th:first-of-type,
+  tbody td:nth-child(2) {
+    background: color-mix(in srgb, var(--tint-amber) 18%, rgb(255 255 255 / 0.6));
+  }
+
+  :global(:root[data-theme='dark']) thead th:first-of-type,
+  :global(:root[data-theme='dark']) tbody td:nth-child(2) {
+    background: color-mix(in srgb, var(--tint-amber) 20%, transparent);
+  }
+
+  .as-of {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  :global(:root[data-theme='dark']) .yes .answer svg {
+    color: var(--gel-green-0);
+  }
+</style>

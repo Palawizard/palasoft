@@ -35,6 +35,7 @@ describe('download routes on the built server', () => {
     ['layout-manager', `${DOWNLOAD}/layout-manager-2/releases/download/v0.1.0-beta.2/Layout.Manager.2_0.1.0-beta.2_x64-setup.exe`],
     ['silence-splitter', `${DOWNLOAD}/silence-splitter/releases/download/v1.0.0-beta.2/Silence-Splitter-1.0.0-beta.2-x64-setup.exe`],
     ['timestamper', `${DOWNLOAD}/timestamper/releases/download/v0.1.0-beta.1/Timestamper_0.1.0-beta.1_x64-setup.exe`],
+    ['chest-counter', `${DOWNLOAD}/chest-counter/releases/download/v2.2.1/Palawi.ChestCounter-win-Setup.exe`],
   ])('redirects /software/dl/%s to the installer', async (slug, location) => {
     const response = await get(site, `/software/dl/${slug}`);
     expect(response.status).toBe(302);

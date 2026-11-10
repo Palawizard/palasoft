@@ -4,6 +4,7 @@ import { downloadPath, softwarePath, thanksAttributes } from '../server/software
 import IconChevron from './IconChevron.astro';
 import IconDownload from './IconDownload.astro';
 import SoftwareIcon from './SoftwareIcon.astro';
+import NewBadge from './NewBadge.astro';
 
 interface Props {
   items: readonly SoftwareWithRelease[];
@@ -30,6 +31,7 @@ const offered = items.filter(({ view }) => view.state !== 'none');
                 </span>
                 <span class="dock-meta numbers">
                   {view.state === 'ready' ? view.release.version : view.state === 'unavailable' ? 'sur GitHub' : ''}
+                  <NewBadge entry={entry} />
                   {isMod && <span class="visually-hidden">, choisis ta version de Minecraft</span>}
                 </span>
               </span>
@@ -93,9 +95,17 @@ const offered = items.filter(({ view }) => view.state !== 'none');
   }
 
   .dock-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     color: var(--ink-soft);
     font-size: 0.8125rem;
     font-weight: 500;
+  }
+
+  .dock-meta :global(.badge) {
+    font-size: 0.75rem;
+    line-height: 1.4;
   }
 
 

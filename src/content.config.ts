@@ -12,7 +12,9 @@ const common = {
   tagline: z.string().min(1).max(140),
   order: z.number().int().nonnegative(),
   repo: z.string().regex(/^Palawizard\/[\w.-]+$/),
-  color: z.enum(['crimson', 'magenta', 'cobalt', 'teal', 'violet', 'emerald']),
+  color: z.enum(['crimson', 'magenta', 'cobalt', 'teal', 'violet', 'emerald', 'amber']),
+  // The program carries a "new" badge until this date (midnight UTC).
+  newUntil: z.date().optional(),
   // schema.org application category, for search engines.
   category: z.enum(['MultimediaApplication', 'UtilitiesApplication', 'DesktopEnhancementApplication', 'GameApplication']),
 };

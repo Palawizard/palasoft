@@ -1,0 +1,122 @@
+---
+// How Chest Counter builds its total, with the figures of the example window shown on the page.
+---
+
+<section class="glass breakdown" data-color="amber" aria-labelledby="breakdown-title">
+  <div class="intro">
+    <h2 id="breakdown-title">Comment ton total se construit</h2>
+    <p>
+      Chest Counter sépare ce qu’il a lu dans tes replays de ce qu’il estime. Tu vois toujours quelle part du total
+      est mesurée.
+    </p>
+    <p class="example">Les nombres viennent de la fenêtre d’exemple, plus haut.</p>
+  </div>
+
+  <dl class="sum numbers">
+    <div class="line">
+      <dt>Lu dans les replays</dt>
+      <dd class="figure">2 748</dd>
+      <dd class="detail">
+        Les coffres ouverts dans les parties qui ont un replay. C’est ce nombre à comparer au compteur du jeu, dans
+        l’onglet Quêtes.
+      </dd>
+    </div>
+    <div class="line">
+      <dt>Estimé</dt>
+      <dd class="figure"><span class="plus" aria-hidden="true">+</span> 371</dd>
+      <dd class="detail">
+        Les parties sans replay, au rythme de tes 20 premières parties, et les coffres cassés sans être ouverts.
+      </dd>
+    </div>
+    <div class="line total">
+      <dt>Total estimé</dt>
+      <dd class="figure">3 119</dd>
+      <dd class="detail">Le grand nombre en haut de la fenêtre.</dd>
+    </div>
+  </dl>
+</section>
+
+<style>
+  .breakdown {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: var(--space-6);
+    padding: var(--space-4);
+  }
+
+  .intro {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+  }
+
+  h2 {
+    font-size: var(--text-subtitle);
+  }
+
+  .example {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  .sum {
+    display: grid;
+    margin: 0;
+  }
+
+  .line {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-3);
+    row-gap: 0.25rem;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .line:first-child {
+    padding-top: 0;
+  }
+
+  .total {
+    padding-bottom: 0;
+    border-bottom: 0;
+    border-top: 2px solid var(--ink);
+  }
+
+  dt {
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+
+  .figure {
+    grid-row: span 2;
+    margin: 0;
+    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1;
+    text-align: right;
+  }
+
+  .total .figure {
+    font-size: clamp(2.25rem, 1.6rem + 1.8vw, 3rem);
+  }
+
+  .plus {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .detail {
+    max-width: 46ch;
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 56rem) {
+    .breakdown {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+  }
+</style>
