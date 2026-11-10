@@ -31,7 +31,6 @@
 
   --font: 'Open Sans Variable', 'Segoe UI', system-ui, sans-serif;
   --text-display: clamp(3rem, 2rem + 6vw, 6rem);
-  --text-title: clamp(2rem, 1.6rem + 2vw, 3rem);
   --text-subtitle: 1.5rem;
   --text-body: 1.0625rem;
   --text-small: 0.875rem;
