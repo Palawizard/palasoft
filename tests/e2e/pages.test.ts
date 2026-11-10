@@ -12,6 +12,7 @@ const PAGES = [
   '/software/silence-splitter',
   '/software/timestamper',
   '/software/palas-item-clear',
+  '/software/chest-counter',
 ];
 
 const html = async (site: Site, path: string): Promise<{ status: number; body: string }> => {

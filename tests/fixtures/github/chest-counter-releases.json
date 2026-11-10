@@ -1,0 +1,203 @@
+[
+  {
+    "tag_name": "v2.2.1",
+    "name": "Chest Counter 2.2.1",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-11-10T21:12:13Z",
+    "html_url": "https://github.com/Palawizard/chest-counter/releases/tag/v2.2.1",
+    "assets": [
+      {
+        "name": "Palawi.ChestCounter-2.2.1-delta.nupkg",
+        "size": 222357,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.1/Palawi.ChestCounter-2.2.1-delta.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-2.2.1-full.nupkg",
+        "size": 52992405,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.1/Palawi.ChestCounter-2.2.1-full.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Portable.zip",
+        "size": 52856549,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.1/Palawi.ChestCounter-win-Portable.zip",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Setup.exe",
+        "size": 60589973,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.1/Palawi.ChestCounter-win-Setup.exe",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "RELEASES",
+        "size": 89,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.1/RELEASES",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "releases.win.json",
+        "size": 532,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.1/releases.win.json",
+        "content_type": "application/json"
+      }
+    ]
+  },
+  {
+    "tag_name": "v2.2.0",
+    "name": "Chest Counter 2.2.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-11-10T20:44:02Z",
+    "html_url": "https://github.com/Palawizard/chest-counter/releases/tag/v2.2.0",
+    "assets": [
+      {
+        "name": "Palawi.ChestCounter-2.2.0-delta.nupkg",
+        "size": 651863,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.0/Palawi.ChestCounter-2.2.0-delta.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-2.2.0-full.nupkg",
+        "size": 52991723,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.0/Palawi.ChestCounter-2.2.0-full.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Portable.zip",
+        "size": 52855867,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.0/Palawi.ChestCounter-win-Portable.zip",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Setup.exe",
+        "size": 60589291,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.0/Palawi.ChestCounter-win-Setup.exe",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "RELEASES",
+        "size": 89,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.0/RELEASES",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "releases.win.json",
+        "size": 532,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.2.0/releases.win.json",
+        "content_type": "application/json"
+      }
+    ]
+  },
+  {
+    "tag_name": "v2.1.0",
+    "name": "Chest Counter 2.1.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-11-10T20:08:09Z",
+    "html_url": "https://github.com/Palawizard/chest-counter/releases/tag/v2.1.0",
+    "assets": [
+      {
+        "name": "Palawi.ChestCounter-2.1.0-delta.nupkg",
+        "size": 133123,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.1.0/Palawi.ChestCounter-2.1.0-delta.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-2.1.0-full.nupkg",
+        "size": 52670430,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.1.0/Palawi.ChestCounter-2.1.0-full.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Portable.zip",
+        "size": 52632403,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.1.0/Palawi.ChestCounter-win-Portable.zip",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Setup.exe",
+        "size": 60214238,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.1.0/Palawi.ChestCounter-win-Setup.exe",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "RELEASES",
+        "size": 89,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.1.0/RELEASES",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "releases.win.json",
+        "size": 532,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.1.0/releases.win.json",
+        "content_type": "application/json"
+      }
+    ]
+  },
+  {
+    "tag_name": "v2.0.0",
+    "name": "Chest Counter 2.0.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-11-10T19:40:33Z",
+    "html_url": "https://github.com/Palawizard/chest-counter/releases/tag/v2.0.0",
+    "assets": [
+      {
+        "name": "Palawi.ChestCounter-2.0.0-full.nupkg",
+        "size": 52668870,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.0.0/Palawi.ChestCounter-2.0.0-full.nupkg",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Portable.zip",
+        "size": 52630843,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.0.0/Palawi.ChestCounter-win-Portable.zip",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "Palawi.ChestCounter-win-Setup.exe",
+        "size": 60212678,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.0.0/Palawi.ChestCounter-win-Setup.exe",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "RELEASES",
+        "size": 89,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.0.0/RELEASES",
+        "content_type": "application/octet-stream"
+      },
+      {
+        "name": "releases.win.json",
+        "size": 272,
+        "download_count": 5,
+        "browser_download_url": "https://github.com/Palawizard/chest-counter/releases/download/v2.0.0/releases.win.json",
+        "content_type": "application/json"
+      }
+    ]
+  }
+]
