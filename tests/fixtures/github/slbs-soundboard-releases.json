@@ -1,0 +1,219 @@
+[
+  {
+    "tag_name": "v0.5.0",
+    "name": "SLB's Soundboard v0.5.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-10-08T13:10:01Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.5.0",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 63,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.5.0/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.5.0_x64.msi",
+        "size": 8105984,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.5.0/slbs-soundboard_0.5.0_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.5.0_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.5.0/slbs-soundboard_0.5.0_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.4.1",
+    "name": "SLB's Soundboard v0.4.1",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-09-23T14:55:57Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.4.1",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 30,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.4.1/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.4.1_x64.msi",
+        "size": 8081408,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.4.1/slbs-soundboard_0.4.1_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.4.1_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.4.1/slbs-soundboard_0.4.1_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.4.0",
+    "name": "SLB's Soundboard v0.4.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-09-20T20:30:53Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.4.0",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 17,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.4.0/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.4.0_x64.msi",
+        "size": 8081408,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.4.0/slbs-soundboard_0.4.0_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.4.0_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.4.0/slbs-soundboard_0.4.0_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.3.0",
+    "name": "SLB's Soundboard v0.3.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-09-20T19:32:44Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.3.0",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 5,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.3.0/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.3.0_x64.msi",
+        "size": 8077312,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.3.0/slbs-soundboard_0.3.0_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.3.0_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.3.0/slbs-soundboard_0.3.0_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.2.0",
+    "name": "SLB's Soundboard v0.2.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-09-20T18:56:46Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.2.0",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.2.0/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.2.0_x64.msi",
+        "size": 7847936,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.2.0/slbs-soundboard_0.2.0_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.2.0_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.2.0/slbs-soundboard_0.2.0_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.1.1",
+    "name": "SLB's Soundboard v0.1.1",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-09-20T17:35:40Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.1.1",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.1.1/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.1.1_x64.msi",
+        "size": 7843840,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.1.1/slbs-soundboard_0.1.1_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.1.1_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.1.1/slbs-soundboard_0.1.1_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.1.0",
+    "name": "SLB's Soundboard v0.1.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-09-20T16:54:31Z",
+    "html_url": "https://github.com/Palawizard/slbs-soundboard/releases/tag/v0.1.0",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 1653,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.1.0/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.1.0_x64.msi",
+        "size": 7831552,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.1.0/slbs-soundboard_0.1.0_x64.msi",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "slbs-soundboard_0.1.0_x64.msi.sig",
+        "size": 428,
+        "download_count": 0,
+        "browser_download_url": "https://github.com/Palawizard/slbs-soundboard/releases/download/v0.1.0/slbs-soundboard_0.1.0_x64.msi.sig",
+        "content_type": "application/zip"
+      }
+    ]
+  }
+]

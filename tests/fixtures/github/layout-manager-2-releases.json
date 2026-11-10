@@ -1,0 +1,64 @@
+[
+  {
+    "tag_name": "v0.1.0-beta.2",
+    "name": "Layout Manager 2 — v0.1.0-beta.2",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-07-03T15:01:43Z",
+    "html_url": "https://github.com/Palawizard/layout-manager-2/releases/tag/v0.1.0-beta.2",
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 2014,
+        "download_count": 20,
+        "browser_download_url": "https://github.com/Palawizard/layout-manager-2/releases/download/v0.1.0-beta.2/latest.json",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "Layout.Manager.2_0.1.0-beta.2_x64-setup.exe",
+        "size": 4613312,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/layout-manager-2/releases/download/v0.1.0-beta.2/Layout.Manager.2_0.1.0-beta.2_x64-setup.exe",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "Layout.Manager.2_0.1.0-beta.2_x64-setup.exe.sig",
+        "size": 440,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/layout-manager-2/releases/download/v0.1.0-beta.2/Layout.Manager.2_0.1.0-beta.2_x64-setup.exe.sig",
+        "content_type": "application/zip"
+      },
+      {
+        "name": "release-checksums.txt",
+        "size": 111,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/layout-manager-2/releases/download/v0.1.0-beta.2/release-checksums.txt",
+        "content_type": "text/plain; charset=utf-8"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.1.0-beta.1",
+    "name": "Layout Manager 2 - v0.1.0-beta.1",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-06-29T19:10:53Z",
+    "html_url": "https://github.com/Palawizard/layout-manager-2/releases/tag/v0.1.0-beta.1",
+    "assets": [
+      {
+        "name": "Layout.Manager.2_0.1.0-beta.1_x64-setup.exe",
+        "size": 3575036,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/layout-manager-2/releases/download/v0.1.0-beta.1/Layout.Manager.2_0.1.0-beta.1_x64-setup.exe",
+        "content_type": "application/x-msdos-program"
+      },
+      {
+        "name": "release-checksums.txt",
+        "size": 111,
+        "download_count": 1,
+        "browser_download_url": "https://github.com/Palawizard/layout-manager-2/releases/download/v0.1.0-beta.1/release-checksums.txt",
+        "content_type": "text/plain"
+      }
+    ]
+  }
+]
