@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { homePath } from '../server/software.ts';
+---
+
+<Layout title="Page introuvable | PalaSoft" description="Cette page n’existe pas sur PalaSoft.">
+  <section class="page lost">
+    <div class="glass window rise">
+      <h1>Page introuvable</h1>
+      <p>Le lien est peut-être ancien. Tous les logiciels sont sur l’accueil.</p>
+      <a class="gel gel-aqua" href={homePath}>Revenir à l’accueil</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .lost {
+    padding-block: var(--space-8);
+  }
+
+  .window {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+    max-width: 36rem;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+  }
+</style>

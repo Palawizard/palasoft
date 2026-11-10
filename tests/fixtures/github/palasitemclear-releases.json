@@ -1,0 +1,344 @@
+[
+  {
+    "tag_name": "v0.1.2",
+    "name": "Pala's Item Clear - v0.1.2",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-10-30T23:11:28Z",
+    "html_url": "https://github.com/Palawizard/PalasItemClear/releases/tag/v0.1.2",
+    "assets": [
+      {
+        "name": "palas-item-clear-1.20.1-fabric-0.1.2.jar",
+        "size": 65830,
+        "download_count": 5,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.1-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.1-forge-0.1.2.jar",
+        "size": 66247,
+        "download_count": 8,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.1-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.1-neoforge-0.1.2.jar",
+        "size": 63111,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.1-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.4-fabric-0.1.2.jar",
+        "size": 63867,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.4-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.4-forge-0.1.2.jar",
+        "size": 62863,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.4-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.4-neoforge-0.1.2.jar",
+        "size": 62623,
+        "download_count": 5,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.4-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.6-fabric-0.1.2.jar",
+        "size": 63969,
+        "download_count": 6,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.6-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.6-forge-0.1.2.jar",
+        "size": 62196,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.6-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.6-neoforge-0.1.2.jar",
+        "size": 62621,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.20.6-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.1-fabric-0.1.2.jar",
+        "size": 63969,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.1-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.1-forge-0.1.2.jar",
+        "size": 62191,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.1-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.1-neoforge-0.1.2.jar",
+        "size": 62621,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.1-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.10-fabric-0.1.2.jar",
+        "size": 63978,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.10-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.10-forge-0.1.2.jar",
+        "size": 62441,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.10-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.10-neoforge-0.1.2.jar",
+        "size": 62651,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.10-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.11-fabric-0.1.2.jar",
+        "size": 64801,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.11-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.11-forge-0.1.2.jar",
+        "size": 63278,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.11-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.11-neoforge-0.1.2.jar",
+        "size": 63471,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.11-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.5-forge-0.1.2.jar",
+        "size": 62193,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.5-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.8-fabric-0.1.2.jar",
+        "size": 63903,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.8-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.8-forge-0.1.2.jar",
+        "size": 62367,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.8-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.8-neoforge-0.1.2.jar",
+        "size": 62578,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-1.21.8-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-26.2-fabric-0.1.2.jar",
+        "size": 64330,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-26.2-fabric-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-26.2-forge-0.1.2.jar",
+        "size": 63273,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-26.2-forge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-26.2-neoforge-0.1.2.jar",
+        "size": 63465,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.2/palas-item-clear-26.2-neoforge-0.1.2.jar",
+        "content_type": "application/java-archive"
+      }
+    ]
+  },
+  {
+    "tag_name": "v0.1.1",
+    "name": "Pala's Item Clear - v0.1.1",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-07-08T03:05:30Z",
+    "html_url": "https://github.com/Palawizard/PalasItemClear/releases/tag/v0.1.1",
+    "assets": [
+      {
+        "name": "palas-item-clear-1.20.1-fabric-0.1.1.jar",
+        "size": 63305,
+        "download_count": 6,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.1-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.1-forge-0.1.1.jar",
+        "size": 63701,
+        "download_count": 23,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.1-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.1-neoforge-0.1.1.jar",
+        "size": 60580,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.1-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.4-fabric-0.1.1.jar",
+        "size": 61332,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.4-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.4-forge-0.1.1.jar",
+        "size": 60335,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.4-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.4-neoforge-0.1.1.jar",
+        "size": 60021,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.4-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.6-fabric-0.1.1.jar",
+        "size": 61437,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.6-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.6-forge-0.1.1.jar",
+        "size": 59660,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.6-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.20.6-neoforge-0.1.1.jar",
+        "size": 60094,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.20.6-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.1-fabric-0.1.1.jar",
+        "size": 61433,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.1-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.1-forge-0.1.1.jar",
+        "size": 59658,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.1-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.1-neoforge-0.1.1.jar",
+        "size": 60090,
+        "download_count": 10,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.1-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.10-fabric-0.1.1.jar",
+        "size": 61426,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.10-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.10-forge-0.1.1.jar",
+        "size": 59885,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.10-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.10-neoforge-0.1.1.jar",
+        "size": 60097,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.10-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.11-fabric-0.1.1.jar",
+        "size": 62323,
+        "download_count": 4,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.11-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.11-forge-0.1.1.jar",
+        "size": 60788,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.11-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-1.21.11-neoforge-0.1.1.jar",
+        "size": 60980,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-1.21.11-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-26.2-fabric-0.1.1.jar",
+        "size": 61848,
+        "download_count": 7,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-26.2-fabric-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-26.2-forge-0.1.1.jar",
+        "size": 60793,
+        "download_count": 2,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-26.2-forge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      },
+      {
+        "name": "palas-item-clear-26.2-neoforge-0.1.1.jar",
+        "size": 60990,
+        "download_count": 3,
+        "browser_download_url": "https://github.com/Palawizard/PalasItemClear/releases/download/v0.1.1/palas-item-clear-26.2-neoforge-0.1.1.jar",
+        "content_type": "application/java-archive"
+      }
+    ]
+  }
+]

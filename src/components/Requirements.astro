@@ -1,0 +1,39 @@
+---
+interface Props {
+  items: readonly { label: string; url?: string | undefined }[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="glass requirements" aria-labelledby="requirements-title">
+      <h2 id="requirements-title">Ce qu’il te faut</h2>
+      <ul>
+        {items.map((item) => (
+          <li>{item.url === undefined ? item.label : <a href={item.url}>{item.label}</a>}</li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .requirements {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3);
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+    padding-left: 1.25em;
+  }
+</style>

@@ -1,0 +1,177 @@
+---
+const bubbles = [
+  { x: 6, y: 78, size: 46, delay: 0 },
+  { x: 14, y: 88, size: 22, delay: 1.2 },
+  { x: 31, y: 82, size: 30, delay: 2.4 },
+  { x: 52, y: 92, size: 18, delay: 0.6 },
+  { x: 67, y: 80, size: 38, delay: 1.8 },
+  { x: 84, y: 86, size: 26, delay: 3 },
+  { x: 93, y: 76, size: 54, delay: 0.9 },
+];
+---
+
+<div class="scene" aria-hidden="true">
+  <div class="sun">
+    <span class="sun-rays"></span>
+    <span class="sun-core"></span>
+  </div>
+  <span class="flare flare-1"></span>
+  <span class="flare flare-2"></span>
+  <span class="flare flare-3"></span>
+  <svg class="waterline" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M0 22 C 180 8, 360 36, 540 22 S 900 8, 1080 22 S 1320 36, 1440 22" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"></path>
+    <path d="M0 34 C 200 24, 400 46, 600 34 S 1000 22, 1200 34 S 1380 42, 1440 34" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"></path>
+  </svg>
+  {
+    bubbles.map((bubble) => (
+      <span
+        class="bubble"
+        style={`left:${bubble.x}%;top:${bubble.y}%;width:${bubble.size}px;height:${bubble.size}px;animation-delay:-${bubble.delay}s`}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .scene {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .sun {
+    position: absolute;
+    top: -27rem;
+    right: -23rem;
+    width: 58rem;
+    aspect-ratio: 1;
+  }
+
+  .sun-rays,
+  .sun-core {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .sun-rays {
+    background: repeating-conic-gradient(from 6deg, rgb(255 255 255 / 0.22) 0deg 3deg, transparent 3deg 10deg);
+    -webkit-mask-image: radial-gradient(circle, #000 5%, rgb(0 0 0 / 0.6) 26%, rgb(0 0 0 / 0.2) 50%, transparent 72%);
+    mask-image: radial-gradient(circle, #000 5%, rgb(0 0 0 / 0.6) 26%, rgb(0 0 0 / 0.2) 50%, transparent 72%);
+    filter: blur(8px);
+    will-change: transform;
+    animation: sun-turn 240s linear infinite;
+  }
+
+  .sun-core {
+    background: radial-gradient(
+      circle,
+      #fffef6 0 3.5%,
+      rgb(255 252 232 / 0.95) 5.5%,
+      rgb(255 247 214 / 0.6) 10%,
+      rgb(255 241 204 / 0.3) 18%,
+      rgb(255 236 196 / 0.12) 30%,
+      rgb(255 236 196 / 0.04) 42%,
+      transparent 56%
+    );
+  }
+
+  .flare {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .flare-1 {
+    top: 9rem;
+    right: 17rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: radial-gradient(circle, rgb(255 255 255 / 0.28), rgb(190 235 255 / 0.08) 70%, transparent 72%);
+  }
+
+  .flare-2 {
+    top: 15rem;
+    right: 25rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    background: rgb(220 245 255 / 0.3);
+  }
+
+  .flare-3 {
+    top: 19rem;
+    right: 31rem;
+    width: 7rem;
+    height: 7rem;
+    background: radial-gradient(circle, transparent 58%, rgb(255 255 255 / 0.16) 68%, rgb(180 230 255 / 0.1) 72%, transparent 74%);
+  }
+
+  @keyframes sun-turn {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  .waterline {
+    position: absolute;
+    top: calc(73% - 22px);
+    left: 0;
+    width: 100%;
+    height: 60px;
+  }
+
+  .bubble {
+    position: absolute;
+    border: 1px solid rgb(255 255 255 / 0.6);
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.95) 0 10%, rgb(255 255 255 / 0.25) 24%, rgb(200 240 255 / 0.12) 60%, rgb(255 255 255 / 0.35) 100%);
+    animation: drift 6s ease-in-out infinite alternate;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .sun-rays,
+    .flare {
+      display: none;
+    }
+
+    .sun-core {
+      background: radial-gradient(
+        circle,
+        #eef6ff 0 2.6%,
+        rgb(214 232 255 / 0.55) 3.6%,
+        rgb(150 190 255 / 0.18) 9%,
+        rgb(120 170 255 / 0.06) 20%,
+        transparent 34%
+      );
+    }
+
+    .waterline {
+      opacity: 0.45;
+    }
+
+    .bubble {
+      border-color: rgb(170 214 255 / 0.35);
+      opacity: 0.7;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .sun {
+      top: -6rem;
+      right: -16rem;
+      width: 32rem;
+    }
+
+    .flare {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bubble,
+    .sun-rays {
+      animation: none;
+    }
+  }
+</style>

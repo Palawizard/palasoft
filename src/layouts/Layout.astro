@@ -1,0 +1,182 @@
+---
+import '../styles/global.css';
+import AeroBubbles from '../components/AeroBubbles.astro';
+import { allSoftware, homePath, softwarePath } from '../server/software.ts';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const software = await allSoftware();
+const mod = software.find((entry) => entry.data.kind === 'minecraft-mod');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0b4fa3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#050d1f" media="(prefers-color-scheme: dark)" />
+  </head>
+  <body>
+    <AeroBubbles />
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <header class="page site-header">
+      <nav class="glass bar" aria-label="Principal">
+        <a class="wordmark" href={homePath}>
+          <span class="orb" aria-hidden="true"></span>
+          PalaSoft
+        </a>
+        <ul class="nav">
+          <li><a href={`${homePath}#logiciels`}>Tous les logiciels</a></li>
+          {mod !== undefined && <li><a href={softwarePath(mod.id)}>Mod Minecraft</a></li>}
+        </ul>
+      </nav>
+    </header>
+    <main id="contenu" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="page site-footer">
+      <div class="glass footer-panel">
+        <div>
+          <p class="footer-title">PalaSoft</p>
+          <p>Les logiciels de Palawi, gratuits. Son site : <a href="https://palawi.fr">palawi.fr</a></p>
+        </div>
+        <nav aria-labelledby="code-title">
+          <p class="footer-title" id="code-title">Le code de chaque logiciel</p>
+          <ul class="footer-links">
+            {
+              software.map((entry) => (
+                <li>
+                  <a href={`https://github.com/${entry.data.repo}`}>{entry.data.name}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    top: var(--space-1);
+    left: var(--space-1);
+    z-index: 10;
+    padding: var(--space-1) var(--space-2);
+    border-radius: 8px;
+    background: var(--glass-strong);
+    color: var(--ink);
+    font-weight: 600;
+    transform: translateY(-200%);
+  }
+
+  .skip:focus-visible {
+    transform: none;
+  }
+
+  .site-header {
+    padding-top: var(--space-2);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    padding: 0.6rem 1rem 0.6rem 0.75rem;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .orb {
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid rgb(0 0 0 / 0.2);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 18%, rgb(255 255 255 / 0.95) 0 22%, transparent 46%),
+      radial-gradient(circle at 50% 75%, #8fe36d 0, #2f9a22 55%, #1b6312 100%);
+    box-shadow: 0 2px 5px rgb(6 48 74 / 0.35);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-weight: 600;
+  }
+
+  .nav a {
+    display: inline-block;
+    padding-block: 0.4rem;
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  main {
+    flex: 1;
+  }
+
+  main:focus {
+    outline: none;
+  }
+
+  .site-footer {
+    margin-top: var(--space-12);
+    padding-bottom: var(--space-4);
+  }
+
+  .footer-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-4);
+    padding: var(--space-4);
+    font-size: var(--text-small);
+  }
+
+  .footer-title {
+    margin-bottom: var(--space-1);
+    font-weight: 700;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-links a {
+    display: inline-block;
+    padding-block: 0.4rem;
+  }
+</style>

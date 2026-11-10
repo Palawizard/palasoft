@@ -1,0 +1,50 @@
+---
+import type { ReleaseView } from '../lib/catalog.ts';
+import { formatDateTime } from '../lib/format.ts';
+
+interface Props {
+  views: readonly ReleaseView[];
+}
+
+const { views } = Astro.props;
+const staleTimes = views.flatMap((view) => (view.state === 'ready' && view.stale ? [view.fetchedAt] : []));
+const oldest = staleTimes.length > 0 ? Math.min(...staleTimes) : undefined;
+const missing = views.some((view) => view.state === 'unavailable');
+---
+
+{
+  (oldest !== undefined || missing) && (
+    <div class="glass notice" role="status">
+      <svg class="notice-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+        <path d="M12 7v6M12 16.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      <p>
+        GitHub, qui héberge les fichiers, ne répond pas en ce moment.
+        {oldest !== undefined && ` Les infos de version affichées datent du ${formatDateTime(oldest)}.`}
+        {missing && " Les boutons sans version t’emmènent directement sur GitHub."}
+      </p>
+    </div>
+  )
+}
+
+<style>
+  .notice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    font-weight: 500;
+  }
+
+  .notice-icon {
+    flex: none;
+    color: #b06f00;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .notice-icon {
+      color: var(--notice);
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <rect width="1024" height="1024" rx="192" fill="#000000" />
+
+  <!-- Rounded bookmark -->
+  <path
+    d="M 288 176
+       C 248 176 224 208 224 248
+       V 792
+       C 224 828 252 852 284 836
+       L 496 724
+       C 506 718 518 718 528 724
+       L 740 836
+       C 772 852 800 828 800 792
+       V 248
+       C 800 208 776 176 736 176
+       Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Timestamp mark accent -->
+  <rect x="392" y="472" width="240" height="80" rx="40" fill="#000000" />
+</svg>

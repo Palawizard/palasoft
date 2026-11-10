@@ -1,0 +1,35 @@
+---
+import type { ReleaseView } from '../lib/catalog.ts';
+import { formatDate, formatDownloads, formatSize } from '../lib/format.ts';
+
+interface Props {
+  view: ReleaseView;
+  downloads?: number | undefined;
+  showDate?: boolean;
+  showSize?: boolean;
+}
+
+const { view, downloads, showDate = false, showSize = true } = Astro.props;
+const size = view.state === 'ready' && view.installer !== undefined ? formatSize(view.installer.size) : undefined;
+const date = view.state === 'ready' && view.release.publishedAt !== null ? formatDate(view.release.publishedAt) : undefined;
+---
+
+{
+  view.state === 'ready' ? (
+    <span class="ticket numbers">
+      <span class="ticket-items">
+      <span>
+        version {view.release.version}
+        {view.release.isBeta && <span class="badge">bêta</span>}
+      </span>
+      {showSize && size !== undefined && <span>{size}</span>}
+      {showDate && date !== undefined && <span>publiée le {date}</span>}
+      {downloads !== undefined && <span>{formatDownloads(downloads)}</span>}
+      </span>
+    </span>
+  ) : view.state === 'none' ? (
+    <span class="ticket">pas encore de version publiée</span>
+  ) : (
+    <span class="ticket">version indisponible pour l’instant</span>
+  )
+}
