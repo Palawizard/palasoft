@@ -27,7 +27,7 @@ const screenshot = entry.data.screenshots[0];
     {
       screenshot !== undefined && (
         <figure class="shot showcase-shot">
-          <Image src={screenshot.src} alt={screenshot.alt} widths={[480, 720, 960]} sizes="(min-width: 64rem) 34rem, 92vw" loading="eager" />
+          <Image src={screenshot.src} alt={screenshot.alt} widths={[560, 840, 1120, 1600]} sizes="(min-width: 64rem) 34rem, 92vw" quality={90} loading="eager" />
         </figure>
       )
     }

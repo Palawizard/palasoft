@@ -63,8 +63,9 @@ const isMod = entry.data.kind === 'minecraft-mod';
             <Image
               src={screenshot.src}
               alt={screenshot.alt}
-              widths={[400, 640, 880]}
+              widths={[640, 960, 1280, 1600]}
               sizes="(min-width: 64rem) 38rem, 92vw"
+              quality={90}
             />
           </figure>
         ) : (
