@@ -1,0 +1,14 @@
+---
+import { Image } from 'astro:assets';
+import type { SoftwareEntry } from '../server/software.ts';
+
+interface Props {
+  entry: SoftwareEntry;
+  size: number;
+  class?: string;
+}
+
+const { entry, size, class: className } = Astro.props;
+---
+
+<Image src={entry.data.icon} alt="" width={size} height={size} class={className} loading="eager" />

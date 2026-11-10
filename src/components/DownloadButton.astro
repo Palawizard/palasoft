@@ -1,0 +1,54 @@
+---
+import type { ReleaseView } from '../lib/catalog.ts';
+import { formatSize } from '../lib/format.ts';
+import { downloadPath, type SoftwareEntry } from '../server/software.ts';
+import IconDownload from './IconDownload.astro';
+
+interface Props {
+  entry: SoftwareEntry;
+  view: ReleaseView;
+  compact?: boolean;
+  showFile?: boolean;
+}
+
+const { entry, view, compact = false, showFile = true } = Astro.props;
+const installer = view.state === 'ready' ? view.installer : undefined;
+---
+
+{
+  view.state === 'none' ? (
+    <p class="none">Aucune version n’est publiée pour l’instant.</p>
+  ) : (
+    <div class="download">
+      <a class:list={['gel', { 'gel-small': compact }]} href={downloadPath(entry.id)}>
+        <IconDownload />
+        {view.state === 'unavailable' ? 'Télécharger sur GitHub' : `Télécharger ${compact ? '' : entry.data.name}`.trim()}
+      </a>
+      {showFile && installer !== undefined && (
+        <p class="file numbers">
+          <span class="visually-hidden">Fichier : </span>
+          {installer.name} · {formatSize(installer.size)}
+        </p>
+      )}
+    </div>
+  )
+}
+
+<style>
+  .download {
+    display: grid;
+    justify-items: start;
+    gap: 0.4rem;
+  }
+
+  .file {
+    max-width: 100%;
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    overflow-wrap: anywhere;
+  }
+
+  .none {
+    color: var(--ink-soft);
+  }
+</style>

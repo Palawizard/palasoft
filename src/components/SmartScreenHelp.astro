@@ -1,39 +1,56 @@
-<section class="smartscreen" aria-labelledby="smartscreen-title">
-  <h2 id="smartscreen-title">si Windows t’avertit</h2>
-  <p>
-    Ce logiciel n’a pas de signature numérique payante. Windows ne le connaît donc pas encore et peut
-    ouvrir une fenêtre d’avertissement au lancement de l’installation. C’est fréquent pour les petits
-    logiciels gratuits.
-  </p>
-  <ol>
-    <li>Dans la fenêtre d’avertissement, clique sur le petit lien sous le message pour afficher plus d’infos.</li>
-    <li>Un bouton apparaît en bas pour lancer l’installation quand même : clique dessus.</li>
-    <li>L’installation continue normalement.</li>
-  </ol>
-  <p class="smartscreen-note">Ne fais ça que pour un fichier téléchargé ici ou sur la page GitHub de Palawi.</p>
+<section class="glass smartscreen" aria-labelledby="smartscreen-title">
+  <header class="dialog-bar">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+      <path d="M12 2 3 5.5v6c0 5 3.8 9.3 9 10.5 5.2-1.2 9-5.5 9-10.5v-6L12 2Z" fill="#2c86c9" />
+      <path d="M12 7v6M12 16v.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+    </svg>
+    <h2 id="smartscreen-title">Si Windows t’avertit</h2>
+  </header>
+  <div class="dialog-body">
+    <p>
+      Ce logiciel n’a pas de signature numérique payante. Windows ne le connaît donc pas encore et peut ouvrir une
+      fenêtre d’avertissement au lancement de l’installation. C’est fréquent pour les petits logiciels gratuits.
+    </p>
+    <ol>
+      <li>Dans la fenêtre d’avertissement, clique sur le petit lien sous le message pour afficher plus d’infos.</li>
+      <li>Un bouton apparaît en bas pour lancer l’installation quand même : clique dessus.</li>
+      <li>L’installation continue normalement.</li>
+    </ol>
+    <p class="note">Ne fais ça que pour un fichier téléchargé ici ou sur la page GitHub de Palawi.</p>
+  </div>
 </section>
 
 <style>
   .smartscreen {
-    display: grid;
-    gap: var(--space-2);
-    max-width: var(--measure);
-    padding: var(--space-3);
-    background: var(--panel);
+    overflow: hidden;
+  }
+
+  .dialog-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem var(--space-3);
+    border-bottom: 1px solid var(--rule);
   }
 
   h2 {
-    font-size: var(--text-subtitle);
+    font-size: 1.25rem;
+  }
+
+  .dialog-body {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-3);
   }
 
   ol {
     display: grid;
     gap: var(--space-1);
     margin: 0;
-    padding-left: 1.5em;
+    padding-left: 1.4em;
   }
 
-  .smartscreen-note {
+  .note {
     color: var(--ink-soft);
     font-size: var(--text-small);
   }

@@ -4,13 +4,19 @@ tagline: Nettoie les objets au sol pour réduire le lag de ton serveur, avec des
 order: 6
 repo: Palawizard/PalasItemClear
 color: emerald
+icon: ../../assets/software/palas-item-clear/icon.svg
+screenshots:
+  - src: ../../assets/software/palas-item-clear/recovery-bin.png
+    alt: "La poubelle de récupération : un coffre où tu reprends les objets retirés."
+  - src: ../../assets/software/palas-item-clear/chat-warnings.png
+    alt: "Les avertissements en couleur dans le chat avant chaque nettoyage, puis le nombre d’objets retirés."
 kind: minecraft-mod
 versionMatrix: versions/version-matrix.json
 modrinth: https://modrinth.com/mod/palas-item-clear
 curseforge: https://www.curseforge.com/minecraft/mc-mods/palas-item-clear
 ---
 
-## ce que ça fait
+## Ce que ça fait
 
 Pala's Item Clear retire régulièrement les objets qui traînent au sol sur ton serveur Minecraft, pour réduire le lag.
 
@@ -20,7 +26,7 @@ Pala's Item Clear retire régulièrement les objets qui traînent au sol sur ton
 - Les commandes /palasitemclear demandent le niveau de permission 2 (opérateur).
 - Il marche avec Forge, Fabric et NeoForge, de Minecraft 1.20.1 à 26.2.
 
-## installer
+## Installer
 
 1. Choisis le loader et la version de Minecraft de ton serveur, puis télécharge le fichier.
 2. Mets le fichier dans le dossier mods du serveur.

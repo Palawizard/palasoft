@@ -1,11 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import QuickDownloads from '../components/QuickDownloads.astro';
+import Bubbles from '../components/Bubbles.astro';
+import Dock from '../components/Dock.astro';
 import RemoteDataNotice from '../components/RemoteDataNotice.astro';
-import SoftwareTile from '../components/SoftwareTile.astro';
+import Showcase from '../components/Showcase.astro';
+import SoftwareRow, { type RowLayout } from '../components/SoftwareRow.astro';
 import { allSoftwareWithReleases } from '../server/software.ts';
 
 const items = await allSoftwareWithReleases();
+const featured = items.find(({ entry }) => entry.data.screenshots.length > 0) ?? items[0];
+const others = items.filter((item) => item !== featured);
+const wideLayouts: RowLayout[] = ['overlap', 'stacked', 'overlap-flip'];
+const layoutOf = (item: (typeof items)[number], index: number): RowLayout => {
+  const shot = item.entry.data.screenshots[0];
+  return shot !== undefined && shot.src.height > shot.src.width ? 'compact' : (wideLayouts[index % wideLayouts.length] ?? 'overlap');
+};
 Astro.response.headers.set('Cache-Control', 'no-cache');
 ---
 
@@ -14,19 +23,26 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
   description="Télécharge les logiciels de Palawi pour Windows et son mod Minecraft, avec l’aide pour les installer."
 >
   <div class="page home">
-    <section class="intro">
-      <h1 class="display">mes logiciels</h1>
-      <p class="lead">
-        Des logiciels gratuits pour Windows et un mod pour serveur Minecraft. Clique sur une tuile pour
-        télécharger, ou ouvre la page d’un logiciel pour savoir comment l’installer.
+    <section class="intro rise">
+      <h1 class="on-sky">PalaSoft</h1>
+      <p class="lead on-sky">
+        Les logiciels de Palawi, gratuits, pour Windows et pour ton serveur Minecraft. Choisis, télécharge, installe : chaque page t’explique tout.
       </p>
     </section>
     <RemoteDataNotice views={items.map(({ view }) => view)} />
-    <QuickDownloads items={items} />
-    <section class="all" aria-labelledby="all-title">
-      <h2 id="all-title" class="all-title">tous les logiciels</h2>
-      <ul class="all-list">
-        {items.map((item, index) => <SoftwareTile item={item} order={index + items.length} />)}
+    <Dock items={items} />
+    {
+      featured !== undefined && (
+        <div class="stage">
+          <Showcase item={featured} />
+          <Bubbles items={others} />
+        </div>
+      )
+    }
+    <section id="autres" class="all" aria-labelledby="all-title">
+      <h2 id="all-title" class="all-title">Les autres logiciels</h2>
+      <ul class="rows">
+        {others.map((item, index) => <SoftwareRow item={item} layout={layoutOf(item, index)} />)}
       </ul>
     </section>
   </div>
@@ -34,62 +50,57 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
 
 <style>
   .home {
-    container-type: inline-size;
     display: grid;
-    gap: var(--space-6);
-    padding-top: var(--space-4);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-6);
   }
 
   .intro {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
-  .display {
-    font-size: max(3rem, 18cqi);
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    margin-left: -0.06em;
+  h1 {
+    font-size: var(--text-display);
+    font-weight: 700;
   }
 
   .lead {
-    max-width: 52ch;
-    font-size: 1.25rem;
-    color: var(--ink-soft);
+    max-width: 46ch;
+    font-size: var(--text-lead);
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: var(--space-4);
+    align-items: center;
   }
 
   .all {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+    scroll-margin-top: var(--space-3);
   }
 
   .all-title {
-    font-size: var(--text-subtitle);
+    font-size: var(--text-title);
   }
 
-  .all-list {
+  .rows {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap);
+    justify-items: stretch;
+    gap: var(--space-6);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  @container (min-width: 40rem) {
-    .all-list {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .all-list > :global(li:nth-child(6n + 1)),
-    .all-list > :global(li:nth-child(6n)) {
-      grid-column: span 2;
-    }
-  }
-
-  @container (min-width: 68rem) {
-    .all-list {
-      grid-template-columns: repeat(4, 1fr);
+  @media (max-width: 64rem) {
+    .stage {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

@@ -13,9 +13,11 @@ src/
     api/health.ts        health check
     dl/[slug].astro      redirect to the recommended file (or the mod jar chosen in the form)
     dl/[slug]/[file].astro  redirect to a named file of the latest release
-  layouts/Layout.astro   shared page shell: header, footer, fonts, press tilt script
-  components/            shared UI pieces (tiles, download panel, mod picker, SmartScreen help...)
-  scripts/tilt.ts        tile press tilt, pointer only, off under reduced motion
+  layouts/Layout.astro   shared page shell: glass header, footer, font, sky and water scene
+  components/            shared UI pieces (quick download dock, showcase window, bubbles,
+                         software rows, download button, mod picker, screenshot gallery,
+                         SmartScreen help...)
+  assets/software/<slug>/  icon and screenshots of each program, optimised by Astro at build
   server/                glue between Astro and lib/ (catalog instance, entry lookup, responses)
   lib/                   code that does not depend on Astro
     config.ts            environment variables
@@ -40,7 +42,9 @@ Each file in `src/content/software/` describes one program. The file name is its
 - `windows`: a Windows program installed from a GitHub release. `installerPattern` is a regular expression matched against the file names of the release: the first match is the file offered for download. `unsignedInstaller` says whether Windows SmartScreen shows a warning, `requirements` lists what must be installed first.
 - `minecraft-mod`: a Minecraft mod, also published on Modrinth and CurseForge. `versionMatrix` is the path, in the mod repository, of the JSON file that lists the Minecraft version bands and their loaders. It is read at the tag of the latest release.
 
-Every entry has a display name, a one-line tagline in French, a sort order, its GitHub repository (`Palawizard/<repo>`) and a tile colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`). The Markdown body of the file is the text of the program page. `requirements` is shown in the "ce qu'il te faut" block next to the download button.
+Every entry has a display name, a one-line tagline in French, a sort order, its GitHub repository (`Palawizard/<repo>`), a colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`, used as the tint of its bubble and window), an `icon` and a list of `screenshots` (`src` and `alt`), both paths into `src/assets/software/<slug>/` checked at build time. The first screenshot is the one shown next to the download button and in the home lists; the others form the gallery of the program page. The Markdown body of the file is the text of the program page. `requirements` is shown in the "Ce qu'il te faut" block next to the text.
+
+Icons come from each program's repository at its published tag. Screenshots of PalaClips and Pala's Item Clear come from their repositories; the other four were captured from each program's own interface, run in a browser with example data. Each image file carries its origin in its metadata.
 
 The build fails when an entry has no file selection rule (`installerPattern` or `versionMatrix`).
 
