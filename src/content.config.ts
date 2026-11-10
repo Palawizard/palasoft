@@ -56,4 +56,15 @@ const software = defineCollection({
   schema: (context) => z.discriminatedUnion('kind', [windowsApp(context), minecraftMod(context)]),
 });
 
-export const collections = { software };
+// English text of a program: same slug as its French file, the rest of its data comes from the French file.
+// `screenshotAlts` and `requirements` follow the order of the French lists.
+const softwareEn = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/software-en' }),
+  schema: z.object({
+    tagline: z.string().min(1).max(140),
+    screenshotAlts: z.array(z.string().min(1)).default([]),
+    requirements: z.array(z.string().min(1)).default([]),
+  }),
+});
+
+export const collections = { software, softwareEn };

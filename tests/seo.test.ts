@@ -11,6 +11,7 @@ const facts: SoftwareFacts = {
   downloadUrl: 'https://palawi.fr/software/dl/palaclips',
   screenshot: 'https://palawi.fr/software/_image?href=x',
   sameAs: ['https://github.com/Palawizard/PalaClips'],
+  language: 'fr',
 };
 
 describe('softwareJsonLd', () => {
@@ -51,10 +52,15 @@ describe('breadcrumbJsonLd', () => {
 
 describe('siteJsonLd', () => {
   it('lists every program page after the site', () => {
-    const [site, list] = siteJsonLd('https://palawi.fr/software/', 'Les logiciels.', [
-      { name: 'PalaClips', url: 'https://palawi.fr/software/palaclips' },
-    ]);
-    expect(site).toMatchObject({ '@type': 'WebSite', name: 'PalaSoft', url: 'https://palawi.fr/software/' });
+    const [site, list] = siteJsonLd({
+      homeUrl: 'https://palawi.fr/software/',
+      description: 'Les logiciels.',
+      language: 'fr',
+      listName: 'Les logiciels de Palawi',
+      pages: [{ name: 'PalaClips', url: 'https://palawi.fr/software/palaclips' }],
+    });
+    expect(site).toMatchObject({ '@type': 'WebSite', name: 'PalaSoft', url: 'https://palawi.fr/software/', inLanguage: 'fr' });
+    expect(list).toMatchObject({ name: 'Les logiciels de Palawi' });
     expect(list?.itemListElement).toEqual([
       { '@type': 'ListItem', position: 1, name: 'PalaClips', url: 'https://palawi.fr/software/palaclips' },
     ]);

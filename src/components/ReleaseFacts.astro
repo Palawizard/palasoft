@@ -1,6 +1,7 @@
 ---
 import type { ReleaseView } from '../lib/catalog.ts';
 import { formatDate, formatDownloads, formatSize } from '../lib/format.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   view: ReleaseView;
@@ -10,8 +11,10 @@ interface Props {
 }
 
 const { view, downloads, showDate = false, showSize = true } = Astro.props;
-const size = view.state === 'ready' && view.installer !== undefined ? formatSize(view.installer.size) : undefined;
-const date = view.state === 'ready' && view.release.publishedAt !== null ? formatDate(view.release.publishedAt) : undefined;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const size = view.state === 'ready' && view.installer !== undefined ? formatSize(view.installer.size, locale) : undefined;
+const date = view.state === 'ready' && view.release.publishedAt !== null ? formatDate(view.release.publishedAt, locale) : undefined;
 ---
 
 {
@@ -19,17 +22,17 @@ const date = view.state === 'ready' && view.release.publishedAt !== null ? forma
     <span class="ticket numbers">
       <span class="ticket-items">
       <span>
-        version {view.release.version}
-        {view.release.isBeta && <span class="badge">bêta</span>}
+        {t.facts.version(view.release.version)}
+        {view.release.isBeta && <span class="badge">{t.facts.beta}</span>}
       </span>
       {showSize && size !== undefined && <span>{size}</span>}
-      {showDate && date !== undefined && <span>publiée le {date}</span>}
-      {downloads !== undefined && <span>{formatDownloads(downloads)}</span>}
+      {showDate && date !== undefined && <span>{t.facts.published(date)}</span>}
+      {downloads !== undefined && <span>{formatDownloads(downloads, locale)}</span>}
       </span>
     </span>
   ) : view.state === 'none' ? (
-    <span class="ticket">pas encore de version publiée</span>
+    <span class="ticket">{t.facts.none}</span>
   ) : (
-    <span class="ticket">version indisponible pour l’instant</span>
+    <span class="ticket">{t.facts.unavailable}</span>
   )
 }

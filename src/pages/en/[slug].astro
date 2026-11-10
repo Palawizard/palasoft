@@ -1,0 +1,10 @@
+---
+import ProgramPage from '../../views/ProgramPage.astro';
+import { findSoftware, notFound } from '../../server/software.ts';
+
+const entry = await findSoftware(Astro.params.slug);
+if (entry === undefined) return notFound();
+Astro.response.headers.set('Cache-Control', 'no-cache');
+---
+
+<ProgramPage entry={entry} />

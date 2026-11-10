@@ -115,5 +115,5 @@ export const startSite = async (env: Record<string, string>): Promise<Site> => {
   return { url, output: () => output, stop };
 };
 
-export const get = (site: Site, path: string): Promise<Response> =>
-  fetch(`${site.url}${path}`, { redirect: 'manual' });
+export const get = (site: Site, path: string, headers: Record<string, string> = {}): Promise<Response> =>
+  fetch(`${site.url}${path}`, { redirect: 'manual', headers });

@@ -1,0 +1,7 @@
+---
+import HomePage from '../../views/HomePage.astro';
+
+Astro.response.headers.set('Cache-Control', 'no-cache');
+---
+
+<HomePage />

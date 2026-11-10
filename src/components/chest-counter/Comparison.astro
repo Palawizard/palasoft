@@ -1,64 +1,31 @@
 ---
-// Chest Counter against the other ways to know how many chests you opened, as checked in November 2026.
-type Answer = { ok: boolean; text: string };
+import { localeOf, stringsFor } from '../../i18n/index.ts';
 
-const columns = ['Chest Counter', 'Compteur du jeu (onglet Quêtes)', 'Sites de stats (Fortnite Tracker et autres)'];
-const rows: { label: string; answers: [Answer, Answer, Answer] }[] = [
-  {
-    label: 'Compte les coffres ouverts',
-    answers: [
-      { ok: true, text: 'Oui' },
-      { ok: true, text: 'Oui, en un seul total' },
-      { ok: false, text: 'Aucun compteur de coffres trouvé' },
-    ],
-  },
-  {
-    label: 'Détail par partie',
-    answers: [
-      { ok: true, text: 'Oui' },
-      { ok: false, text: 'Non' },
-      { ok: false, text: 'Pas pour les coffres' },
-    ],
-  },
-  {
-    label: 'Sépare le mesuré de l’estimé',
-    answers: [
-      { ok: true, text: 'Oui' },
-      { ok: false, text: 'Non' },
-      { ok: false, text: 'Non' },
-    ],
-  },
-  {
-    label: 'Sans lancer le jeu ni créer de compte',
-    answers: [
-      { ok: true, text: 'Oui' },
-      { ok: false, text: 'Non, dans le jeu' },
-      { ok: false, text: 'Non, stats publiques à activer' },
-    ],
-  },
-  {
-    label: 'Marche sans internet',
-    answers: [
-      { ok: true, text: 'Oui' },
-      { ok: false, text: 'Non' },
-      { ok: false, text: 'Non' },
-    ],
-  },
+// Chest Counter against the other ways to know how many chests you opened, as checked in November 2026.
+// Which answers are a yes stays here; the words come from the dictionaries.
+const c = stringsFor(localeOf(Astro)).chestCounter.comparison;
+const yes: boolean[][] = [
+  [true, true, false],
+  [true, false, false],
+  [true, false, false],
+  [true, false, false],
+  [true, false, false],
 ];
+const rows = c.rows.map((row, index) => ({
+  label: row.label,
+  answers: row.answers.map((text, column) => ({ text, ok: yes[index]?.[column] ?? false })),
+}));
 ---
 
 <section class="glass comparison" aria-labelledby="comparison-title">
-  <h2 id="comparison-title">Et les autres moyens de compter ?</h2>
-  <p class="lead-in">
-    Le compteur du jeu reste la référence : compare-le à la ligne « Lu dans les replays ». Chest Counter montre en plus
-    comment ce nombre est atteint, et tu peux le garder ouvert à côté du jeu.
-  </p>
+  <h2 id="comparison-title">{c.title}</h2>
+  <p class="lead-in">{c.lead}</p>
   <div class="scroll" role="region" aria-labelledby="comparison-title" tabindex="0">
     <table>
       <thead>
         <tr>
           <td></td>
-          {columns.map((column) => <th scope="col">{column}</th>)}
+          {c.columns.map((column) => <th scope="col">{column}</th>)}
         </tr>
       </thead>
       <tbody>
@@ -86,7 +53,7 @@ const rows: { label: string; answers: [Answer, Answer, Answer] }[] = [
       </tbody>
     </table>
   </div>
-  <p class="as-of">Comparaison faite en novembre 2026.</p>
+  <p class="as-of">{c.asOf}</p>
 </section>
 
 <style>

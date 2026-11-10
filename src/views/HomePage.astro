@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Bubbles from '../components/Bubbles.astro';
+import Dock from '../components/Dock.astro';
+import RemoteDataNotice from '../components/RemoteDataNotice.astro';
+import Showcase from '../components/Showcase.astro';
+import SoftwareRow, { type RowLayout } from '../components/SoftwareRow.astro';
+import { allSoftwareWithReleases, homePath, softwarePath } from '../server/software.ts';
+import { siteJsonLd } from '../lib/seo.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+// The home, in the language of its route (pages/index.astro, pages/en/index.astro).
+
+const items = await allSoftwareWithReleases();
+const featured = items.find(({ entry }) => entry.data.screenshots.length > 0) ?? items[0];
+const others = items.filter((item) => item !== featured);
+const wideLayouts: RowLayout[] = ['overlap', 'overlap-flip'];
+const layoutOf = (item: (typeof items)[number], index: number): RowLayout => {
+  const shot = item.entry.data.screenshots[0];
+  return shot !== undefined && shot.src.height > shot.src.width ? 'compact' : (wideLayouts[index % wideLayouts.length] ?? 'overlap');
+};
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const description = t.home.description;
+const absolute = (path: string): string => new URL(path, Astro.site).href;
+const jsonLd = siteJsonLd({
+  homeUrl: absolute(homePath(locale)),
+  description,
+  language: locale,
+  listName: t.home.listName,
+  pages: items.map(({ entry }) => ({ name: entry.data.name, url: absolute(softwarePath(entry.id, locale)) })),
+});
+---
+
+<Layout title={t.home.title} description={description} jsonLd={jsonLd}>
+  <div class="page home">
+    <section class="intro rise">
+      <h1 class="on-sky">PalaSoft</h1>
+      <p class="lead on-sky">
+        {t.home.lead}
+      </p>
+    </section>
+    <RemoteDataNotice views={items.map(({ view }) => view)} />
+    <Dock items={items} />
+    {
+      featured !== undefined && (
+        <div class="stage">
+          <Showcase item={featured} />
+          <Bubbles items={others} />
+        </div>
+      )
+    }
+    <section id="autres" class="all" aria-labelledby="all-title">
+      <h2 id="all-title" class="all-title">{t.home.others}</h2>
+      <ul class="rows">
+        {others.map((item, index) => <SoftwareRow item={item} layout={layoutOf(item, index)} />)}
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .home {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+  }
+
+  .intro {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    font-weight: 700;
+  }
+
+  .lead {
+    max-width: 46ch;
+    font-size: var(--text-lead);
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .all {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+    scroll-margin-top: var(--space-3);
+  }
+
+  .all-title {
+    font-size: var(--text-title);
+  }
+
+  .rows {
+    display: grid;
+    justify-items: stretch;
+    gap: var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 64rem) {
+    .stage {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

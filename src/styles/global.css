@@ -197,6 +197,10 @@ p {
   text-wrap: pretty;
 }
 
+li {
+  text-wrap: pretty;
+}
+
 a {
   color: inherit;
   text-decoration-thickness: 1px;
