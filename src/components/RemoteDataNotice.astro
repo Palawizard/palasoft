@@ -1,0 +1,23 @@
+---
+import type { ReleaseView } from '../lib/catalog.ts';
+import { formatDateTime } from '../lib/format.ts';
+
+interface Props {
+  views: readonly ReleaseView[];
+}
+
+const { views } = Astro.props;
+const staleTimes = views.flatMap((view) => (view.state === 'ready' && view.stale ? [view.fetchedAt] : []));
+const oldest = staleTimes.length > 0 ? Math.min(...staleTimes) : undefined;
+const missing = views.some((view) => view.state === 'unavailable');
+---
+
+{
+  (oldest !== undefined || missing) && (
+    <p class="notice" role="status">
+      GitHub, qui héberge les fichiers, ne répond pas en ce moment.
+      {oldest !== undefined && ` Les infos de version affichées datent du ${formatDateTime(oldest)}.`}
+      {missing && " Les boutons sans version t'emmènent directement sur GitHub."}
+    </p>
+  )
+}

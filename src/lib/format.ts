@@ -25,6 +25,22 @@ export const formatDate = (isoDate: string): string =>
     .map((part) => (part.type === 'day' && part.value === '1' ? '1er' : part.value))
     .join('');
 
+const dateAndTime = new Intl.DateTimeFormat('fr-FR', {
+  day: 'numeric',
+  month: 'long',
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZone: 'Europe/Paris',
+});
+
+export const formatDateTime = (timestamp: number): string => {
+  const parts = Object.fromEntries(
+    dateAndTime.formatToParts(new Date(timestamp)).map((part) => [part.type, part.value]),
+  );
+  const day = parts['day'] === '1' ? '1er' : parts['day'];
+  return `${day} ${parts['month']} à ${parts['hour']} h ${parts['minute']}`;
+};
+
 const LOADER_NAMES: Readonly<Record<string, string>> = {
   fabric: 'Fabric',
   forge: 'Forge',

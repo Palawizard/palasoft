@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import QuickDownloads from '../components/QuickDownloads.astro';
+import RemoteDataNotice from '../components/RemoteDataNotice.astro';
+import SoftwareTile from '../components/SoftwareTile.astro';
+import { allSoftwareWithReleases } from '../server/software.ts';
+
+const items = await allSoftwareWithReleases();
+Astro.response.headers.set('Cache-Control', 'no-cache');
+---
+
+<Layout
+  title="PalaSoft | Les logiciels de Palawi à télécharger"
+  description="Télécharge les logiciels de Palawi pour Windows et son mod Minecraft, avec l'aide pour les installer."
+>
+  <div class="page home">
+    <section class="intro">
+      <h1 class="display">mes logiciels</h1>
+      <p class="lead">
+        Des logiciels gratuits pour Windows et un mod pour serveur Minecraft. Clique sur une tuile pour
+        télécharger, ou ouvre la page d'un logiciel pour savoir comment l'installer.
+      </p>
+    </section>
+    <RemoteDataNotice views={items.map(({ view }) => view)} />
+    <QuickDownloads items={items} />
+    <section class="all" aria-labelledby="all-title">
+      <h2 id="all-title" class="all-title">tous les logiciels</h2>
+      <ul class="all-list">
+        {items.map((item, index) => <SoftwareTile item={item} order={index + items.length} />)}
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .home {
+    display: grid;
+    gap: var(--space-6);
+    padding-top: var(--space-4);
+  }
+
+  .intro {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .display {
+    font-size: var(--text-display);
+    line-height: 0.95;
+    margin-left: -0.05em;
+  }
+
+  .lead {
+    max-width: 52ch;
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+  }
+
+  .all {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .all-title {
+    font-size: var(--text-subtitle);
+  }
+
+  .all-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    gap: var(--gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

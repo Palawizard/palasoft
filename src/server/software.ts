@@ -1,5 +1,5 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
-import { createCatalog, type SoftwareSource } from '../lib/catalog.ts';
+import { createCatalog, type ReleaseView, type SoftwareSource } from '../lib/catalog.ts';
 import { readConfig } from '../lib/config.ts';
 
 export type SoftwareEntry = CollectionEntry<'software'>;
@@ -14,6 +14,16 @@ export const toSource = (entry: SoftwareEntry): SoftwareSource =>
   entry.data.kind === 'windows'
     ? { slug: entry.id, repo: entry.data.repo, kind: 'windows', installerPattern: entry.data.installerPattern }
     : { slug: entry.id, repo: entry.data.repo, kind: 'minecraft-mod', versionMatrix: entry.data.versionMatrix };
+
+export const releaseOf = (entry: SoftwareEntry): Promise<ReleaseView> => catalog.release(toSource(entry));
+
+export interface SoftwareWithRelease {
+  entry: SoftwareEntry;
+  view: ReleaseView;
+}
+
+export const allSoftwareWithReleases = async (): Promise<SoftwareWithRelease[]> =>
+  Promise.all((await allSoftware()).map(async (entry) => ({ entry, view: await releaseOf(entry) })));
 
 export const findSoftware = async (slug: string | undefined): Promise<SoftwareEntry | undefined> =>
   slug === undefined ? undefined : getEntry('software', slug);

@@ -1,0 +1,37 @@
+---
+import type { ReleaseView } from '../lib/catalog.ts';
+import { formatDate, formatSize } from '../lib/format.ts';
+
+interface Props {
+  view: ReleaseView;
+  showDate?: boolean;
+}
+
+const { view, showDate = false } = Astro.props;
+const size = view.state === 'ready' && view.installer !== undefined ? formatSize(view.installer.size) : undefined;
+const date = view.state === 'ready' && view.release.publishedAt !== null ? formatDate(view.release.publishedAt) : undefined;
+---
+
+{
+  view.state === 'ready' ? (
+    <span class="facts numbers">
+      <span>version {view.release.version}</span>
+      {size !== undefined && <span>{size}</span>}
+      {showDate && date !== undefined && <span>publiée le {date}</span>}
+      {view.release.isBeta && <span class="badge">bêta</span>}
+    </span>
+  ) : view.state === 'none' ? (
+    <span class="facts">pas encore de version publiée</span>
+  ) : (
+    <span class="facts">version indisponible pour l'instant</span>
+  )
+}
+
+<style>
+  .facts {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+  }
+</style>

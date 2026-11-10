@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatSize, loaderName, minecraftBandLabel } from '../src/lib/format.ts';
+import { formatDate, formatDateTime, formatSize, loaderName, minecraftBandLabel } from '../src/lib/format.ts';
 
 describe('formatSize', () => {
   it.each([
@@ -18,6 +18,13 @@ describe('formatDate', () => {
   it('writes the date in French, in the Paris time zone', () => {
     expect(formatDate('2026-10-28T15:32:10Z')).toBe('28 octobre 2026');
     expect(formatDate('2026-06-30T23:41:02Z')).toBe('1er juillet 2026');
+  });
+});
+
+describe('formatDateTime', () => {
+  it('writes the day, month and Paris time', () => {
+    expect(formatDateTime(Date.parse('2026-11-10T13:05:00Z'))).toBe('10 novembre à 14 h 05');
+    expect(formatDateTime(Date.parse('2026-07-01T08:30:00Z'))).toBe('1er juillet à 10 h 30');
   });
 });
 
