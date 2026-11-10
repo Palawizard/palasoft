@@ -5,7 +5,8 @@ import Dock from '../components/Dock.astro';
 import RemoteDataNotice from '../components/RemoteDataNotice.astro';
 import Showcase from '../components/Showcase.astro';
 import SoftwareRow, { type RowLayout } from '../components/SoftwareRow.astro';
-import { allSoftwareWithReleases } from '../server/software.ts';
+import { allSoftwareWithReleases, homePath, softwarePath } from '../server/software.ts';
+import { siteJsonLd } from '../lib/seo.ts';
 
 const items = await allSoftwareWithReleases();
 const featured = items.find(({ entry }) => entry.data.screenshots.length > 0) ?? items[0];
@@ -16,12 +17,16 @@ const layoutOf = (item: (typeof items)[number], index: number): RowLayout => {
   return shot !== undefined && shot.src.height > shot.src.width ? 'compact' : (wideLayouts[index % wideLayouts.length] ?? 'overlap');
 };
 Astro.response.headers.set('Cache-Control', 'no-cache');
+const description = 'Télécharge les logiciels de Palawi pour Windows et son mod Minecraft, avec l’aide pour les installer.';
+const absolute = (path: string): string => new URL(path, Astro.site).href;
+const jsonLd = siteJsonLd(
+  absolute(homePath),
+  description,
+  items.map(({ entry }) => ({ name: entry.data.name, url: absolute(softwarePath(entry.id)) })),
+);
 ---
 
-<Layout
-  title="PalaSoft | Les logiciels de Palawi à télécharger"
-  description="Télécharge les logiciels de Palawi pour Windows et son mod Minecraft, avec l’aide pour les installer."
->
+<Layout title="PalaSoft | Les logiciels de Palawi à télécharger" description={description} jsonLd={jsonLd}>
   <div class="page home">
     <section class="intro rise">
       <h1 class="on-sky">PalaSoft</h1>

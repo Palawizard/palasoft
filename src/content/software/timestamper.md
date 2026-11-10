@@ -4,6 +4,7 @@ tagline: Note les moments forts de ton stream Twitch avec un raccourci, puis exp
 order: 5
 repo: Palawizard/timestamper
 color: violet
+category: UtilitiesApplication
 icon: ../../assets/software/timestamper/icon.svg
 screenshots:
   - src: ../../assets/software/timestamper/live-marks.png

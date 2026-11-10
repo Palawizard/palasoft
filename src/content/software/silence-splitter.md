@@ -4,6 +4,7 @@ tagline: Repère les silences de tes vidéos et prépare la coupe pour ton logic
 order: 4
 repo: Palawizard/silence-splitter
 color: teal
+category: MultimediaApplication
 icon: ../../assets/software/silence-splitter/icon.svg
 screenshots:
   - src: ../../assets/software/silence-splitter/timeline-preview.png

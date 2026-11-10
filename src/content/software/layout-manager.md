@@ -4,6 +4,7 @@ tagline: Ouvre et place tes applications sur tes écrans en un clic, avec des di
 order: 3
 repo: Palawizard/layout-manager-2
 color: cobalt
+category: DesktopEnhancementApplication
 icon: ../../assets/software/layout-manager/icon.svg
 screenshots:
   - src: ../../assets/software/layout-manager/layouts-list.png

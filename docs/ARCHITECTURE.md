@@ -9,7 +9,8 @@ src/
   pages/                 routes, served under /software
     index.astro          home: quick download strip, then one tile per program
     [slug].astro         generic program page
-    404.astro            not found page
+    404.astro            not found page (noindex)
+    sitemap.xml.ts       sitemap of the home and every program page, listed in the robots.txt of palawi.fr
     api/health.ts        health check
     dl/[slug].astro      redirect to the recommended file (or the mod jar chosen in the form)
     dl/[slug]/[file].astro  redirect to a named file of the latest release
@@ -18,7 +19,8 @@ src/
                          software rows, download button, mod picker, screenshot gallery,
                          SmartScreen help...)
   assets/software/<slug>/  icon and screenshots of each program, optimised by Astro at build
-public/                  PalaSoft site icons (favicon.svg, apple-touch-icon.png); the same logo is inlined in the header by components/Logo.astro
+public/                  PalaSoft site icons (favicon.svg, apple-touch-icon.png) and the share card (og-palasoft.jpg); the same logo is inlined in the header by components/Logo.astro
+scripts/og-card/card.html  source of og-palasoft.jpg
   server/                glue between Astro and lib/ (catalog instance, entry lookup, responses)
   lib/                   code that does not depend on Astro
     config.ts            environment variables
@@ -29,6 +31,7 @@ public/                  PalaSoft site icons (favicon.svg, apple-touch-icon.png)
     counts.ts            GitHub download count, without update manifests, signatures and checksums
     stores.ts            Modrinth and CurseForge download counts
     format.ts            French formatting of sizes, dates, counts and Minecraft versions
+    seo.ts               schema.org structured data (program, breadcrumb, site and program list)
   styles/                global styles and design tokens
 tests/                   unit tests
   fixtures/github/       real GitHub responses, reduced to the fields in use
@@ -43,7 +46,7 @@ Each file in `src/content/software/` describes one program. The file name is its
 - `windows`: a Windows program installed from a GitHub release. `installerPattern` is a regular expression matched against the file names of the release: the first match is the file offered for download. `unsignedInstaller` says whether Windows SmartScreen shows a warning, `requirements` lists what must be installed first.
 - `minecraft-mod`: a Minecraft mod, also published on Modrinth and CurseForge. `versionMatrix` is the path, in the mod repository, of the JSON file that lists the Minecraft version bands and their loaders. It is read at the tag of the latest release.
 
-Every entry has a display name, a one-line tagline in French, a sort order, its GitHub repository (`Palawizard/<repo>`), a colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`, used as the tint of its bubble and window), an `icon` and a list of `screenshots` (`src` and `alt`), both paths into `src/assets/software/<slug>/` checked at build time. The first screenshot is the one shown next to the download button and in the home lists; the others form the gallery of the program page. The Markdown body of the file is the text of the program page. `requirements` is shown in the "Ce qu'il te faut" block next to the text.
+Every entry has a display name, a one-line tagline in French (also the meta description of its page), a sort order, its schema.org `category` (`MultimediaApplication`, `UtilitiesApplication`, `DesktopEnhancementApplication` or `GameApplication`, for search engines), its GitHub repository (`Palawizard/<repo>`), a colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`, used as the tint of its bubble and window), an `icon` and a list of `screenshots` (`src` and `alt`), both paths into `src/assets/software/<slug>/` checked at build time. The first screenshot is the one shown next to the download button and in the home lists; the others form the gallery of the program page. The Markdown body of the file is the text of the program page. `requirements` is shown in the "Ce qu'il te faut" block next to the text.
 
 Icons come from each program's repository at its published tag. Screenshots of PalaClips and Pala's Item Clear come from their repositories; the other four were captured from each program's own interface, run in a browser with example data. Each image file carries its origin in its metadata.
 
@@ -88,6 +91,8 @@ On the home page, the other programs alternate between two row layouts, capture 
 Theme: `<html data-theme="light|dark">` drives every dark rule (`:root[data-theme='dark'] ...`). An inline script in the head sets it before the first paint, from the visitor's saved choice (`localStorage` key `palasoft-theme`) or else the system setting. `components/SkyToggle.astro` is a button over the sun of the scene: it saves the other theme and, with the View Transitions API, reveals it as a circle growing from the sun (700 ms); without that API or under reduced motion the theme switches at once. The sun position is shared through `--sun-size`, `--sun-x` and `--sun-y` so the button, the sun and the lens flares stay aligned.
 
 Motion: only the bubbles drift. The quick download dock and the featured window use `glass-still`, a glass panel without backdrop blur: they sit on the plain sky next to the drifting bubbles, where the blur is invisible but was recomputed on every frame and made the drift stutter. The sun rays are still for the same reason. The drift keyframes carry a 0.01 degree rotation: a translation-only animation that slow was snapped to whole pixels and moved in visible steps.
+
+Search and sharing: every page has a canonical URL (the 404 page has `noindex` instead), Open Graph and Twitter tags, and one JSON-LD graph: `WebSite` and the `ItemList` of program pages on the home, `SoftwareApplication` (free offer, version, download URL, GitHub and store links, author `https://palawi.fr/#palawi` as declared on the palawi.fr hub) and `BreadcrumbList` on a program page. The picture of a shared link (Discord, social networks) is the first screenshot when it is wider than tall, served by `/_image` as a JPEG of 1200 px at most, never enlarged; otherwise `public/og-palasoft.jpg`, a 1200 by 630 card rendered from `scripts/og-card/card.html` (open it in Chrome at 1200 by 630 from that folder and capture it, after an `npm install`; redo it when a program is added or its icon changes). Discord takes the embed colour from `theme-color` (#0b4fa3 in the served HTML). Program page titles read "Télécharger <name> pour Windows | PalaSoft", the mod "<name>, mod Minecraft gratuit | PalaSoft".
 
 When GitHub is down, every page still renders: with a saved copy it shows the saved release details and the date of that copy, without one it shows the programs without release details and the buttons lead to GitHub.
 

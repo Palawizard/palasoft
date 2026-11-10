@@ -124,4 +124,36 @@ describe('pages on the built server', () => {
       expect(head, path).toContain('document.documentElement.dataset.theme');
     }
   });
+
+  it('gives every page a share picture and structured data, and lists them in the sitemap', async () => {
+    github.down = false;
+    const site = await start();
+    for (const path of PAGES) {
+      const { body } = await html(site, path);
+      const head = body.slice(0, body.indexOf('</head>'));
+      expect(head, path).toMatch(/<meta property="og:image" content="https:\/\/palawi\.fr\/software\/[^"]+"/);
+      expect(head, path).toContain('<meta name="twitter:card" content="summary_large_image"');
+      expect(head, path).toContain('<link rel="canonical" href="https://palawi.fr' + path + '"');
+      const ld = /<script type="application\/ld\+json">([^<]*)<\/script>/.exec(head);
+      expect(ld, path).not.toBeNull();
+      const graph = (JSON.parse(ld?.[1] ?? '{}') as { '@graph': { '@type': string }[] })['@graph'];
+      expect(graph.map((node) => node['@type']), path).toEqual(
+        path === '/software/' ? ['WebSite', 'ItemList'] : ['SoftwareApplication', 'BreadcrumbList'],
+      );
+    }
+    const card = await get(site, '/software/og-palasoft.jpg');
+    expect(card.status).toBe(200);
+    expect(card.headers.get('content-type')).toContain('image/jpeg');
+    const sitemap = await html(site, '/software/sitemap.xml');
+    expect(sitemap.status).toBe(200);
+    for (const path of PAGES) expect(sitemap.body).toContain(`<loc>https://palawi.fr${path}</loc>`);
+  });
+
+  it('keeps the missing page out of search results', async () => {
+    const site = await start();
+    const { status, body } = await html(site, '/software/nothing-here');
+    expect(status).toBe(404);
+    expect(body).toContain('<meta name="robots" content="noindex"');
+    expect(body).not.toContain('rel="canonical"');
+  });
 });
