@@ -15,6 +15,7 @@ kind: minecraft-mod
 versionMatrix: versions/version-matrix.json
 modrinth: https://modrinth.com/mod/palas-item-clear
 curseforge: https://www.curseforge.com/minecraft/mc-mods/palas-item-clear
+curseforgeId: 1601947
 ---
 
 ## Ce que ça fait
