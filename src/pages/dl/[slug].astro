@@ -1,0 +1,24 @@
+---
+import { findModFile } from '../../lib/assets.ts';
+import { catalog, findSoftware, notFound, redirect, softwarePath, toSource } from '../../server/software.ts';
+
+const entry = await findSoftware(Astro.params.slug);
+if (entry === undefined) return notFound();
+
+const view = await catalog.release(toSource(entry));
+if (entry.data.kind === 'minecraft-mod') {
+  const loader = Astro.url.searchParams.get('loader') ?? '';
+  const band = Astro.url.searchParams.get(`mc-${loader}`) ?? '';
+  const file = view.state === 'ready' ? findModFile(view.modFiles, loader, band) : undefined;
+  return redirect(file?.asset.browser_download_url ?? `${softwarePath(entry.id)}#telecharger`);
+}
+
+switch (view.state) {
+  case 'unavailable':
+    return redirect(`${view.historyUrl}/latest`);
+  case 'none':
+    return redirect(softwarePath(entry.id));
+  case 'ready':
+    return redirect(view.installer?.browser_download_url ?? view.release.pageUrl);
+}
+---

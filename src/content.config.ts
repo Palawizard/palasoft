@@ -7,6 +7,7 @@ const common = {
   tagline: z.string().min(1).max(140),
   order: z.number().int().nonnegative(),
   repo: z.string().regex(/^Palawizard\/[\w.-]+$/),
+  color: z.enum(['crimson', 'magenta', 'cobalt', 'teal', 'violet', 'emerald']),
 };
 
 const isValidRegExp = (pattern: string): boolean => {

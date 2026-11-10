@@ -1,0 +1,150 @@
+---
+import { render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import DownloadPanel from '../components/DownloadPanel.astro';
+import ModPicker from '../components/ModPicker.astro';
+import RemoteDataNotice from '../components/RemoteDataNotice.astro';
+import Requirements from '../components/Requirements.astro';
+import SmartScreenHelp from '../components/SmartScreenHelp.astro';
+import { findSoftware, homePath, notFound, releaseOf } from '../server/software.ts';
+
+const entry = await findSoftware(Astro.params.slug);
+if (entry === undefined) return notFound();
+
+const view = await releaseOf(entry);
+const { Content } = await render(entry);
+const { data } = entry;
+Astro.response.headers.set('Cache-Control', 'no-cache');
+---
+
+<Layout title={`${data.name} | PalaSoft`} description={data.tagline}>
+  <article class="page software">
+    <a class="back" href={homePath}>Tous les logiciels</a>
+    <header class="software-header">
+      <h1 class="display">{data.name}</h1>
+      <p class="lead">{data.tagline}</p>
+    </header>
+    <RemoteDataNotice views={[view]} />
+    <div class="columns">
+      <aside id="telecharger" class="side" aria-label="Télécharger">
+        {data.kind === 'windows' ? <DownloadPanel entry={entry} view={view} /> : <ModPicker entry={entry} view={view} />}
+        {data.kind === 'windows' && <Requirements items={data.requirements} />}
+        <p class="history">
+          <a href={view.historyUrl}>Voir toutes les versions et leurs nouveautés sur GitHub</a>
+        </p>
+      </aside>
+      <div class="main">
+        <div class="prose">
+          <Content />
+        </div>
+        {data.kind === 'windows' && data.unsignedInstaller && <SmartScreenHelp />}
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .software {
+    display: grid;
+    gap: var(--space-6);
+    padding-top: var(--space-2);
+  }
+
+  .back {
+    justify-self: start;
+    padding-block: var(--space-1);
+    font-size: var(--text-small);
+  }
+
+  .software-header {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: calc(var(--space-4) * -1);
+  }
+
+  .display {
+    font-size: var(--text-display);
+    line-height: 0.95;
+    margin-left: -0.05em;
+  }
+
+  .lead {
+    max-width: 52ch;
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+  }
+
+  .software {
+    container-type: inline-size;
+  }
+
+  .columns {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .side {
+    display: grid;
+    align-content: start;
+    gap: var(--space-4);
+    scroll-margin-top: var(--space-4);
+  }
+
+  .main {
+    display: grid;
+    align-content: start;
+    gap: var(--space-6);
+  }
+
+  @container (min-width: 60rem) {
+    .columns {
+      grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+      gap: var(--space-8);
+    }
+
+    .side {
+      position: sticky;
+      top: var(--space-3);
+    }
+
+    .main {
+      padding-top: var(--space-1);
+      border-top: 1px solid var(--rule);
+    }
+  }
+
+  .prose {
+    display: grid;
+    gap: var(--space-2);
+    max-width: var(--measure);
+  }
+
+  .prose :global(h2) {
+    margin-top: var(--space-3);
+    font-size: var(--text-subtitle);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(ol),
+  .prose :global(ul) {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding-left: 1.5em;
+  }
+
+  .prose :global(code) {
+    font-size: 0.9em;
+  }
+
+  .prose:empty {
+    display: none;
+  }
+
+  .history {
+    font-size: var(--text-small);
+  }
+</style>

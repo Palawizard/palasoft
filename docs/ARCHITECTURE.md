@@ -7,11 +7,15 @@ src/
   content.config.ts      schema of the software entries
   content/software/      one Markdown file per program (frontmatter + page text)
   pages/                 routes, served under /software
+    index.astro          home: quick download strip, then one tile per program
+    [slug].astro         generic program page
+    404.astro            not found page
     api/health.ts        health check
-    dl/[slug].ts         redirect to the recommended file
-    dl/[slug]/[file].ts  redirect to a named file of the latest release
-  layouts/               page shells
-  components/            shared UI pieces
+    dl/[slug].astro      redirect to the recommended file (or the mod jar chosen in the form)
+    dl/[slug]/[file].astro  redirect to a named file of the latest release
+  layouts/Layout.astro   shared page shell: header, footer, fonts, press tilt script
+  components/            shared UI pieces (tiles, download panel, mod picker, SmartScreen help...)
+  scripts/tilt.ts        tile press tilt, pointer only, off under reduced motion
   server/                glue between Astro and lib/ (catalog instance, entry lookup, responses)
   lib/                   code that does not depend on Astro
     config.ts            environment variables
@@ -34,7 +38,7 @@ Each file in `src/content/software/` describes one program. The file name is its
 - `windows`: a Windows program installed from a GitHub release. `installerPattern` is a regular expression matched against the file names of the release: the first match is the file offered for download. `unsignedInstaller` says whether Windows SmartScreen shows a warning, `requirements` lists what must be installed first.
 - `minecraft-mod`: a Minecraft mod, also published on Modrinth and CurseForge. `versionMatrix` is the path, in the mod repository, of the JSON file that lists the Minecraft version bands and their loaders. It is read at the tag of the latest release.
 
-Every entry has a display name, a one-line tagline in French, a sort order and its GitHub repository (`Palawizard/<repo>`).
+Every entry has a display name, a one-line tagline in French, a sort order, its GitHub repository (`Palawizard/<repo>`) and a tile colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`). The Markdown body of the file is the text of the program page. `requirements` is shown in the "ce qu'il te faut" block next to the download button.
 
 The build fails when an entry has no file selection rule (`installerPattern` or `versionMatrix`).
 
@@ -61,7 +65,11 @@ Files are never served by this site. `/software/dl/<slug>` answers `302` to the 
 
 ## Pages
 
-Every program gets a generic page built from the shared components. A program can have its own page instead by adding `src/pages/<slug>.astro`: a static route takes priority over the dynamic one, and the custom page still uses the shared layout so the site keeps one look.
+Every program gets a generic page built from the shared components. A program can have its own page instead by adding `src/pages/<slug>.astro`: a static route takes priority over the dynamic one, and the custom page still uses the shared layout so the site keeps one look. This was checked on a build with a temporary `src/pages/timestamper.astro`: `/software/timestamper` served the custom page while `/software/palaclips` kept the generic one.
+
+The download routes are Astro pages without markup rather than endpoints, so that a `404` without body renders `404.astro`. The mod page posts a plain HTML form (`loader` plus `mc-<loader>`) to `/software/dl/<slug>`, which redirects to the matching jar; it works without JavaScript.
+
+When GitHub is down, every page still renders: with a saved copy it shows the saved release details and the date of that copy, without one it shows the programs without release details and the buttons lead to GitHub.
 
 ## Base path
 

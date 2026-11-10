@@ -1,0 +1,65 @@
+---
+import type { SoftwareWithRelease } from '../server/software.ts';
+import { softwarePath } from '../server/software.ts';
+import IconChevron from './IconChevron.astro';
+import ReleaseFacts from './ReleaseFacts.astro';
+
+interface Props {
+  item: SoftwareWithRelease;
+  order: number;
+}
+
+const { item, order } = Astro.props;
+const { entry, view } = item;
+---
+
+<li class="enter" style={`--order: ${order}`}>
+  <a class="tile software-tile" data-tilt data-color={entry.data.color} href={softwarePath(entry.id)}>
+    <h3 class="software-name">{entry.data.name}</h3>
+    <p class="software-tagline">{entry.data.tagline}</p>
+    <p class="software-facts">
+      <span>{entry.data.kind === 'minecraft-mod' ? 'mod Minecraft pour serveur' : 'pour Windows'}</span>
+      <ReleaseFacts view={view} />
+    </p>
+    <span class="software-open">
+      {entry.data.kind === 'minecraft-mod' ? 'choisir ma version' : 'comment l’installer'}
+      <IconChevron />
+    </span>
+  </a>
+</li>
+
+<style>
+  .software-tile {
+    gap: var(--space-2);
+    min-height: 17rem;
+    height: 100%;
+    padding: var(--space-3);
+  }
+
+  .software-name {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  }
+
+  .software-open {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1);
+    padding-top: var(--space-1);
+    border-top: 1px solid rgb(255 255 255 / 0.4);
+    font-weight: 600;
+  }
+
+  .software-tagline {
+    flex: 1;
+    max-width: 34ch;
+  }
+
+  .software-facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    font-size: var(--text-small);
+  }
+</style>

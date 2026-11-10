@@ -1,5 +1,5 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
-import { createCatalog, type SoftwareSource } from '../lib/catalog.ts';
+import { createCatalog, type ReleaseView, type SoftwareSource } from '../lib/catalog.ts';
 import { readConfig } from '../lib/config.ts';
 
 export type SoftwareEntry = CollectionEntry<'software'>;
@@ -15,6 +15,16 @@ export const toSource = (entry: SoftwareEntry): SoftwareSource =>
     ? { slug: entry.id, repo: entry.data.repo, kind: 'windows', installerPattern: entry.data.installerPattern }
     : { slug: entry.id, repo: entry.data.repo, kind: 'minecraft-mod', versionMatrix: entry.data.versionMatrix };
 
+export const releaseOf = (entry: SoftwareEntry): Promise<ReleaseView> => catalog.release(toSource(entry));
+
+export interface SoftwareWithRelease {
+  entry: SoftwareEntry;
+  view: ReleaseView;
+}
+
+export const allSoftwareWithReleases = async (): Promise<SoftwareWithRelease[]> =>
+  Promise.all((await allSoftware()).map(async (entry) => ({ entry, view: await releaseOf(entry) })));
+
 export const findSoftware = async (slug: string | undefined): Promise<SoftwareEntry | undefined> =>
   slug === undefined ? undefined : getEntry('software', slug);
 
@@ -23,13 +33,14 @@ export const allSoftware = async (): Promise<SoftwareEntry[]> =>
 
 const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
 
+export const homePath = `${base}/`;
+
 export const softwarePath = (slug: string): string => `${base}/${slug}`;
+
+export const downloadPath = (slug: string, file?: string): string =>
+  file === undefined ? `${base}/dl/${slug}` : `${base}/dl/${slug}/${encodeURIComponent(file)}`;
 
 export const redirect = (location: string): Response =>
   new Response(null, { status: 302, headers: { Location: location, 'Cache-Control': 'no-store' } });
 
-export const notFound = (): Response =>
-  new Response('Fichier introuvable.', {
-    status: 404,
-    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' },
-  });
+export const notFound = (): Response => new Response(null, { status: 404 });

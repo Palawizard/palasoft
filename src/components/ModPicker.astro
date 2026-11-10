@@ -1,0 +1,266 @@
+---
+import { filesByLoader } from '../lib/assets.ts';
+import type { ReleaseView } from '../lib/catalog.ts';
+import { formatDate, loaderName, minecraftBandLabel } from '../lib/format.ts';
+import { downloadPath, type SoftwareEntry } from '../server/software.ts';
+import IconDownload from './IconDownload.astro';
+
+interface Props {
+  entry: SoftwareEntry;
+  view: ReleaseView;
+}
+
+const { entry, view } = Astro.props;
+const groups = view.state === 'ready' ? filesByLoader(view.modFiles) : [];
+const stores =
+  entry.data.kind === 'minecraft-mod'
+    ? [
+        { label: 'Modrinth', url: entry.data.modrinth },
+        { label: 'CurseForge', url: entry.data.curseforge },
+      ]
+    : [];
+---
+
+<div class="picker">
+  {
+    view.state === 'ready' && groups.length > 0 ? (
+      <form class="picker-form" method="get" action={downloadPath(entry.id)}>
+        <fieldset class="loaders">
+          <legend>1. Le loader de ton serveur</legend>
+          <div class="loader-options">
+            {groups.map(({ loader }) => (
+              <label class="loader-option">
+                <input type="radio" name="loader" value={loader} required />
+                <span>{loaderName(loader)}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="versions">
+          <p class="step">2. La version de Minecraft de ton serveur</p>
+          <p class="hint">Choisis d’abord le loader.</p>
+          {groups.map(({ loader, files }) => (
+            <label class="version-field" data-loader={loader}>
+              <span class="visually-hidden">Version de Minecraft pour {loaderName(loader)}</span>
+              <select name={`mc-${loader}`}>
+                {files.map((file) => (
+                  <option value={file.bandId}>Minecraft {minecraftBandLabel(file.bandId)}</option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+        <button class="tile submit" data-tilt data-color={entry.data.color} type="submit">
+          <span class="submit-action">
+            <IconDownload />
+            Télécharger le mod
+          </span>
+          <span class="submit-facts numbers ready-facts">
+            version {view.release.version}
+            {view.release.publishedAt !== null && ` · publiée le ${formatDate(view.release.publishedAt)}`}
+          </span>
+          <span class="submit-facts waiting-facts" aria-hidden="true">
+            Choisis d’abord le loader de ton serveur
+          </span>
+        </button>
+      </form>
+    ) : view.state === 'none' ? (
+      <p>Aucune version n’est publiée pour l’instant.</p>
+    ) : (
+      <p>
+        Le choix de version est indisponible pour l’instant.
+        <a href={`${view.historyUrl}/latest`}>Prends le fichier directement sur GitHub</a> : son nom contient la
+        version de Minecraft et le loader.
+      </p>
+    )
+  }
+  <p class="server-only">
+    Ce mod s’installe seulement sur le serveur : les joueurs se connectent sans rien installer.
+  </p>
+  <ul class="stores">
+    {
+      stores.map((store) => (
+        <li>
+          <a class="store" href={store.url}>
+            Aussi sur {store.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .picker {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .picker-form {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .loaders {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend,
+  .step {
+    margin-bottom: var(--space-1);
+    padding: 0;
+    font-weight: 600;
+  }
+
+  .loader-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+    gap: var(--gap);
+  }
+
+  .loader-option {
+    position: relative;
+    display: block;
+    cursor: pointer;
+  }
+
+  .loader-option input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .loader-option span {
+    display: block;
+    padding: var(--space-1) var(--space-2);
+    border: 2px solid var(--ink);
+    text-align: center;
+  }
+
+  .loader-option input:checked + span {
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .loader-option input:focus-visible + span {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  .versions {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .hint {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  select {
+    width: 100%;
+    padding: var(--space-1) var(--space-2);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  @supports selector(:has(*)) {
+    .version-field {
+      display: none;
+    }
+
+    .picker-form:has(input[value='fabric']:checked) .version-field[data-loader='fabric'],
+    .picker-form:has(input[value='forge']:checked) .version-field[data-loader='forge'],
+    .picker-form:has(input[value='neoforge']:checked) .version-field[data-loader='neoforge'] {
+      display: block;
+    }
+
+    .picker-form:has(input[name='loader']:checked) .hint {
+      display: none;
+    }
+
+    .waiting-facts {
+      display: none;
+    }
+
+    .picker-form:not(:has(input[name='loader']:checked)) .submit {
+      background: transparent;
+      color: var(--ink);
+      box-shadow: inset 0 0 0 2px var(--ink-soft);
+    }
+
+    .picker-form:not(:has(input[name='loader']:checked)) .ready-facts {
+      display: none;
+    }
+
+    .picker-form:not(:has(input[name='loader']:checked)) .waiting-facts {
+      display: block;
+    }
+  }
+
+
+  @supports not selector(:has(*)) {
+    .hint,
+    .waiting-facts {
+      display: none;
+    }
+  }
+
+  .submit {
+    gap: var(--space-1);
+    width: 100%;
+    padding: var(--space-3);
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .submit-action {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .submit-facts {
+    font-size: var(--text-small);
+  }
+
+  .server-only {
+    font-weight: 600;
+  }
+
+  .stores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .store {
+    display: block;
+    padding: var(--space-1) var(--space-2);
+    border: 2px solid var(--ink);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .store:hover,
+    .loader-option:hover span {
+      background: var(--panel);
+    }
+  }
+</style>
