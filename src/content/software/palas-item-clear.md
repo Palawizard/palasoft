@@ -9,3 +9,22 @@ versionMatrix: versions/version-matrix.json
 modrinth: https://modrinth.com/mod/palas-item-clear
 curseforge: https://www.curseforge.com/minecraft/mc-mods/palas-item-clear
 ---
+
+## ce que ça fait
+
+Pala's Item Clear retire régulièrement les objets qui traînent au sol sur ton serveur Minecraft, pour réduire le lag.
+
+- Au départ, il nettoie toutes les 5 minutes, et prévient dans le chat 60, 30 et 5 secondes avant.
+- Les objets retirés restent récupérables pendant 2 minutes avec la commande /palasitemclear bin.
+- Tu peux protéger des objets, des mondes ou les objets jetés par les joueurs.
+- Les commandes /palasitemclear demandent le niveau de permission 2 (opérateur).
+- Il marche avec Forge, Fabric et NeoForge, de Minecraft 1.20.1 à 26.2.
+
+## installer
+
+1. Choisis le loader et la version de Minecraft de ton serveur, puis télécharge le fichier.
+2. Mets le fichier dans le dossier mods du serveur.
+3. Avec Fabric, installe aussi Fabric API. En 1.20.1 avec Forge ou Fabric, installe aussi Architectury API.
+4. Démarre le serveur une fois : il crée le fichier de réglages config/palasitemclear.json.
+
+Après avoir modifié ce fichier, lance /palasitemclear reload. Les messages du chat sont en anglais au départ, et tu peux tous les changer.
