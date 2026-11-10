@@ -33,6 +33,26 @@ The site is served under the `/software` base path, so open `http://localhost:43
 
 Health check: `GET /software/api/health`. Download links: `/software/dl/<slug>` for the recommended file, `/software/dl/<slug>/<file>` for a given file of the latest release.
 
+## Docker
+
+The image is built in two stages (dependencies and build, then a runtime with production dependencies only) and runs as the unprivileged `node` user. Its health check calls `/software/api/health`.
+
+`compose.yaml` runs one container, `palasoft-web`:
+
+- no published port: a reverse proxy reaches it on port 4321 through an external Docker network, `palasoft-edge` by default (set `PALASOFT_NETWORK` to use another one);
+- read-only root file system, all capabilities dropped;
+- the saved copies of the remote data live in the `palasoft-data` volume, mounted on `DATA_DIR` (`/app/data`);
+- settings come from `.env` when it exists (see `.env.example`).
+
+```sh
+docker network create palasoft-edge
+cp .env.example .env
+docker compose up -d --build
+docker compose ps
+```
+
+The container is healthy once `docker compose ps` shows `(healthy)`.
+
 ## Adding a program
 
 Add a Markdown file to `src/content/software/`. Its frontmatter is validated at build time by the schema in `src/content.config.ts`. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
