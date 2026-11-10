@@ -175,54 +175,56 @@ const isMod = entry.data.kind === 'minecraft-mod';
     transform-origin: right center;
   }
 
-  .stacked {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    grid-template-areas:
-      'media media'
-      'copy copy';
-    padding-top: var(--space-3);
-  }
+  @media (min-width: 56.0625rem) {
+    .stacked {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      grid-template-areas:
+        'media media'
+        'copy copy';
+      padding-top: var(--space-3);
+    }
 
-  .stacked .row-media {
-    grid-area: media;
-  }
+    .stacked .row-media {
+      grid-area: media;
+    }
 
-  .stacked .row-copy {
-    grid-area: copy;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    grid-template-areas:
-      'head facts'
-      'tagline actions'
-      'tagline file';
-    align-items: start;
-    column-gap: var(--space-6);
-    width: 100%;
-  }
+    .stacked .row-copy {
+      grid-area: copy;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      grid-template-areas:
+        'head facts'
+        'tagline actions'
+        'tagline file';
+      align-items: start;
+      column-gap: var(--space-6);
+      width: 100%;
+    }
 
-  .stacked .row-head {
-    grid-area: head;
-  }
+    .stacked .row-head {
+      grid-area: head;
+    }
 
-  .stacked .row-tagline {
-    grid-area: tagline;
-    max-width: 44ch;
-  }
+    .stacked .row-tagline {
+      grid-area: tagline;
+      max-width: 44ch;
+    }
 
-  .stacked .row-copy > :global(.ticket) {
-    grid-area: facts;
-    align-self: center;
-  }
+    .stacked .row-copy > :global(.ticket) {
+      grid-area: facts;
+      align-self: center;
+    }
 
-  .stacked .row-actions {
-    grid-area: actions;
-  }
+    .stacked .row-actions {
+      grid-area: actions;
+    }
 
-  .stacked .row-file {
-    grid-area: file;
-  }
+    .stacked .row-file {
+      grid-area: file;
+    }
 
-  .stacked .row-media .shot {
-    width: 100%;
+    .stacked .row-media .shot {
+      width: 100%;
+    }
   }
 
   .compact {
@@ -264,11 +266,8 @@ const isMod = entry.data.kind === 'minecraft-mod';
   }
 
   @media (max-width: 56rem) {
-    .row,
-    .stacked,
-    .stacked .row-copy {
+    .row {
       grid-template-columns: minmax(0, 1fr);
-      grid-template-areas: none;
     }
 
     .row {
@@ -280,11 +279,6 @@ const isMod = entry.data.kind === 'minecraft-mod';
       order: -1;
     }
 
-    .row .row-copy,
-    .stacked .row-copy > * {
-      order: 0;
-      grid-area: auto;
-    }
 
     .row .row-media .shot {
       margin: calc(var(--space-6) * -1) 0 0;
