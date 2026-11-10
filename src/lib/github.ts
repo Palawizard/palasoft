@@ -46,11 +46,7 @@ const headers = (token: string | undefined, accept: string): Record<string, stri
   ...(token === undefined ? {} : { Authorization: `Bearer ${token}` }),
 });
 
-const getJson = async (
-  url: string,
-  accept: string,
-  options: GitHubClientOptions,
-): Promise<unknown> => {
+const request = async (url: string, accept: string, options: GitHubClientOptions): Promise<Response> => {
   const fetchImpl = options.fetch ?? fetch;
   const response = await fetchImpl(url, {
     headers: headers(options.token, accept),
@@ -59,15 +55,35 @@ const getJson = async (
   if (!response.ok) {
     throw new GitHubRequestError(url, response.status);
   }
-  return response.json();
+  return response;
+};
+
+const getJson = async (url: string, accept: string, options: GitHubClientOptions): Promise<unknown> =>
+  (await request(url, accept, options)).json();
+
+const MAX_RELEASE_PAGES = 10;
+
+export const nextPageUrl = (link: string | null, apiUrl: string): string | undefined => {
+  const next = link
+    ?.split(',')
+    .map((part) => /<([^>]+)>;\s*rel="([^"]+)"/.exec(part.trim()))
+    .find((match) => match?.[2] === 'next')?.[1];
+  if (next === undefined) return undefined;
+  return new URL(next).origin === new URL(apiUrl).origin ? next : undefined;
 };
 
 export const fetchReleases = async (
   repo: string,
   options: GitHubClientOptions,
 ): Promise<Release[]> => {
-  const url = `${options.apiUrl}/repos/${repo}/releases?per_page=100`;
-  return releasesSchema.parse(await getJson(url, 'application/vnd.github+json', options));
+  const releases: Release[] = [];
+  let url: string | undefined = `${options.apiUrl}/repos/${repo}/releases?per_page=100`;
+  for (let page = 0; url !== undefined && page < MAX_RELEASE_PAGES; page += 1) {
+    const response: Response = await request(url, 'application/vnd.github+json', options);
+    releases.push(...releasesSchema.parse(await response.json()));
+    url = nextPageUrl(response.headers.get('link'), options.apiUrl);
+  }
+  return releases;
 };
 
 export const fetchRepoJsonFile = async (
