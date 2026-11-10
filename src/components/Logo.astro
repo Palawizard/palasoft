@@ -1,0 +1,31 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg class={className} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="ps-logo-body" cx="50%" cy="72%" r="62%">
+      <stop offset="0" stop-color="#9be87a"/><stop offset="0.55" stop-color="#2f9a22"/><stop offset="1" stop-color="#195f10"/>
+    </radialGradient>
+    <linearGradient id="ps-logo-shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="ps-logo-water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fd0dd" stop-opacity="0.9"/><stop offset="1" stop-color="#1c9bb3" stop-opacity="0.95"/>
+    </linearGradient>
+    <clipPath id="ps-logo-c"><circle cx="32" cy="32" r="29"/></clipPath>
+  </defs>
+  <circle cx="32" cy="33.5" r="29" fill="#06304a" opacity="0.18"/>
+  <circle cx="32" cy="32" r="29" fill="url(#ps-logo-body)"/>
+  <g clip-path="url(#ps-logo-c)">
+    <path d="M0 45 C 10 41, 20 49, 32 45 S 54 41, 64 45 V64 H0Z" fill="url(#ps-logo-water)"/>
+    <path d="M0 45 C 10 41, 20 49, 32 45 S 54 41, 64 45" fill="none" stroke="#fff" stroke-opacity="0.85" stroke-width="1.6"/>
+  </g>
+  <path d="M32 15 V37 M22.5 28.5 L32 38 L41.5 28.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="32" cy="16" rx="21" ry="11.5" fill="url(#ps-logo-shine)"/>
+  <circle cx="32" cy="32" r="28.5" fill="none" stroke="#0b3d10" stroke-opacity="0.45" stroke-width="1"/>
+</svg>

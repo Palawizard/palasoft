@@ -231,6 +231,13 @@ svg {
   backdrop-filter: blur(14px) saturate(1.3);
 }
 
+/* Panels over the plain sky next to the drifting bubbles: the blur is invisible there,
+   but recomputing it on every frame of the drift made the bubbles stutter. */
+.glass-still {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 .glass::before {
   content: '';
   position: absolute;
