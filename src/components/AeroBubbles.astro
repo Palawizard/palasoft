@@ -22,6 +22,10 @@ const bubbles = [
     <path d="M660 -20 L700 600 L780 600 Z" fill="url(#ray)"></path>
     <path d="M620 -20 L330 600 L400 600 Z" fill="url(#ray)" opacity="0.6"></path>
   </svg>
+  <svg class="waterline" viewBox="0 0 1440 60" preserveAspectRatio="none">
+    <path d="M0 22 C 180 8, 360 36, 540 22 S 900 8, 1080 22 S 1320 36, 1440 22" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="2"></path>
+    <path d="M0 34 C 200 24, 400 46, 600 34 S 1000 22, 1200 34 S 1380 42, 1440 34" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"></path>
+  </svg>
   {
     bubbles.map((bubble) => (
       <span
@@ -49,6 +53,14 @@ const bubbles = [
     height: 40rem;
   }
 
+  .waterline {
+    position: absolute;
+    top: calc(73% - 22px);
+    left: 0;
+    width: 100%;
+    height: 60px;
+  }
+
   .bubble {
     position: absolute;
     border: 1px solid rgb(255 255 255 / 0.6);
@@ -60,6 +72,10 @@ const bubbles = [
   @media (prefers-color-scheme: dark) {
     .rays {
       opacity: 0.35;
+    }
+
+    .waterline {
+      opacity: 0.45;
     }
 
     .bubble {

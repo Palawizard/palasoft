@@ -10,18 +10,18 @@ import SoftwareIcon from './SoftwareIcon.astro';
 interface Props {
   item: SoftwareWithRelease;
   flip: boolean;
-  shotIndex: number;
 }
 
-const { item, flip, shotIndex } = Astro.props;
+const { item, flip } = Astro.props;
 const { entry, view, downloads } = item;
-const screenshot = entry.data.screenshots[shotIndex] ?? entry.data.screenshots[0];
+const screenshot = entry.data.screenshots[0];
+const portrait = screenshot !== undefined && screenshot.src.height > screenshot.src.width;
 const installer = view.state === 'ready' ? view.installer : undefined;
 const isMod = entry.data.kind === 'minecraft-mod';
 ---
 
 <li>
-  <article class:list={['glass', 'row', { flip }]} data-color={entry.data.color} aria-labelledby={`row-${entry.id}`}>
+  <article class:list={['glass', 'row', { flip, portrait }]} data-color={entry.data.color} aria-labelledby={`row-${entry.id}`}>
     <div class="row-copy">
       <div class="row-head">
         <SoftwareIcon entry={entry} size={56} class="row-icon" />
@@ -33,7 +33,7 @@ const isMod = entry.data.kind === 'minecraft-mod';
         </div>
       </div>
       <p class="row-tagline">{entry.data.tagline}</p>
-      <ReleaseFacts view={view} downloads={downloads} />
+      <ReleaseFacts view={view} downloads={downloads} showDate />
       <div class="row-actions">
         {
           isMod ? (
@@ -75,7 +75,7 @@ const isMod = entry.data.kind === 'minecraft-mod';
 <style>
   .row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
     gap: var(--space-4);
     align-items: center;
     padding: var(--space-4);
@@ -83,8 +83,35 @@ const isMod = entry.data.kind === 'minecraft-mod';
   }
 
 
+  .flip {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+
   .flip .row-copy {
     order: 2;
+  }
+
+  .portrait,
+  .portrait.flip {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+
+  .portrait.flip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  }
+
+  .row-media {
+    display: grid;
+    justify-items: center;
+  }
+
+  .portrait .row-media .shot {
+    width: fit-content;
+  }
+
+  .portrait .row-media .shot :global(img) {
+    width: auto;
+    max-height: 22rem;
   }
 
 

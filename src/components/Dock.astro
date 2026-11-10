@@ -12,7 +12,7 @@ const { items } = Astro.props;
 const offered = items.filter(({ view }) => view.state !== 'none');
 ---
 
-<section class="glass dock" aria-labelledby="dock-title">
+<section id="logiciels" class="glass dock" aria-labelledby="dock-title">
   <h2 id="dock-title" class="dock-title">Téléchargement rapide</h2>
   <ul class="dock-list">
     {
@@ -31,7 +31,11 @@ const offered = items.filter(({ view }) => view.state !== 'none');
                   {isMod ? 'choisir ta version' : view.state === 'ready' ? view.release.version : 'sur GitHub'}
                 </span>
               </span>
-              {!isMod && <IconDownload />}
+              {!isMod && (
+                <span class="gel-dot">
+                  <IconDownload />
+                </span>
+              )}
             </a>
           </li>
         );
@@ -42,6 +46,7 @@ const offered = items.filter(({ view }) => view.state !== 'none');
 
 <style>
   .dock {
+    scroll-margin-top: var(--space-3);
     display: grid;
     gap: 0.75rem;
     padding: 0.9rem 1rem 1rem;
@@ -66,7 +71,7 @@ const offered = items.filter(({ view }) => view.state !== 'none');
     padding-right: 0.9rem;
   }
 
-  .dock-list :global(.icon) {
+  .dock-list .gel-dot {
     margin-left: auto;
   }
 
@@ -87,17 +92,6 @@ const offered = items.filter(({ view }) => view.state !== 'none');
     font-weight: 500;
   }
 
-  .dock :global(.icon) {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--gel-green-2);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .dock :global(.icon) {
-      color: var(--gel-green-0);
-    }
-  }
 
   @media (max-width: 52rem) {
     .dock-list {

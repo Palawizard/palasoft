@@ -34,10 +34,10 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
         </div>
       )
     }
-    <section id="logiciels" class="all" aria-labelledby="all-title">
-      <h2 id="all-title" class="all-title">Tous les logiciels</h2>
+    <section id="autres" class="all" aria-labelledby="all-title">
+      <h2 id="all-title" class="all-title">Les autres logiciels</h2>
       <ul class="rows">
-        {items.map((item, index) => <SoftwareRow item={item} flip={index % 2 === 1} shotIndex={item === featured ? 1 : 0} />)}
+        {others.map((item, index) => <SoftwareRow item={item} flip={index % 2 === 1} />)}
       </ul>
     </section>
   </div>

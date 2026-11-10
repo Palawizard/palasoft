@@ -1,7 +1,7 @@
 ---
 import { filesByLoader } from '../lib/assets.ts';
 import type { ReleaseView } from '../lib/catalog.ts';
-import { formatDate, loaderName, minecraftBandLabel } from '../lib/format.ts';
+import { formatDate, formatSize, loaderName, minecraftBandLabel } from '../lib/format.ts';
 import { downloadPath, type SoftwareEntry } from '../server/software.ts';
 import IconDownload from './IconDownload.astro';
 
@@ -44,7 +44,9 @@ const stores =
               <span class="visually-hidden">Version de Minecraft pour {loaderName(loader)}</span>
               <select name={`mc-${loader}`}>
                 {files.map((file) => (
-                  <option value={file.bandId}>Minecraft {minecraftBandLabel(file.bandId)}</option>
+                  <option value={file.bandId} data-file={`${file.asset.name} · ${formatSize(file.asset.size)}`}>
+                    Minecraft {minecraftBandLabel(file.bandId)}
+                  </option>
                 ))}
               </select>
             </label>
@@ -59,6 +61,7 @@ const stores =
             version {view.release.version}
             {view.release.publishedAt !== null && ` · publiée le ${formatDate(view.release.publishedAt)}`}
           </span>
+          <span class="submit-facts numbers file-facts" data-file-facts></span>
           <span class="submit-facts waiting-facts" aria-hidden="true">
             Choisis d’abord le loader de ton serveur
           </span>
@@ -90,6 +93,22 @@ const stores =
   </ul>
 </div>
 
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>('.picker-form')) {
+    const target = form.querySelector<HTMLElement>('[data-file-facts]');
+    const update = (): void => {
+      const loader = form.querySelector<HTMLInputElement>('input[name="loader"]:checked')?.value;
+      const select = loader === undefined ? null : form.querySelector<HTMLSelectElement>(`select[name="mc-${loader}"]`);
+      const file = select?.selectedOptions[0]?.dataset['file'];
+      if (target === null) return;
+      target.textContent = file ?? '';
+      form.classList.toggle('has-file', file !== undefined);
+    };
+    form.addEventListener('change', update);
+    update();
+  }
+</script>
+
 <style>
   .picker {
     display: grid;
@@ -116,7 +135,7 @@ const stores =
 
   .loader-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     overflow: hidden;
     border: 1px solid rgb(11 42 68 / 0.25);
     border-radius: var(--radius-control);
@@ -143,7 +162,7 @@ const stores =
 
   .loader-option span {
     display: block;
-    padding: 0.6rem var(--space-2);
+    padding: 0.6rem 0.4rem;
     background: linear-gradient(to bottom, var(--pill-0) 0%, var(--pill-1) 50%, var(--pill-2) 51%, var(--pill-1) 100%);
     font-weight: 600;
     text-align: center;
@@ -200,6 +219,15 @@ const stores =
   .submit-facts {
     font-size: var(--text-small);
     font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .file-facts:empty {
+    display: none;
+  }
+
+  .has-file .ready-facts {
+    display: none;
   }
 
   @supports selector(:has(*)) {

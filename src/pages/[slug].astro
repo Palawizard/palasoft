@@ -10,6 +10,7 @@ import Requirements from '../components/Requirements.astro';
 import ScreenshotGallery from '../components/ScreenshotGallery.astro';
 import SmartScreenHelp from '../components/SmartScreenHelp.astro';
 import SoftwareIcon from '../components/SoftwareIcon.astro';
+import WindowTitle from '../components/WindowTitle.astro';
 import { downloadsOf, findSoftware, homePath, notFound, releaseOf } from '../server/software.ts';
 
 const entry = await findSoftware(Astro.params.slug);
@@ -32,10 +33,7 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
     </a>
     <RemoteDataNotice views={[view]} />
     <section class="glass hero rise" data-color={data.color} aria-labelledby="software-title">
-      <header class="titlebar">
-        <SoftwareIcon entry={entry} size={24} class="titlebar-icon" />
-        <span>{data.name}</span>
-      </header>
+      <WindowTitle entry={entry} caption={data.name} />
       <div class="hero-body">
         <div id="telecharger" class="hero-copy">
           <div class="identity">
@@ -97,30 +95,16 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
     padding-left: 0.7rem;
   }
 
-  .titlebar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
-    border-bottom: 1px solid var(--rule);
-    font-size: var(--text-small);
-    font-weight: 600;
-  }
 
   .hero {
     overflow: hidden;
   }
 
 
-  :global(.titlebar-icon) {
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 4px;
-  }
 
   .hero-body {
     display: grid;
-    grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
     gap: var(--space-6);
     align-items: start;
     padding: var(--space-4);
@@ -138,8 +122,8 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
   }
 
   .identity {
-    display: flex;
-    align-items: center;
+    display: grid;
+    justify-items: start;
     gap: var(--space-2);
   }
 
@@ -151,7 +135,7 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
   }
 
   h1 {
-    font-size: var(--text-display);
+    font-size: clamp(2.25rem, 1.6rem + 1.8vw, 3rem);
     font-weight: 700;
   }
 
@@ -170,9 +154,22 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
     font-size: var(--text-small);
   }
 
+  .hero-media {
+    display: grid;
+    justify-items: center;
+  }
+
   .hero-media .shot {
+    width: fit-content;
+    max-width: 100%;
     transform: perspective(90rem) rotateY(-3deg);
     transform-origin: left center;
+  }
+
+  .hero-media .shot :global(img) {
+    width: auto;
+    max-width: 100%;
+    max-height: 32rem;
   }
 
   .no-shot {

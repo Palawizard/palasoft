@@ -4,7 +4,7 @@ import type { SoftwareWithRelease } from '../server/software.ts';
 import { softwarePath } from '../server/software.ts';
 import DownloadButton from './DownloadButton.astro';
 import ReleaseFacts from './ReleaseFacts.astro';
-import SoftwareIcon from './SoftwareIcon.astro';
+import WindowTitle from './WindowTitle.astro';
 
 interface Props {
   item: SoftwareWithRelease;
@@ -15,15 +15,12 @@ const screenshot = entry.data.screenshots[0];
 ---
 
 <article class="glass showcase rise" data-color={entry.data.color} aria-labelledby="showcase-title">
-  <header class="titlebar">
-    <SoftwareIcon entry={entry} size={24} class="titlebar-icon" />
-    <span>{entry.data.name}</span>
-  </header>
+  <WindowTitle entry={entry} caption={entry.data.name} />
   <div class="body">
     <div class="copy">
       <h2 id="showcase-title" class="name">{entry.data.name}</h2>
       <p class="tagline">{entry.data.tagline}</p>
-      <ReleaseFacts view={view} downloads={downloads} showSize={false} />
+      <ReleaseFacts view={view} downloads={downloads} showDate />
       <DownloadButton entry={entry} view={view} />
       <a class="more" href={softwarePath(entry.id)}>Voir comment l’installer</a>
     </div>
@@ -43,21 +40,6 @@ const screenshot = entry.data.screenshots[0];
   }
 
 
-  .titlebar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
-    border-bottom: 1px solid var(--rule);
-    font-size: var(--text-small);
-    font-weight: 600;
-  }
-
-  :global(.titlebar-icon) {
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 4px;
-  }
 
   .body {
     display: grid;
