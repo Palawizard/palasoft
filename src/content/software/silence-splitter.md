@@ -19,7 +19,7 @@ requirements:
   - label: Windows 10 ou 11
 ---
 
-## ce que ça fait
+## Ce que ça fait
 
 Silence Splitter repère les silences de tes vidéos MP4 et prépare la coupe pour ton logiciel de montage.
 
@@ -30,12 +30,12 @@ Silence Splitter repère les silences de tes vidéos MP4 et prépare la coupe po
 - Tout se passe sur ton PC, sans compte. L’interface est en français et en anglais, en thème clair ou sombre.
 - Il se met à jour tout seul.
 
-## installer
+## Installer
 
 1. Télécharge le fichier avec le bouton Télécharger, puis ouvre-le.
 2. L’installation se fait pour ton compte Windows. Tout ce qu’il faut pour lire les vidéos est inclus, rien d’autre à installer.
 
-## bon à savoir
+## Bon à savoir
 
 - C’est une version bêta.
 - Il ne lit que les vidéos MP4.

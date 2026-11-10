@@ -1,0 +1,76 @@
+---
+const bubbles = [
+  { x: 6, y: 78, size: 46, delay: 0 },
+  { x: 14, y: 88, size: 22, delay: 1.2 },
+  { x: 31, y: 82, size: 30, delay: 2.4 },
+  { x: 52, y: 92, size: 18, delay: 0.6 },
+  { x: 67, y: 80, size: 38, delay: 1.8 },
+  { x: 84, y: 86, size: 26, delay: 3 },
+  { x: 93, y: 76, size: 54, delay: 0.9 },
+];
+---
+
+<div class="scene" aria-hidden="true">
+  <svg class="rays" viewBox="0 0 800 600" preserveAspectRatio="xMaxYMin slice">
+    <defs>
+      <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"></stop>
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+    <path d="M640 -20 L520 600 L600 600 Z" fill="url(#ray)"></path>
+    <path d="M660 -20 L700 600 L780 600 Z" fill="url(#ray)"></path>
+    <path d="M620 -20 L330 600 L400 600 Z" fill="url(#ray)" opacity="0.6"></path>
+  </svg>
+  {
+    bubbles.map((bubble) => (
+      <span
+        class="bubble"
+        style={`left:${bubble.x}%;top:${bubble.y}%;width:${bubble.size}px;height:${bubble.size}px;animation-delay:-${bubble.delay}s`}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .scene {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .rays {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(70rem, 100%);
+    height: 40rem;
+  }
+
+  .bubble {
+    position: absolute;
+    border: 1px solid rgb(255 255 255 / 0.6);
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.95) 0 10%, rgb(255 255 255 / 0.25) 24%, rgb(200 240 255 / 0.12) 60%, rgb(255 255 255 / 0.35) 100%);
+    animation: drift 6s ease-in-out infinite alternate;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .rays {
+      opacity: 0.35;
+    }
+
+    .bubble {
+      border-color: rgb(170 214 255 / 0.35);
+      opacity: 0.7;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bubble {
+      animation: none;
+    }
+  }
+</style>

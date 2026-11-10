@@ -68,16 +68,16 @@ describe('pages on the built server', () => {
     const page = await html(site, '/software/palaclips');
     expect(page.body).toContain('publiée le 28 octobre 2026');
     expect(page.body).toContain('href="/software/dl/palaclips"');
-    expect(page.body).toContain("si Windows t’avertit");
+    expect(page.body).toContain("Si Windows t’avertit");
     expect(home.body).toContain('33 téléchargements');
-    expect(page.body).toContain('33 téléchargements au total');
+    expect(page.body).toContain('33 téléchargements');
     const mod = await html(site, '/software/palas-item-clear');
-    expect(mod.body).toContain('4\u202f300 téléchargements au total');
+    expect(mod.body).toContain('4\u202f300 téléchargements');
     expect(github.requests).toContain('/modrinth/v2/project/palas-item-clear');
     expect(github.requests.some((path) => path.startsWith('/curseforge'))).toBe(false);
     expect(mod.body).toContain('name="mc-forge"');
     expect(mod.body).toContain('value="1.21.6-1.21.8"');
-    expect(mod.body).not.toContain("si Windows t’avertit");
+    expect(mod.body).not.toContain("Si Windows t’avertit");
     await site.stop();
   });
 

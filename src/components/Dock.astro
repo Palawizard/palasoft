@@ -1,0 +1,120 @@
+---
+import type { SoftwareWithRelease } from '../server/software.ts';
+import { downloadPath, softwarePath } from '../server/software.ts';
+import IconDownload from './IconDownload.astro';
+import SoftwareIcon from './SoftwareIcon.astro';
+
+interface Props {
+  items: readonly SoftwareWithRelease[];
+}
+
+const { items } = Astro.props;
+const offered = items.filter(({ view }) => view.state !== 'none');
+---
+
+<section class="glass dock" aria-labelledby="dock-title">
+  <h2 id="dock-title" class="dock-title">Téléchargement rapide</h2>
+  <ul class="dock-list">
+    {
+      offered.map(({ entry, view }) => {
+        const isMod = entry.data.kind === 'minecraft-mod';
+        return (
+          <li>
+            <a class="pill" href={isMod ? `${softwarePath(entry.id)}#telecharger` : downloadPath(entry.id)}>
+              <SoftwareIcon entry={entry} size={28} class="dock-icon" />
+              <span class="dock-text">
+                <span>
+                  {!isMod && <span class="visually-hidden">Télécharger </span>}
+                  {entry.data.name}
+                </span>
+                <span class="dock-meta numbers">
+                  {isMod ? 'choisir ta version' : view.state === 'ready' ? view.release.version : 'sur GitHub'}
+                </span>
+              </span>
+              {!isMod && <IconDownload />}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  .dock {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .dock-title {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .dock-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dock-list .pill {
+    width: 100%;
+    padding-right: 0.9rem;
+  }
+
+  .dock-list :global(.icon) {
+    margin-left: auto;
+  }
+
+  :global(.dock-icon) {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 6px;
+  }
+
+  .dock-text {
+    display: grid;
+    line-height: 1.15;
+  }
+
+  .dock-meta {
+    color: var(--ink-soft);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .dock :global(.icon) {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--gel-green-2);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .dock :global(.icon) {
+      color: var(--gel-green-0);
+    }
+  }
+
+  @media (max-width: 52rem) {
+    .dock-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .dock-list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dock-text {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 0.5rem;
+    }
+  }
+</style>

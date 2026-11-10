@@ -60,7 +60,7 @@ describe('download routes on the built server', () => {
     const response = await get(site, path);
     expect(response.status).toBe(404);
     expect(response.headers.get('location')).toBeNull();
-    expect(await response.text()).toContain('page introuvable');
+    expect(await response.text()).toContain('Page introuvable');
   });
 
   it('sends the mod button to its page, where the version is chosen', async () => {

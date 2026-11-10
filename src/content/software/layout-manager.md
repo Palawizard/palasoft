@@ -19,7 +19,7 @@ requirements:
   - label: Windows 10 ou 11
 ---
 
-## ce que ça fait
+## Ce que ça fait
 
 Layout Manager 2 enregistre des dispositions de travail et les remet en place quand tu veux. Une disposition est une liste d’actions dans l’ordre :
 
@@ -31,12 +31,12 @@ Chaque fenêtre peut prendre tout l’écran, une moitié, un quart, le centre, 
 
 L’interface est en français, suit le thème clair ou sombre de Windows, marche hors ligne, sans compte, et se met à jour toute seule.
 
-## installer
+## Installer
 
 1. Télécharge le fichier avec le bouton Télécharger, puis ouvre-le.
 2. L’installation se fait pour ton compte Windows.
 
-## bon à savoir
+## Bon à savoir
 
 - C’est une version bêta.
 - Il ne peut pas déplacer une application lancée en administrateur.

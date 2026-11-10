@@ -26,7 +26,7 @@ requirements:
   - label: Une carte graphique NVIDIA, AMD ou Intel est conseillée. Sans elle, PalaClips marche quand même mais demande plus d’effort au processeur pendant que tu joues.
 ---
 
-## ce que ça fait
+## Ce que ça fait
 
 PalaClips garde en mémoire les derniers instants de ta partie. Un raccourci (Alt+F10 au départ) les enregistre en clip sans quitter le jeu.
 
@@ -38,7 +38,7 @@ PalaClips garde en mémoire les derniers instants de ta partie. Un raccourci (Al
 - Il se met à jour tout seul.
 
 
-## installer
+## Installer
 
 1. Télécharge le fichier avec le bouton Télécharger, puis ouvre-le.
 2. L’installation se fait pour ton compte Windows, sans mot de passe administrateur.

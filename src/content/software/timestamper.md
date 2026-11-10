@@ -17,7 +17,7 @@ requirements:
   - label: Windows 10 ou 11
 ---
 
-## ce que ça fait
+## Ce que ça fait
 
 Timestamper t’aide à noter les moments forts de ton stream Twitch pendant que tu joues.
 
@@ -27,12 +27,12 @@ Timestamper t’aide à noter les moments forts de ton stream Twitch pendant que
 - Il peut démarrer et s’arrêter en même temps qu’OBS, si tu actives le serveur WebSocket d’OBS. Il ne donne jamais d’ordre à OBS.
 - Tout reste sur ton PC, hors ligne, sans compte.
 
-## installer
+## Installer
 
 1. Télécharge le fichier avec le bouton Télécharger, puis ouvre-le.
 2. L’installation se fait pour ton compte Windows.
 
-## bon à savoir
+## Bon à savoir
 
 - L’interface est en anglais.
 - C’est une version bêta.

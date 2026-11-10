@@ -1,0 +1,177 @@
+---
+import { Image } from 'astro:assets';
+import type { SoftwareWithRelease } from '../server/software.ts';
+import { softwarePath } from '../server/software.ts';
+import DownloadButton from './DownloadButton.astro';
+import ReleaseFacts from './ReleaseFacts.astro';
+import { formatSize } from '../lib/format.ts';
+import SoftwareIcon from './SoftwareIcon.astro';
+
+interface Props {
+  item: SoftwareWithRelease;
+  flip: boolean;
+  shotIndex: number;
+}
+
+const { item, flip, shotIndex } = Astro.props;
+const { entry, view, downloads } = item;
+const screenshot = entry.data.screenshots[shotIndex] ?? entry.data.screenshots[0];
+const installer = view.state === 'ready' ? view.installer : undefined;
+const isMod = entry.data.kind === 'minecraft-mod';
+---
+
+<li>
+  <article class:list={['glass', 'row', { flip }]} data-color={entry.data.color} aria-labelledby={`row-${entry.id}`}>
+    <div class="row-copy">
+      <div class="row-head">
+        <SoftwareIcon entry={entry} size={56} class="row-icon" />
+        <div>
+          <h3 id={`row-${entry.id}`} class="row-name">
+            <a href={softwarePath(entry.id)}>{entry.data.name}</a>
+          </h3>
+          <p class="row-kind">{isMod ? 'Mod Minecraft pour serveur' : 'Pour Windows'}</p>
+        </div>
+      </div>
+      <p class="row-tagline">{entry.data.tagline}</p>
+      <ReleaseFacts view={view} downloads={downloads} />
+      <div class="row-actions">
+        {
+          isMod ? (
+            <a class="gel gel-small" href={`${softwarePath(entry.id)}#telecharger`}>
+              Choisir ma version
+            </a>
+          ) : (
+            <DownloadButton entry={entry} view={view} compact showFile={false} />
+          )
+        }
+        <a class="gel gel-aqua gel-small" href={softwarePath(entry.id)}>
+          Comment l’installer
+        </a>
+      </div>
+      {installer !== undefined && (
+        <p class="row-file numbers">
+          <span class="visually-hidden">Fichier : </span>
+          {installer.name} · {formatSize(installer.size)}
+        </p>
+      )}
+    </div>
+    <div class="row-media">
+      {
+        screenshot !== undefined ? (
+          <figure class="shot">
+            <Image src={screenshot.src} alt={screenshot.alt} widths={[400, 640, 880]} sizes="(min-width: 64rem) 34rem, 92vw" />
+          </figure>
+        ) : (
+          <div class="no-shot">
+            <SoftwareIcon entry={entry} size={120} class="no-shot-icon" />
+            <p>Pas encore de capture de ce logiciel.</p>
+          </div>
+        )
+      }
+    </div>
+  </article>
+</li>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-4);
+    overflow: hidden;
+  }
+
+
+  .flip .row-copy {
+    order: 2;
+  }
+
+
+  .row-copy {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+  }
+
+  .row-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  :global(.row-icon) {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgb(6 48 74 / 0.3);
+  }
+
+  .row-name {
+    font-size: var(--text-title);
+  }
+
+  .row-name a {
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .row-name a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .row-kind {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  .row-tagline {
+    max-width: 34ch;
+    font-size: var(--text-lead);
+    line-height: 1.4;
+  }
+
+  .row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .row-file {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    overflow-wrap: anywhere;
+  }
+
+  .no-shot {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-6) var(--space-3);
+    border: 1px dashed var(--rule);
+    border-radius: 10px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  :global(.no-shot-icon) {
+    width: 7.5rem;
+    height: 7.5rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 24px rgb(6 48 74 / 0.3);
+  }
+
+  @media (max-width: 56rem) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      padding: var(--space-3);
+    }
+
+    .flip .row-copy {
+      order: 0;
+    }
+  }
+</style>

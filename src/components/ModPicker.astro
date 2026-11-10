@@ -50,7 +50,7 @@ const stores =
             </label>
           ))}
         </div>
-        <button class="tile submit" data-tilt data-color={entry.data.color} type="submit">
+        <button class="gel submit" type="submit">
           <span class="submit-action">
             <IconDownload />
             Télécharger le mod
@@ -81,7 +81,7 @@ const stores =
     {
       stores.map((store) => (
         <li>
-          <a class="store" href={store.url}>
+          <a class="pill store" href={store.url}>
             Aussi sur {store.label}
           </a>
         </li>
@@ -102,7 +102,6 @@ const stores =
   }
 
   .loaders {
-    width: 100%;
     margin: 0;
     padding: 0;
     border: 0;
@@ -112,19 +111,26 @@ const stores =
   .step {
     margin-bottom: var(--space-1);
     padding: 0;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .loader-options {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
-    gap: var(--gap);
+    overflow: hidden;
+    border: 1px solid rgb(11 42 68 / 0.25);
+    border-radius: var(--radius-control);
+    box-shadow: 0 3px 8px -3px rgb(6 48 74 / 0.35);
   }
 
   .loader-option {
     position: relative;
     display: block;
     cursor: pointer;
+  }
+
+  .loader-option + .loader-option {
+    border-left: 1px solid rgb(11 42 68 / 0.18);
   }
 
   .loader-option input {
@@ -137,19 +143,21 @@ const stores =
 
   .loader-option span {
     display: block;
-    padding: var(--space-1) var(--space-2);
-    border: 2px solid var(--ink);
+    padding: 0.6rem var(--space-2);
+    background: linear-gradient(to bottom, var(--pill-0) 0%, var(--pill-1) 50%, var(--pill-2) 51%, var(--pill-1) 100%);
+    font-weight: 600;
     text-align: center;
   }
 
   .loader-option input:checked + span {
-    background: var(--ink);
-    color: var(--ground);
+    background: linear-gradient(to bottom, var(--gel-aqua-0) 0%, var(--gel-aqua-1) 49%, var(--gel-aqua-2) 50%, var(--gel-aqua-3) 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.4);
   }
 
   .loader-option input:focus-visible + span {
-    outline: 3px solid var(--ink);
-    outline-offset: 3px;
+    outline: 3px solid var(--gel-aqua-1);
+    outline-offset: -3px;
   }
 
   .versions {
@@ -164,12 +172,34 @@ const stores =
 
   select {
     width: 100%;
-    padding: var(--space-1) var(--space-2);
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    background: var(--ground);
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgb(11 42 68 / 0.25);
+    border-radius: 10px;
+    background: var(--glass-strong);
+    box-shadow: inset 0 2px 4px rgb(6 48 74 / 0.12);
     color: var(--ink);
     font: inherit;
+  }
+
+  .submit {
+    display: grid;
+    justify-items: start;
+    gap: 0.2rem;
+    width: 100%;
+    border-radius: 18px;
+    text-align: left;
+  }
+
+  .submit-action {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .submit-facts {
+    font-size: var(--text-small);
+    font-weight: 500;
   }
 
   @supports selector(:has(*)) {
@@ -192,9 +222,11 @@ const stores =
     }
 
     .picker-form:not(:has(input[name='loader']:checked)) .submit {
-      background: transparent;
+      background: var(--glass-strong);
+      border-color: rgb(11 42 68 / 0.3);
+      box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
       color: var(--ink);
-      box-shadow: inset 0 0 0 2px var(--ink-soft);
+      text-shadow: none;
     }
 
     .picker-form:not(:has(input[name='loader']:checked)) .ready-facts {
@@ -206,7 +238,6 @@ const stores =
     }
   }
 
-
   @supports not selector(:has(*)) {
     .hint,
     .waiting-facts {
@@ -214,53 +245,20 @@ const stores =
     }
   }
 
-  .submit {
-    gap: var(--space-1);
-    width: 100%;
-    padding: var(--space-3);
-    border: 0;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .submit-action {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-
-  .submit-facts {
-    font-size: var(--text-small);
-  }
-
   .server-only {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .stores {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap);
+    gap: var(--space-1);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .store {
-    display: block;
-    padding: var(--space-1) var(--space-2);
-    border: 2px solid var(--ink);
-    text-decoration: none;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .store:hover,
-    .loader-option:hover span {
-      background: var(--panel);
-    }
+    padding-left: 1rem;
   }
 </style>
