@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import DownloadButton from '../components/DownloadButton.astro';
@@ -11,7 +11,8 @@ import ScreenshotGallery from '../components/ScreenshotGallery.astro';
 import SmartScreenHelp from '../components/SmartScreenHelp.astro';
 import SoftwareIcon from '../components/SoftwareIcon.astro';
 import WindowTitle from '../components/WindowTitle.astro';
-import { downloadsOf, findSoftware, homePath, notFound, releaseOf } from '../server/software.ts';
+import { downloadPath, downloadsOf, findSoftware, homePath, notFound, releaseOf, softwarePath } from '../server/software.ts';
+import { SITE_NAME, breadcrumbJsonLd, softwareJsonLd } from '../lib/seo.ts';
 
 const entry = await findSoftware(Astro.params.slug);
 if (entry === undefined) return notFound();
@@ -21,9 +22,42 @@ const { Content } = await render(entry);
 const { data } = entry;
 const [mainShot] = data.screenshots;
 Astro.response.headers.set('Cache-Control', 'no-cache');
+
+// A landscape first screenshot is the picture of a shared link (never enlarged, JPEG so every network can read it);
+// otherwise the PalaSoft card is.
+const shareSource = mainShot !== undefined && mainShot.src.width > mainShot.src.height ? mainShot : undefined;
+const shareShot =
+  shareSource === undefined
+    ? undefined
+    : await getImage({ src: shareSource.src, width: Math.min(1200, shareSource.src.width), format: 'jpeg', quality: 85 });
+const shareImage =
+  shareSource === undefined || shareShot === undefined
+    ? undefined
+    : { src: shareShot.src, width: Number(shareShot.attributes.width), height: Number(shareShot.attributes.height), alt: shareSource.alt };
+const absolute = (path: string): string => new URL(path, Astro.site).href;
+const pageUrl = absolute(softwarePath(entry.id));
+const isMod = data.kind === 'minecraft-mod';
+const title = isMod ? `${data.name}, mod Minecraft gratuit | ${SITE_NAME}` : `Télécharger ${data.name} pour Windows | ${SITE_NAME}`;
+const jsonLd = [
+  softwareJsonLd({
+    name: data.name,
+    description: data.tagline,
+    url: pageUrl,
+    category: data.category,
+    kind: data.kind,
+    version: view.state === 'ready' ? view.release.version : undefined,
+    downloadUrl: !isMod && view.state === 'ready' && view.installer !== undefined ? absolute(downloadPath(entry.id)) : undefined,
+    screenshot: shareImage === undefined ? undefined : absolute(shareImage.src),
+    sameAs: [`https://github.com/${data.repo}`, ...(isMod ? [data.modrinth, data.curseforge] : [])],
+  }),
+  breadcrumbJsonLd([
+    { name: SITE_NAME, url: absolute(homePath) },
+    { name: data.name, url: pageUrl },
+  ]),
+];
 ---
 
-<Layout title={`${data.name} | PalaSoft`} description={data.tagline}>
+<Layout title={title} description={data.tagline} image={shareImage} jsonLd={jsonLd}>
   <article class="page software">
     <a class="pill back" href={homePath}>
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
