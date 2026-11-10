@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatDateTime, formatSize, loaderName, minecraftBandLabel } from '../src/lib/format.ts';
+import { formatDate, formatDateTime, formatDownloads, formatSize, loaderName, minecraftBandLabel } from '../src/lib/format.ts';
 
 describe('formatSize', () => {
   it.each([
@@ -11,6 +11,15 @@ describe('formatSize', () => {
     [2 * 1024 ** 3, '2 Go'],
   ])('formats %d bytes as %s', (bytes, expected) => {
     expect(formatSize(bytes)).toBe(expected);
+  });
+});
+
+describe('formatDownloads', () => {
+  it('groups thousands the French way and agrees the noun', () => {
+    expect(formatDownloads(4300)).toBe('4\u202f300 téléchargements');
+    expect(formatDownloads(33)).toBe('33 téléchargements');
+    expect(formatDownloads(1)).toBe('1 téléchargement');
+    expect(formatDownloads(0)).toBe('0 téléchargement');
   });
 });
 

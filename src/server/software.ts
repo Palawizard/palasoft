@@ -25,13 +25,21 @@ export const toSource = (entry: SoftwareEntry): SoftwareSource =>
 
 export const releaseOf = (entry: SoftwareEntry): Promise<ReleaseView> => catalog.release(toSource(entry));
 
+export const downloadsOf = (entry: SoftwareEntry): Promise<number | undefined> => catalog.downloads(toSource(entry));
+
 export interface SoftwareWithRelease {
   entry: SoftwareEntry;
   view: ReleaseView;
+  downloads: number | undefined;
 }
 
 export const allSoftwareWithReleases = async (): Promise<SoftwareWithRelease[]> =>
-  Promise.all((await allSoftware()).map(async (entry) => ({ entry, view: await releaseOf(entry) })));
+  Promise.all(
+    (await allSoftware()).map(async (entry) => {
+      const [view, downloads] = await Promise.all([releaseOf(entry), downloadsOf(entry)]);
+      return { entry, view, downloads };
+    }),
+  );
 
 export const findSoftware = async (slug: string | undefined): Promise<SoftwareEntry | undefined> =>
   slug === undefined ? undefined : getEntry('software', slug);

@@ -12,6 +12,9 @@ export const formatSize = (bytes: number): string => {
   return `${integer.format(bytes)} octets`;
 };
 
+export const formatDownloads = (count: number): string =>
+  `${integer.format(count)} téléchargement${count === 1 || count === 0 ? '' : 's'}`;
+
 const longDate = new Intl.DateTimeFormat('fr-FR', {
   day: 'numeric',
   month: 'long',

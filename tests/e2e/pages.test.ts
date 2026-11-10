@@ -48,6 +48,7 @@ describe('pages on the built server', () => {
       const { status, body } = await html(site, path);
       expect(status, path).toBe(200);
       expect(body, path).toContain('ne répond pas en ce moment');
+      expect(body, path).not.toContain('téléchargements');
     }
     const home = await html(site, '/software/');
     expect(home.body).toContain("version indisponible pour l’instant");
@@ -68,7 +69,12 @@ describe('pages on the built server', () => {
     expect(page.body).toContain('publiée le 28 octobre 2026');
     expect(page.body).toContain('href="/software/dl/palaclips"');
     expect(page.body).toContain("si Windows t’avertit");
+    expect(home.body).toContain('33 téléchargements');
+    expect(page.body).toContain('33 téléchargements au total');
     const mod = await html(site, '/software/palas-item-clear');
+    expect(mod.body).toContain('4\u202f300 téléchargements au total');
+    expect(github.requests).toContain('/modrinth/v2/project/palas-item-clear');
+    expect(github.requests.some((path) => path.startsWith('/curseforge'))).toBe(false);
     expect(mod.body).toContain('name="mc-forge"');
     expect(mod.body).toContain('value="1.21.6-1.21.8"');
     expect(mod.body).not.toContain("si Windows t’avertit");
