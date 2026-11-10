@@ -1,6 +1,7 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { createCatalog, type ReleaseView, type SoftwareSource } from '../lib/catalog.ts';
 import { readConfig } from '../lib/config.ts';
+import { modrinthSlug } from '../lib/stores.ts';
 
 export type SoftwareEntry = CollectionEntry<'software'>;
 
@@ -13,7 +14,14 @@ export const catalog = createCatalog(readConfig(process.env), {
 export const toSource = (entry: SoftwareEntry): SoftwareSource =>
   entry.data.kind === 'windows'
     ? { slug: entry.id, repo: entry.data.repo, kind: 'windows', installerPattern: entry.data.installerPattern }
-    : { slug: entry.id, repo: entry.data.repo, kind: 'minecraft-mod', versionMatrix: entry.data.versionMatrix };
+    : {
+        slug: entry.id,
+        repo: entry.data.repo,
+        kind: 'minecraft-mod',
+        versionMatrix: entry.data.versionMatrix,
+        modrinthSlug: modrinthSlug(entry.data.modrinth),
+        curseforgeId: entry.data.curseforgeId,
+      };
 
 export const releaseOf = (entry: SoftwareEntry): Promise<ReleaseView> => catalog.release(toSource(entry));
 

@@ -35,6 +35,7 @@ const minecraftMod = z.object({
   versionMatrix: z.string().regex(/^[\w./-]+\.json$/),
   modrinth: z.url(),
   curseforge: z.url(),
+  curseforgeId: z.number().int().positive().optional(),
 });
 
 const software = defineCollection({

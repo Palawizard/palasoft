@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { pickInstaller, modFiles, modMatrixSchema, type ModFile, type ModMatrix } from './assets.ts';
 import { createCachedSource, type CachedSource } from './cache.ts';
 import type { ServerConfig } from './config.ts';
+import { githubDownloads } from './counts.ts';
+import { fetchCurseForgeDownloads, fetchModrinthDownloads, type StoreClientOptions } from './stores.ts';
 import {
   fetchReleases,
   fetchRepoJsonFile,
@@ -15,7 +17,14 @@ import {
 
 export type SoftwareSource =
   | { slug: string; repo: string; kind: 'windows'; installerPattern: string }
-  | { slug: string; repo: string; kind: 'minecraft-mod'; versionMatrix: string };
+  | {
+      slug: string;
+      repo: string;
+      kind: 'minecraft-mod';
+      versionMatrix: string;
+      modrinthSlug: string | undefined;
+      curseforgeId: number | undefined;
+    };
 
 const snapshotSchema = z.object({
   releases: releasesSchema,
@@ -47,6 +56,7 @@ export type ReleaseView =
 
 export interface Catalog {
   release: (source: SoftwareSource) => Promise<ReleaseView>;
+  downloads: (source: SoftwareSource) => Promise<number | undefined>;
 }
 
 const RETRY_AFTER_FAILURE_MS = 60 * 1000;
@@ -64,6 +74,34 @@ export const createCatalog = (
     ...(options.fetch === undefined ? {} : { fetch: options.fetch }),
   };
   const sources = new Map<string, CachedSource<Snapshot>>();
+  const storeCounts = new Map<string, CachedSource<number>>();
+  const storeClient = (apiUrl: string): StoreClientOptions => ({
+    apiUrl,
+    timeoutMs: config.requestTimeoutMs,
+    ...(options.fetch === undefined ? {} : { fetch: options.fetch }),
+  });
+
+  const storeCount = (key: string, load: () => Promise<number>): CachedSource<number> => {
+    let cached = storeCounts.get(key);
+    if (cached === undefined) {
+      cached = createCachedSource({
+        key,
+        ttlMs: config.cacheTtlMs,
+        retryAfterFailureMs: RETRY_AFTER_FAILURE_MS,
+        dataDir: config.dataDir,
+        schema: z.number().int().nonnegative(),
+        load,
+        ...(options.onError === undefined ? {} : { onError: options.onError }),
+      });
+      storeCounts.set(key, cached);
+    }
+    return cached;
+  };
+
+  const countOf = async (source: CachedSource<number>): Promise<number> => {
+    const result = await source.get();
+    return result.state === 'unavailable' ? 0 : result.value;
+  };
 
   const loadSnapshot = async (source: SoftwareSource): Promise<Snapshot> => {
     const releases = await fetchReleases(source.repo, client);
@@ -119,5 +157,30 @@ export const createCatalog = (
     };
   };
 
-  return { release };
+  const downloads = async (source: SoftwareSource): Promise<number | undefined> => {
+    const snapshot = await sourceFor(source).get();
+    if (snapshot.state === 'unavailable') return undefined;
+    let total = githubDownloads(snapshot.value.releases);
+    if (source.kind === 'minecraft-mod') {
+      const { modrinthSlug, curseforgeId } = source;
+      if (modrinthSlug !== undefined) {
+        total += await countOf(
+          storeCount(`modrinth-${modrinthSlug}`, () =>
+            fetchModrinthDownloads(modrinthSlug, storeClient(config.modrinthApiUrl)),
+          ),
+        );
+      }
+      const apiKey = config.curseforgeApiKey;
+      if (curseforgeId !== undefined && apiKey !== undefined) {
+        total += await countOf(
+          storeCount(`curseforge-${curseforgeId}`, () =>
+            fetchCurseForgeDownloads(curseforgeId, apiKey, storeClient(config.curseforgeApiUrl)),
+          ),
+        );
+      }
+    }
+    return total;
+  };
+
+  return { release, downloads };
 };

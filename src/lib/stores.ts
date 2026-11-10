@@ -37,3 +37,17 @@ export const fetchModrinthDownloads = async (slug: string, options: StoreClientO
   const project = modrinthProjectSchema.parse(await getJson(url, { 'User-Agent': USER_AGENT }, options));
   return project.downloads;
 };
+
+const curseForgeModSchema = z.object({ data: z.object({ downloadCount: z.number().nonnegative() }) });
+
+export const fetchCurseForgeDownloads = async (
+  projectId: number,
+  apiKey: string,
+  options: StoreClientOptions,
+): Promise<number> => {
+  const url = `${options.apiUrl}/v1/mods/${projectId}`;
+  const mod = curseForgeModSchema.parse(
+    await getJson(url, { Accept: 'application/json', 'x-api-key': apiKey }, options),
+  );
+  return Math.round(mod.data.downloadCount);
+};
