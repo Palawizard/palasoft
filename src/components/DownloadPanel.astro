@@ -15,7 +15,7 @@ const { entry, view } = Astro.props;
 <div class="download">
   {
     view.state === 'none' ? (
-      <p class="none">Aucune version n'est publiée pour l'instant.</p>
+      <p class="none">Aucune version n’est publiée pour l’instant.</p>
     ) : (
       <a class="tile download-tile" data-tilt data-color={entry.data.color} href={downloadPath(entry.id)}>
         <span class="download-action">
@@ -35,12 +35,10 @@ const { entry, view } = Astro.props;
   .download {
     display: grid;
     gap: var(--space-1);
-    justify-items: start;
   }
 
   .download-tile {
     gap: var(--space-2);
-    min-width: min(100%, 26rem);
     padding: var(--space-3);
   }
 

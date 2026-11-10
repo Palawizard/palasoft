@@ -17,7 +17,7 @@ const missing = views.some((view) => view.state === 'unavailable');
     <p class="notice" role="status">
       GitHub, qui héberge les fichiers, ne répond pas en ce moment.
       {oldest !== undefined && ` Les infos de version affichées datent du ${formatDateTime(oldest)}.`}
-      {missing && " Les boutons sans version t'emmènent directement sur GitHub."}
+      {missing && " Les boutons sans version t’emmènent directement sur GitHub."}
     </p>
   )
 }

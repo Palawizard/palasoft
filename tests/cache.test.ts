@@ -93,6 +93,19 @@ describe('createCachedSource', () => {
     expect(result).toMatchObject({ state: 'stale', value: palaclipsReleases() });
   });
 
+  it('keeps a recent copy from disk marked as stale until GitHub answers again', async () => {
+    await source(async () => palaclipsReleases()).get();
+    const load = vi.fn(async (): Promise<Release[]> => {
+      throw new Error('GitHub is down');
+    });
+    const restarted = source(load);
+    expect((await restarted.get()).state).toBe('stale');
+    expect((await restarted.get()).state).toBe('stale');
+    clock += RETRY;
+    load.mockResolvedValueOnce(palaclipsReleases());
+    expect((await restarted.get()).state).toBe('fresh');
+  });
+
   it('reports unavailable when GitHub is down and there is no copy', async () => {
     const cache = source(async () => {
       throw new Error('GitHub is down');

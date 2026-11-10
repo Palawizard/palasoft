@@ -1,6 +1,7 @@
 ---
 import type { SoftwareWithRelease } from '../server/software.ts';
 import { softwarePath } from '../server/software.ts';
+import IconChevron from './IconChevron.astro';
 import ReleaseFacts from './ReleaseFacts.astro';
 
 interface Props {
@@ -20,19 +21,33 @@ const { entry, view } = item;
       <span>{entry.data.kind === 'minecraft-mod' ? 'mod Minecraft pour serveur' : 'pour Windows'}</span>
       <ReleaseFacts view={view} />
     </p>
+    <span class="software-open">
+      {entry.data.kind === 'minecraft-mod' ? 'choisir ma version' : 'comment l’installer'}
+      <IconChevron />
+    </span>
   </a>
 </li>
 
 <style>
   .software-tile {
     gap: var(--space-2);
-    min-height: 15rem;
+    min-height: 17rem;
     height: 100%;
     padding: var(--space-3);
   }
 
   .software-name {
-    font-size: var(--text-title);
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  }
+
+  .software-open {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1);
+    padding-top: var(--space-1);
+    border-top: 1px solid rgb(255 255 255 / 0.4);
+    font-weight: 600;
   }
 
   .software-tagline {

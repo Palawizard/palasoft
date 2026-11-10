@@ -9,7 +9,7 @@ const { items } = Astro.props;
 {
   items.length > 0 && (
     <section class="requirements" aria-labelledby="requirements-title">
-      <h2 id="requirements-title">à installer avant</h2>
+      <h2 id="requirements-title">ce qu’il te faut</h2>
       <ul>
         {items.map((item) => (
           <li>{item.url === undefined ? item.label : <a href={item.url}>{item.label}</a>}</li>

@@ -26,7 +26,10 @@ const offered = items.filter(({ view }) => view.state !== 'none');
               data-color={entry.data.color}
               href={isMod ? `${softwarePath(entry.id)}#telecharger` : downloadPath(entry.id)}
             >
-              <span class="quick-name">{entry.data.name}</span>
+              <span class="quick-name">
+                {!isMod && <span class="visually-hidden">Télécharger </span>}
+                {entry.data.name}
+              </span>
               <span class="quick-meta">
                 {isMod ? <span>choisir ta version de Minecraft</span> : <ReleaseFacts view={view} />}
                 <IconDownload />

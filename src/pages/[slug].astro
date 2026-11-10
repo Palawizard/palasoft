@@ -25,17 +25,21 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
       <p class="lead">{data.tagline}</p>
     </header>
     <RemoteDataNotice views={[view]} />
-    <div id="telecharger" class="download-zone">
-      {data.kind === 'windows' ? <DownloadPanel entry={entry} view={view} /> : <ModPicker entry={entry} view={view} />}
+    <div class="columns">
+      <aside id="telecharger" class="side" aria-label="Télécharger">
+        {data.kind === 'windows' ? <DownloadPanel entry={entry} view={view} /> : <ModPicker entry={entry} view={view} />}
+        {data.kind === 'windows' && <Requirements items={data.requirements} />}
+        <p class="history">
+          <a href={view.historyUrl}>Voir toutes les versions et leurs nouveautés sur GitHub</a>
+        </p>
+      </aside>
+      <div class="main">
+        <div class="prose">
+          <Content />
+        </div>
+        {data.kind === 'windows' && data.unsignedInstaller && <SmartScreenHelp />}
+      </div>
     </div>
-    {data.kind === 'windows' && <Requirements items={data.requirements} />}
-    <div class="prose">
-      <Content />
-    </div>
-    {data.kind === 'windows' && data.unsignedInstaller && <SmartScreenHelp />}
-    <p class="history">
-      <a href={view.historyUrl}>Voir toutes les versions et leurs nouveautés sur GitHub</a>
-    </p>
   </article>
 </Layout>
 
@@ -70,12 +74,43 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
     color: var(--ink-soft);
   }
 
-  .download-zone {
+  .software {
+    container-type: inline-size;
+  }
+
+  .columns {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .side {
+    display: grid;
+    align-content: start;
+    gap: var(--space-4);
     scroll-margin-top: var(--space-4);
   }
 
-  .download-zone:empty {
-    display: none;
+  .main {
+    display: grid;
+    align-content: start;
+    gap: var(--space-6);
+  }
+
+  @container (min-width: 60rem) {
+    .columns {
+      grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+      gap: var(--space-8);
+    }
+
+    .side {
+      position: sticky;
+      top: var(--space-3);
+    }
+
+    .main {
+      padding-top: var(--space-1);
+      border-top: 1px solid var(--rule);
+    }
   }
 
   .prose {
@@ -87,6 +122,10 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
   .prose :global(h2) {
     margin-top: var(--space-3);
     font-size: var(--text-subtitle);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
   }
 
   .prose :global(ol),

@@ -10,6 +10,7 @@ const entryPoint = fileURLToPath(new URL('../../dist/server/entry.mjs', import.m
 export interface FakeGitHub {
   url: string;
   down: boolean;
+  withoutReleases: Set<string>;
   requests: string[];
   close: () => Promise<void>;
 }
@@ -25,9 +26,9 @@ const closeServer = (server: Server): Promise<void> =>
     server.close(() => resolve());
   });
 
-const fixtureFor = (path: string, ref: string | null): unknown => {
+const fixtureFor = (path: string, ref: string | null, withoutReleases: Set<string>): unknown => {
   const releases = /^\/repos\/(Palawizard\/[^/]+)\/releases$/.exec(path);
-  if (releases?.[1] !== undefined) return releasesFixture(releases[1]);
+  if (releases?.[1] !== undefined) return withoutReleases.has(releases[1]) ? [] : releasesFixture(releases[1]);
   if (path === '/repos/Palawizard/PalasItemClear/contents/versions/version-matrix.json' && ref === 'v0.1.2') {
     return readFixture('github/palasitemclear-version-matrix-v0.1.2.json');
   }
@@ -35,11 +36,11 @@ const fixtureFor = (path: string, ref: string | null): unknown => {
 };
 
 export const startFakeGitHub = async (): Promise<FakeGitHub> => {
-  const fake: Omit<FakeGitHub, 'url' | 'close'> = { down: false, requests: [] };
+  const fake: Omit<FakeGitHub, 'url' | 'close'> = { down: false, withoutReleases: new Set(), requests: [] };
   const server = createServer((request, response) => {
     const url = new URL(request.url ?? '/', 'http://fake.test');
     fake.requests.push(url.pathname);
-    const body = fake.down ? undefined : fixtureFor(url.pathname, url.searchParams.get('ref'));
+    const body = fake.down ? undefined : fixtureFor(url.pathname, url.searchParams.get('ref'), fake.withoutReleases);
     response.writeHead(fake.down ? 503 : body === undefined ? 404 : 200, { 'content-type': 'application/json' });
     response.end(JSON.stringify(body ?? { message: fake.down ? 'Service Unavailable' : 'Not Found' }));
   });

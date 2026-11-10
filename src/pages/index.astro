@@ -11,14 +11,14 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
 
 <Layout
   title="PalaSoft | Les logiciels de Palawi à télécharger"
-  description="Télécharge les logiciels de Palawi pour Windows et son mod Minecraft, avec l'aide pour les installer."
+  description="Télécharge les logiciels de Palawi pour Windows et son mod Minecraft, avec l’aide pour les installer."
 >
   <div class="page home">
     <section class="intro">
       <h1 class="display">mes logiciels</h1>
       <p class="lead">
         Des logiciels gratuits pour Windows et un mod pour serveur Minecraft. Clique sur une tuile pour
-        télécharger, ou ouvre la page d'un logiciel pour savoir comment l'installer.
+        télécharger, ou ouvre la page d’un logiciel pour savoir comment l’installer.
       </p>
     </section>
     <RemoteDataNotice views={items.map(({ view }) => view)} />
@@ -34,6 +34,7 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
 
 <style>
   .home {
+    container-type: inline-size;
     display: grid;
     gap: var(--space-6);
     padding-top: var(--space-4);
@@ -45,9 +46,10 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
   }
 
   .display {
-    font-size: var(--text-display);
-    line-height: 0.95;
-    margin-left: -0.05em;
+    font-size: max(3rem, 18cqi);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin-left: -0.06em;
   }
 
   .lead {
@@ -67,10 +69,27 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
 
   .all-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+    grid-template-columns: 1fr;
     gap: var(--gap);
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  @container (min-width: 40rem) {
+    .all-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .all-list > :global(li:nth-child(6n + 1)),
+    .all-list > :global(li:nth-child(6n)) {
+      grid-column: span 2;
+    }
+  }
+
+  @container (min-width: 68rem) {
+    .all-list {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 </style>

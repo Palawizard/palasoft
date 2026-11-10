@@ -38,6 +38,7 @@ export const createCachedSource = <T>(options: CacheOptions<T>): CachedSource<T>
   const fileSchema = z.object({ fetchedAt: z.number(), value: options.schema });
 
   let memory: Entry<T> | undefined;
+  let memoryIsCopy = false;
   let lastFailureAt: number | undefined;
   let pending: Promise<CachedResult<T>> | undefined;
 
@@ -58,7 +59,10 @@ export const createCachedSource = <T>(options: CacheOptions<T>): CachedSource<T>
   };
 
   const fallback = async (): Promise<CachedResult<T>> => {
-    memory ??= await readCopy();
+    if (memory === undefined) {
+      memory = await readCopy();
+      memoryIsCopy = memory !== undefined;
+    }
     return memory === undefined ? { state: 'unavailable' } : { state: 'stale', ...memory };
   };
 
@@ -66,6 +70,7 @@ export const createCachedSource = <T>(options: CacheOptions<T>): CachedSource<T>
     try {
       const entry = { value: await options.load(), fetchedAt: now() };
       memory = entry;
+      memoryIsCopy = false;
       lastFailureAt = undefined;
       await writeCopy(entry).catch(options.onError);
       return { state: 'fresh', ...entry };
@@ -77,7 +82,7 @@ export const createCachedSource = <T>(options: CacheOptions<T>): CachedSource<T>
   };
 
   const get = async (): Promise<CachedResult<T>> => {
-    if (memory !== undefined && now() - memory.fetchedAt < options.ttlMs) {
+    if (memory !== undefined && !memoryIsCopy && now() - memory.fetchedAt < options.ttlMs) {
       return { state: 'fresh', ...memory };
     }
     if (lastFailureAt !== undefined && now() - lastFailureAt < options.retryAfterFailureMs) {

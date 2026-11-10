@@ -38,7 +38,7 @@ const stores =
         </fieldset>
         <div class="versions">
           <p class="step">2. La version de Minecraft de ton serveur</p>
-          <p class="hint">Choisis d'abord le loader.</p>
+          <p class="hint">Choisis d’abord le loader.</p>
           {groups.map(({ loader, files }) => (
             <label class="version-field" data-loader={loader}>
               <span class="visually-hidden">Version de Minecraft pour {loaderName(loader)}</span>
@@ -55,24 +55,27 @@ const stores =
             <IconDownload />
             Télécharger le mod
           </span>
-          <span class="submit-facts numbers">
+          <span class="submit-facts numbers ready-facts">
             version {view.release.version}
             {view.release.publishedAt !== null && ` · publiée le ${formatDate(view.release.publishedAt)}`}
+          </span>
+          <span class="submit-facts waiting-facts" aria-hidden="true">
+            Choisis d’abord le loader de ton serveur
           </span>
         </button>
       </form>
     ) : view.state === 'none' ? (
-      <p>Aucune version n'est publiée pour l'instant.</p>
+      <p>Aucune version n’est publiée pour l’instant.</p>
     ) : (
       <p>
-        Le choix de version est indisponible pour l'instant.
+        Le choix de version est indisponible pour l’instant.
         <a href={`${view.historyUrl}/latest`}>Prends le fichier directement sur GitHub</a> : son nom contient la
         version de Minecraft et le loader.
       </p>
     )
   }
   <p class="server-only">
-    Ce mod s'installe seulement sur le serveur : les joueurs se connectent sans rien installer.
+    Ce mod s’installe seulement sur le serveur : les joueurs se connectent sans rien installer.
   </p>
   <ul class="stores">
     {
@@ -91,13 +94,11 @@ const stores =
   .picker {
     display: grid;
     gap: var(--space-3);
-    max-width: var(--measure);
   }
 
   .picker-form {
     display: grid;
     gap: var(--space-3);
-    justify-items: start;
   }
 
   .loaders {
@@ -118,7 +119,6 @@ const stores =
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
     gap: var(--gap);
-    width: min(100%, 26rem);
   }
 
   .loader-option {
@@ -163,7 +163,7 @@ const stores =
   }
 
   select {
-    min-width: min(100%, 18rem);
+    width: 100%;
     padding: var(--space-1) var(--space-2);
     border: 2px solid var(--ink);
     border-radius: 0;
@@ -186,17 +186,37 @@ const stores =
     .picker-form:has(input[name='loader']:checked) .hint {
       display: none;
     }
+
+    .waiting-facts {
+      display: none;
+    }
+
+    .picker-form:not(:has(input[name='loader']:checked)) .submit {
+      background: transparent;
+      color: var(--ink);
+      box-shadow: inset 0 0 0 2px var(--ink-soft);
+    }
+
+    .picker-form:not(:has(input[name='loader']:checked)) .ready-facts {
+      display: none;
+    }
+
+    .picker-form:not(:has(input[name='loader']:checked)) .waiting-facts {
+      display: block;
+    }
   }
 
+
   @supports not selector(:has(*)) {
-    .hint {
+    .hint,
+    .waiting-facts {
       display: none;
     }
   }
 
   .submit {
     gap: var(--space-1);
-    min-width: min(100%, 26rem);
+    width: 100%;
     padding: var(--space-3);
     border: 0;
     font: inherit;
