@@ -1,6 +1,7 @@
 ---
 import type { SoftwareWithRelease } from '../server/software.ts';
 import { softwarePath } from '../server/software.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 import SoftwareIcon from './SoftwareIcon.astro';
 
 interface Props {
@@ -8,14 +9,16 @@ interface Props {
 }
 
 const { items } = Astro.props;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
 ---
 
-<nav class="bubbles" aria-label="Les autres logiciels">
+<nav class="bubbles" aria-label={t.home.others}>
   <ul>
     {
       items.map(({ entry }, index) => (
         <li class="rise" style={`--order:${index + 2}`}>
-          <a class="bubble" data-color={entry.data.color} href={softwarePath(entry.id)} style={`animation-delay:-${index * 1.3}s`}>
+          <a class="bubble" data-color={entry.data.color} href={softwarePath(entry.id, locale)} style={`animation-delay:-${index * 1.3}s`}>
             <span class="sphere">
               <SoftwareIcon entry={entry} size={56} class="bubble-icon" />
             </span>

@@ -1,0 +1,10 @@
+---
+import ChestCounterPage from '../../views/ChestCounterPage.astro';
+import { findSoftware, notFound } from '../../server/software.ts';
+
+const entry = await findSoftware('chest-counter');
+if (entry === undefined || entry.data.kind !== 'windows') return notFound();
+Astro.response.headers.set('Cache-Control', 'no-cache');
+---
+
+<ChestCounterPage entry={entry} />

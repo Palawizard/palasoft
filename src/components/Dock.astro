@@ -5,6 +5,7 @@ import IconChevron from './IconChevron.astro';
 import IconDownload from './IconDownload.astro';
 import SoftwareIcon from './SoftwareIcon.astro';
 import NewBadge from './NewBadge.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   items: readonly SoftwareWithRelease[];
@@ -12,27 +13,29 @@ interface Props {
 
 const { items } = Astro.props;
 const offered = items.filter(({ view }) => view.state !== 'none');
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
 ---
 
 <section id="logiciels" class="glass glass-still dock" aria-labelledby="dock-title">
-  <h2 id="dock-title" class="dock-title">Téléchargement rapide</h2>
+  <h2 id="dock-title" class="dock-title">{t.dock.title}</h2>
   <ul class="dock-list">
     {
       offered.map(({ entry, view }) => {
         const isMod = entry.data.kind === 'minecraft-mod';
         return (
           <li>
-            <a class="pill" href={isMod ? `${softwarePath(entry.id)}#telecharger` : downloadPath(entry.id)} {...thanksAttributes(entry, view)}>
+            <a class="pill" href={isMod ? `${softwarePath(entry.id, locale)}#telecharger` : downloadPath(entry.id)} {...thanksAttributes(entry, view, locale)}>
               <SoftwareIcon entry={entry} size={28} class="dock-icon" />
               <span class="dock-text">
                 <span>
-                  {!isMod && <span class="visually-hidden">Télécharger </span>}
+                  {!isMod && <span class="visually-hidden">{t.dock.download} </span>}
                   {entry.data.name}
                 </span>
                 <span class="dock-meta numbers">
-                  {view.state === 'ready' ? view.release.version : view.state === 'unavailable' ? 'sur GitHub' : ''}
+                  {view.state === 'ready' ? view.release.version : view.state === 'unavailable' ? t.dock.onGitHub : ''}
                   <NewBadge entry={entry} />
-                  {isMod && <span class="visually-hidden">, choisis ta version de Minecraft</span>}
+                  {isMod && <span class="visually-hidden">{t.dock.chooseVersion}</span>}
                 </span>
               </span>
               {isMod ? (

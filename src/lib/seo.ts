@@ -21,6 +21,7 @@ export interface SoftwareFacts {
   downloadUrl: string | undefined;
   screenshot: string | undefined;
   sameAs: string[];
+  language: string;
 }
 
 export const softwareJsonLd = (facts: SoftwareFacts): JsonLd => {
@@ -34,7 +35,7 @@ export const softwareJsonLd = (facts: SoftwareFacts): JsonLd => {
     isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
     author,
-    inLanguage: 'fr',
+    inLanguage: facts.language,
     sameAs: facts.sameAs,
   };
   if (facts.version !== undefined) data.softwareVersion = facts.version;
@@ -53,18 +54,26 @@ export const breadcrumbJsonLd = (trail: { name: string; url: string }[]): JsonLd
   })),
 });
 
-export const siteJsonLd = (homeUrl: string, description: string, pages: { name: string; url: string }[]): JsonLd[] => [
+export interface SiteFacts {
+  homeUrl: string;
+  description: string;
+  language: string;
+  listName: string;
+  pages: { name: string; url: string }[];
+}
+
+export const siteJsonLd = ({ homeUrl, description, language, listName, pages }: SiteFacts): JsonLd[] => [
   {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: homeUrl,
     description,
-    inLanguage: 'fr',
+    inLanguage: language,
     publisher: author,
   },
   {
     '@type': 'ItemList',
-    name: 'Les logiciels de Palawi',
+    name: listName,
     itemListElement: pages.map((page, index) => ({
       '@type': 'ListItem',
       position: index + 1,

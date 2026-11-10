@@ -1,15 +1,18 @@
 ---
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
 interface Props {
   items: readonly { label: string; url?: string | undefined }[];
 }
 
 const { items } = Astro.props;
+const t = stringsFor(localeOf(Astro));
 ---
 
 {
   items.length > 0 && (
     <section class="glass requirements" aria-labelledby="requirements-title">
-      <h2 id="requirements-title">Ce qu’il te faut</h2>
+      <h2 id="requirements-title">{t.requirements.title}</h2>
       <ul>
         {items.map((item) => (
           <li>{item.url === undefined ? item.label : <a href={item.url}>{item.label}</a>}</li>

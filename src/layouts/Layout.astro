@@ -4,7 +4,9 @@ import AeroBubbles from '../components/AeroBubbles.astro';
 import Logo from '../components/Logo.astro';
 import SkyToggle from '../components/SkyToggle.astro';
 import DownloadThanks from '../components/DownloadThanks.astro';
-import { allSoftware, homePath, softwarePath } from '../server/software.ts';
+import { allSoftware, assetPath, homePath, localizedPath, softwarePath } from '../server/software.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+import LanguageSwitch from '../components/LanguageSwitch.astro';
 import { SITE_NAME, serializeJsonLd, type JsonLd } from '../lib/seo.ts';
 
 export interface ShareImage {
@@ -24,29 +26,39 @@ interface Props {
 }
 
 const { title, description, image, noindex = false, jsonLd = [] } = Astro.props;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const pagePath = Astro.locals.pagePath ?? '/';
+const alternates = [
+  { hreflang: 'fr', href: new URL(localizedPath(pagePath, 'fr'), Astro.site).href },
+  { hreflang: 'en', href: new URL(localizedPath(pagePath, 'en'), Astro.site).href },
+  { hreflang: 'x-default', href: new URL(localizedPath(pagePath, 'fr'), Astro.site).href },
+];
 const software = await allSoftware();
 const mod = software.find((entry) => entry.data.kind === 'minecraft-mod');
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const share: ShareImage = image ?? {
-  src: `${homePath}og-palasoft.jpg?v=2`,
+  src: assetPath('og-palasoft.jpg?v=2'),
   width: 1200,
   height: 630,
-  alt: 'PalaSoft : les logiciels gratuits de Palawi, en un clic.',
+  alt: t.layout.shareAlt,
 };
 const shareUrl = new URL(share.src, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang={t.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {!noindex && alternates.map((link) => <link rel="alternate" hreflang={link.hreflang} href={link.href} />)}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
-    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale" content={t.ogLocale} />
+    <meta property="og:locale:alternate" content={locale === 'fr' ? 'en_US' : 'fr_FR'} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -59,8 +71,8 @@ const shareUrl = new URL(share.src, Astro.site).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={shareUrl} />
     {jsonLd.length > 0 && <script type="application/ld+json" is:inline set:html={serializeJsonLd(jsonLd)} />}
-    <link rel="icon" href={`${homePath}favicon.svg?v=2`} type="image/svg+xml" />
-    <link rel="apple-touch-icon" href={`${homePath}apple-touch-icon.png?v=2`} />
+    <link rel="icon" href={assetPath('favicon.svg?v=2')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={assetPath('apple-touch-icon.png?v=2')} />
     <meta name="theme-color" content="#0b4fa3" />
     <script is:inline>
       (() => {
@@ -78,24 +90,25 @@ const shareUrl = new URL(share.src, Astro.site).href;
   <body>
     <AeroBubbles />
     <SkyToggle />
-    <a class="skip" href="#contenu">Aller au contenu</a>
+    <a class="skip" href="#contenu">{t.layout.skip}</a>
     <header class="page site-header">
-      <nav class="glass bar" aria-label="Principal">
+      <nav class="glass bar" aria-label={t.layout.navLabel}>
         <div class="brand">
-          <a class="pill back-home" href="https://palawi.fr/" title="Revenir sur palawi.fr">
+          <a class="pill back-home" href="https://palawi.fr/" title={t.layout.backHome} hreflang="fr">
             <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
               <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             palawi.fr
           </a>
-          <a class="wordmark" href={homePath}>
+          <a class="wordmark" href={homePath(locale)}>
             <Logo class="logo" />
             PalaSoft
           </a>
         </div>
         <ul class="nav">
-          <li><a href={`${homePath}#logiciels`}>Tous les logiciels</a></li>
-          {mod !== undefined && <li><a href={softwarePath(mod.id)}>Mod Minecraft</a></li>}
+          <li><a href={`${homePath(locale)}#logiciels`}>{t.layout.allSoftware}</a></li>
+          {mod !== undefined && <li><a href={softwarePath(mod.id, locale)}>{t.layout.minecraftMod}</a></li>}
+          <li class="nav-language"><LanguageSwitch /></li>
         </ul>
       </nav>
     </header>
@@ -106,10 +119,10 @@ const shareUrl = new URL(share.src, Astro.site).href;
       <div class="glass footer-panel">
         <div>
           <p class="footer-title">PalaSoft</p>
-          <p>Les logiciels de Palawi, gratuits. Son site : <a href="https://palawi.fr">palawi.fr</a></p>
+          <p>{t.layout.footerTagline} <a href="https://palawi.fr">palawi.fr</a></p>
         </div>
         <nav aria-labelledby="code-title">
-          <p class="footer-title" id="code-title">Le code de chaque logiciel</p>
+          <p class="footer-title" id="code-title">{t.layout.footerCode}</p>
           <ul class="footer-links">
             {
               software.map((entry) => (
@@ -190,6 +203,7 @@ const shareUrl = new URL(share.src, Astro.site).href;
   .nav {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-1) var(--space-3);
     margin: 0;
     padding: 0;
@@ -201,6 +215,18 @@ const shareUrl = new URL(share.src, Astro.site).href;
     display: inline-block;
     padding-block: 0.4rem;
     text-decoration: none;
+  }
+
+  /* On a phone the links take the second row, with the language switch at its end. */
+  @media (max-width: 40rem) {
+    .nav {
+      flex: 1 1 100%;
+      column-gap: var(--space-2);
+    }
+
+    .nav-language {
+      margin-inline-start: auto;
+    }
   }
 
   @media (hover: hover) and (pointer: fine) {

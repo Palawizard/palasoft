@@ -4,38 +4,45 @@
 
 ```
 src/
-  content.config.ts      schema of the software entries
-  content/software/      one Markdown file per program (frontmatter + page text)
-  pages/                 routes, served under /software
-    index.astro          home: quick download strip, then one tile per program
-    [slug].astro         generic program page
-    chest-counter.astro  Chest Counter's own page (sections in components/chest-counter/)
-    404.astro            not found page (noindex)
-    sitemap.xml.ts       sitemap of the home and every program page, listed in the robots.txt of palawi.fr
+  content.config.ts      schema of the software entries and of their English texts
+  content/software/      one Markdown file per program (frontmatter + French page text)
+  content/software-en/   the English text of each program, same file name
+  middleware.ts          language of each request, redirect to the visitor's language
+  env.d.ts               Astro.locals: locale and page path without language prefix
+  i18n/                  fr.ts and en.ts (every interface string), index.ts (language of a page, its strings)
+  pages/                 routes, served under /software; the en/ folder repeats the page routes in English
+    index.astro, en/index.astro  home (views/HomePage.astro)
+    [slug].astro, en/[slug].astro  generic program page (views/ProgramPage.astro)
+    chest-counter.astro, en/chest-counter.astro  Chest Counter's own page (views/ChestCounterPage.astro, sections in components/chest-counter/)
+    404.astro            not found page (noindex), in the language of the address
+    lang/[locale].ts     the language switch: saves the choice in a cookie, back to the page
+    sitemap.xml.ts       sitemap of every page in both languages with their hreflang links, listed in the robots.txt of palawi.fr
     api/health.ts        health check
     dl/[slug].astro      redirect to the recommended file (or the mod jar chosen in the form)
     dl/[slug]/[file].astro  redirect to a named file of the latest release
-  layouts/Layout.astro   shared page shell: glass header (back to palawi.fr, wordmark, links), footer, font, sky and water scene
+  views/                 the pages themselves, shared by the French and English routes
+  layouts/Layout.astro   shared page shell: glass header (back to palawi.fr, wordmark, links, language switch), footer, font, sky and water scene, hreflang links
   components/            shared UI pieces (quick download dock, showcase window, bubbles,
                          software rows, download button, mod picker, screenshot gallery,
-                         SmartScreen help...)
+                         SmartScreen help, language switch...)
   assets/software/<slug>/  icon and screenshots of each program, optimised by Astro at build
 public/                  PalaSoft site icons (favicon.svg, apple-touch-icon.png) and the share card (og-palasoft.jpg); the same logo is inlined in the header by components/Logo.astro
 scripts/og-card/card.html  source of og-palasoft.jpg
-  server/                glue between Astro and lib/ (catalog instance, entry lookup, responses,
+  server/                glue between Astro and lib/ (catalog instance, entry lookup, localized paths and texts, responses,
                          program-page.ts: release, title, share picture and structured data of a program page)
   lib/                   code that does not depend on Astro
     config.ts            environment variables
+    locale.ts            the two languages, Accept-Language reading, cookie name
     github.ts            GitHub releases client and response schema
     cache.ts             memory cache with a copy on disk
     assets.ts            file selection (Windows installer, mod jars)
     catalog.ts           release data of one program, ready for the pages
     counts.ts            GitHub download count, without update manifests, signatures and checksums
     stores.ts            Modrinth and CurseForge download counts
-    format.ts            French formatting of sizes, dates, counts and Minecraft versions
+    format.ts            French and English formatting of sizes, dates, counts and Minecraft versions
     seo.ts               schema.org structured data (program, breadcrumb, site and program list)
   styles/                global styles and design tokens
-tests/                   unit tests
+tests/                   unit tests (translations.test.ts checks that both languages have the same strings and the same shape of program texts)
   fixtures/github/       real GitHub responses, reduced to the fields in use
   e2e/                   tests against the built server and a local fake GitHub
 docs/                    project documentation
@@ -53,6 +60,8 @@ Every entry has a display name, a one-line tagline in French (also the meta desc
 Icons come from each program's repository at its published tag. Screenshots of PalaClips and Pala's Item Clear come from their repositories; the other four were captured from each program's own interface, run in a browser with example data. Each image file carries its origin in its metadata.
 
 The build fails when an entry has no file selection rule (`installerPattern` or `versionMatrix`).
+
+The English text of a program is a file of the same name in `src/content/software-en/`: `tagline`, `screenshotAlts` and `requirements` in the same order as the French lists (links stay in the French file), and the page text. `localText` in `server/software.ts` merges it with the French entry; without an English file the French text is shown.
 
 ## Release data
 
@@ -84,7 +93,7 @@ Files are never served by this site. `/software/dl/<slug>` answers `302` to the 
 
 ## Pages
 
-Every program gets a generic page built from the shared components. A program can have its own page instead by adding `src/pages/<slug>.astro`: a static route takes priority over the dynamic one, and the custom page still uses the shared layout so the site keeps one look, and takes its release data, title, share picture and structured data from `programPage` (`server/program-page.ts`), like the generic page. Chest Counter has one (`pages/chest-counter.astro`): its two window captures side by side in light and dark (the site's theme decides which one is in front), how its total is built, first steps, a comparison with the other ways to count chests, then its text and the usual side column. This was checked on a build with a temporary `src/pages/timestamper.astro`: `/software/timestamper` served the custom page while `/software/palaclips` kept the generic one.
+Every program gets a generic page built from the shared components. A program can have its own page instead by adding a view in `src/views/` and the two routes `src/pages/<slug>.astro` and `src/pages/en/<slug>.astro`: a static route takes priority over the dynamic one, and the custom page still uses the shared layout so the site keeps one look, and takes its release data, title, share picture and structured data from `programPage` (`server/program-page.ts`), like the generic page. Chest Counter has one (`views/ChestCounterPage.astro`): its two window captures side by side in light and dark (the site's theme decides which one is in front), how its total is built, first steps, a comparison with the other ways to count chests, then its text and the usual side column. This was checked on a build with a temporary `src/pages/timestamper.astro`: `/software/timestamper` served the custom page while `/software/palaclips` kept the generic one.
 
 Thank-you window: `components/DownloadThanks.astro`, in the layout, is a modal `<dialog>` opened right after a click on a link marked `data-thanks` (download buttons and quick download dock, attributes from `thanksAttributes` in `server/software.ts`) or the submit of the mod form. The browser still follows the link or sends the form, the file downloads and the page stays. The window thanks the visitor, names the file, then shows the SmartScreen steps (`SmartScreenSteps.astro`, shared with the program page) for an unsigned installer, or the mod install steps. It has a link to start the download again and closes with its button, Escape or a click outside, focus going back to the button that started it. Links that lead to a page instead (GitHub down, release without installer) have no `data-thanks`. Modified clicks (new tab) do not open it.
 
@@ -96,9 +105,17 @@ Theme: `<html data-theme="light|dark">` drives every dark rule (`:root[data-them
 
 Motion: only the bubbles drift. The quick download dock and the featured window use `glass-still`, a glass panel without backdrop blur: they sit on the plain sky next to the drifting bubbles, where the blur is invisible but was recomputed on every frame and made the drift stutter. The sun rays are still for the same reason. The drift is a float and a sway: 2rem up while turning from -6 to 6 degrees, 4.5 s each way, the program bubbles turning around the centre of their sphere with their label. Firefox snaps a slow translation to whole pixels, so the earlier drift (0.6rem in 5 s, about 2 px a second) moved in visible steps on a 147 Hz screen, even with a 0.01 degree rotation; Palawi picked this motion among twelve variants side by side in Firefox. The mobile row of bubbles has 2.5rem of top padding because a scrolling row also clips what rises above it.
 
-Search and sharing: every page has a canonical URL (the 404 page has `noindex` instead), Open Graph and Twitter tags, and one JSON-LD graph: `WebSite` and the `ItemList` of program pages on the home, `SoftwareApplication` (free offer, version, download URL, GitHub and store links, author `https://palawi.fr/#palawi` as declared on the palawi.fr hub) and `BreadcrumbList` on a program page. The picture of a shared link (Discord, social networks) is the first screenshot when it is wider than tall, served by `/_image` as a JPEG of 1200 px at most, never enlarged; otherwise `public/og-palasoft.jpg`, a 1200 by 630 card rendered from `scripts/og-card/card.html` (open it in Chrome at 1200 by 630 from that folder and capture it, after an `npm install`; redo it when a program is added or its icon changes, and raise the `?v=` of its URL in `layouts/Layout.astro` so Discord and Cloudflare fetch the new one). Discord takes the embed colour from `theme-color` (#0b4fa3 in the served HTML). Program page titles read "Télécharger <name> pour Windows | PalaSoft", the mod "<name>, mod Minecraft gratuit | PalaSoft".
+Search and sharing: every page has a canonical URL and its two language versions (the 404 page has `noindex` instead), Open Graph and Twitter tags, and one JSON-LD graph: `WebSite` and the `ItemList` of program pages on the home, `SoftwareApplication` (free offer, version, download URL, GitHub and store links, author `https://palawi.fr/#palawi` as declared on the palawi.fr hub) and `BreadcrumbList` on a program page. The picture of a shared link (Discord, social networks) is the first screenshot when it is wider than tall, served by `/_image` as a JPEG of 1200 px at most, never enlarged; otherwise `public/og-palasoft.jpg`, a 1200 by 630 card rendered from `scripts/og-card/card.html` (open it in Chrome at 1200 by 630 from that folder and capture it, after an `npm install`; redo it when a program is added or its icon changes, and raise the `?v=` of its URL in `layouts/Layout.astro` so Discord and Cloudflare fetch the new one). Discord takes the embed colour from `theme-color` (#0b4fa3 in the served HTML). Program page titles read "Télécharger <name> pour Windows | PalaSoft" ("Download <name> for Windows | PalaSoft" in English), the mod "<name>, mod Minecraft gratuit | PalaSoft" ("<name>, free Minecraft mod | PalaSoft").
 
 When GitHub is down, every page still renders: with a saved copy it shows the saved release details and the date of that copy, without one it shows the programs without release details and the buttons lead to GitHub.
+
+## Languages
+
+The site is in French and in English. French pages keep their addresses (`/software/...`), English pages live under `/software/en/...`, so each language has its own address for search engines and for shared links. Every page links to both versions with `hreflang` (`x-default` is the French one), and the sitemap lists both.
+
+`middleware.ts` reads the language from the address and puts it in `Astro.locals`. On a French address, a visitor without a saved choice whose browser asks for English, or for another language before French, is sent to the English page with a 302 (`Vary: Accept-Language, Cookie`, not cached). A bare `*` or no `Accept-Language` at all, which is how search engine crawlers ask, gets the French page; an English address is never redirected by the browser language. The header switch (`components/LanguageSwitch.astro`) links to `/software/lang/<fr|en>?next=<page>`, which saves the choice in the `palasoft-lang` cookie (one year, path `/software/`) and goes back to the same page in that language; it works without JavaScript and only accepts a `next` inside `/software/`. A saved choice wins over the browser language on every address. The mod form sends `lang` so that its redirects come back to the page in the right language.
+
+Every visible string lives in `src/i18n/fr.ts` and `src/i18n/en.ts` (same keys, checked by a unit test); dates, sizes and counts go through `lib/format.ts` with the page language. Screenshots stay the French captures.
 
 ## Base path
 

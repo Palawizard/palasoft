@@ -1,0 +1,284 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import DownloadButton from '../components/DownloadButton.astro';
+import ModPicker from '../components/ModPicker.astro';
+import ReleaseFacts from '../components/ReleaseFacts.astro';
+import RemoteDataNotice from '../components/RemoteDataNotice.astro';
+import Requirements from '../components/Requirements.astro';
+import ScreenshotGallery from '../components/ScreenshotGallery.astro';
+import SmartScreenHelp from '../components/SmartScreenHelp.astro';
+import SoftwareIcon from '../components/SoftwareIcon.astro';
+import WindowTitle from '../components/WindowTitle.astro';
+import { homePath, type SoftwareEntry } from '../server/software.ts';
+import { programPage } from '../server/program-page.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+// The generic page of a program, in the language of its route (pages/[slug].astro, pages/en/[slug].astro).
+interface Props {
+  entry: SoftwareEntry;
+}
+
+const { entry } = Astro.props;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const { view, downloads, title, shareImage, jsonLd, text } = await programPage(entry, locale, Astro.site);
+const { Content } = await render(text.body);
+const { data } = entry;
+const [mainShot] = text.screenshots;
+---
+
+<Layout title={title} description={text.tagline} image={shareImage} jsonLd={jsonLd}>
+  <article class="page software">
+    <a class="pill back" href={homePath(locale)}>
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      {t.program.back}
+    </a>
+    <RemoteDataNotice views={[view]} />
+    <section class="glass hero rise" data-color={data.color} aria-labelledby="software-title">
+      <WindowTitle entry={entry} caption={data.name} />
+      <div class="hero-body">
+        <div id="telecharger" class="hero-copy">
+          <div class="identity">
+            <SoftwareIcon entry={entry} size={88} class="hero-icon" />
+            <div>
+              <h1 id="software-title">{data.name}</h1>
+              <p class="kind">{data.kind === 'minecraft-mod' ? t.program.forServer : t.program.forWindows}</p>
+            </div>
+          </div>
+          <p class="tagline">{text.tagline}</p>
+          <ReleaseFacts view={view} downloads={downloads} showDate showSize={false} />
+          {data.kind === 'windows' ? <DownloadButton entry={entry} view={view} /> : <ModPicker entry={entry} view={view} />}
+          {data.kind === 'windows' && view.state !== 'none' && (
+            <p class="host">{t.program.host}</p>
+          )}
+        </div>
+        <div class="hero-media">
+          {
+            mainShot !== undefined ? (
+              <figure class="shot">
+                <Image src={mainShot.src} alt={mainShot.alt} widths={[640, 960, 1280, 1600]} sizes="(min-width: 64rem) 40rem, 92vw" quality={90} loading="eager" />
+              </figure>
+            ) : (
+              <div class="no-shot">
+                <SoftwareIcon entry={entry} size={140} class="no-shot-icon" />
+                <p>{t.program.noShot}</p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </section>
+    {text.screenshots.length > 1 && <ScreenshotGallery name={data.name} shots={text.screenshots.slice(1)} />}
+    <div class="columns">
+      <div class="glass prose">
+        <Content />
+      </div>
+      <aside class="side" aria-label={t.program.asideLabel}>
+        {data.kind === 'windows' && <Requirements items={text.requirements} />}
+        {data.kind === 'windows' && data.unsignedInstaller && <SmartScreenHelp />}
+        <p class="glass history">
+          <a href={view.historyUrl}>{t.program.history}</a>
+        </p>
+      </aside>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .software {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+  }
+
+  .back {
+    justify-self: start;
+    padding-left: 0.7rem;
+  }
+
+
+  .hero {
+    overflow: hidden;
+  }
+
+
+
+  .hero-body {
+    display: grid;
+    grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+    padding: var(--space-4);
+  }
+
+  .hero-copy {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+    scroll-margin-top: var(--space-3);
+  }
+
+  .hero-copy > :global(.picker) {
+    width: 100%;
+  }
+
+  .identity {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+  }
+
+  :global(.hero-icon) {
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgb(6 48 74 / 0.35);
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 1.6rem + 1.8vw, 3rem);
+    font-weight: 700;
+  }
+
+  .kind {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .tagline {
+    font-size: var(--text-lead);
+    line-height: 1.4;
+  }
+
+  .host {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  .hero-media {
+    display: grid;
+    justify-items: center;
+  }
+
+  .hero-media .shot {
+    width: fit-content;
+    max-width: 100%;
+    transform: perspective(90rem) rotateY(-3deg);
+    transform-origin: left center;
+  }
+
+  .hero-media .shot :global(img) {
+    width: auto;
+    max-width: 100%;
+    max-height: 32rem;
+  }
+
+  .no-shot {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-8) var(--space-3);
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  :global(.no-shot-icon) {
+    width: 8.75rem;
+    height: 8.75rem;
+    border-radius: 28px;
+    box-shadow: 0 12px 28px rgb(6 48 74 / 0.35);
+  }
+
+  .columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .prose {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  .prose > :global(*) {
+    max-width: var(--measure);
+  }
+
+  .prose :global(h2) {
+    margin-top: var(--space-3);
+    font-size: var(--text-subtitle);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(ol) {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .prose :global(ol > li) {
+    position: relative;
+    padding-left: 2.75rem;
+    counter-increment: step;
+  }
+
+  .prose :global(ol > li)::before {
+    content: counter(step);
+    position: absolute;
+    top: -0.1rem;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid rgb(0 0 0 / 0.2);
+    border-radius: 50%;
+    background: linear-gradient(to bottom, var(--gel-aqua-0) 0%, var(--gel-aqua-1) 49%, var(--gel-aqua-2) 50%, var(--gel-aqua-3) 100%);
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: 0 1px 1px rgb(0 0 0 / 0.4);
+  }
+
+  .prose :global(ul) {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding-left: 1.4em;
+  }
+
+  .side {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .history {
+    padding: var(--space-2) var(--space-3);
+    font-weight: 600;
+  }
+
+  @media (max-width: 64rem) {
+    .hero-body,
+    .columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero-media .shot {
+      transform: none;
+    }
+  }
+</style>

@@ -1,9 +1,20 @@
 ---
 // The sun (the moon at dusk) of the scene is the theme switch. The scene itself stays
-// aria-hidden; this button sits on top of the sun and carries the label.
+// aria-hidden; this button sits on top of the sun and carries the label (both labels travel with it for the script).
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+const t = stringsFor(localeOf(Astro));
 ---
 
-<button class="sky-toggle" type="button" data-sky-toggle aria-label="Passer au thème sombre" title="Passer au thème sombre">
+<button
+  class="sky-toggle"
+  type="button"
+  data-sky-toggle
+  data-to-dark={t.theme.toDark}
+  data-to-light={t.theme.toLight}
+  aria-label={t.theme.toDark}
+  title={t.theme.toDark}
+>
   <span class="ring" aria-hidden="true"></span>
 </button>
 
@@ -39,7 +50,7 @@
   const apply = (theme: Theme): void => {
     root.dataset['theme'] = theme;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', COLORS[theme]);
-    const label = theme === 'dark' ? 'Passer au thème clair' : 'Passer au thème sombre';
+    const label = (theme === 'dark' ? button?.dataset['toLight'] : button?.dataset['toDark']) ?? '';
     button?.setAttribute('aria-label', label);
     button?.setAttribute('title', label);
   };

@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import type { SoftwareWithRelease } from '../server/software.ts';
-import { softwarePath } from '../server/software.ts';
+import { localText, softwarePath } from '../server/software.ts';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 import DownloadButton from './DownloadButton.astro';
 import ReleaseFacts from './ReleaseFacts.astro';
 import WindowTitle from './WindowTitle.astro';
@@ -12,18 +13,21 @@ interface Props {
 }
 
 const { entry, view, downloads } = Astro.props.item;
-const screenshot = entry.data.screenshots[0];
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+const text = await localText(entry, locale);
+const screenshot = text.screenshots[0];
 ---
 
 <article class="glass glass-still showcase rise" data-color={entry.data.color} aria-labelledby="showcase-title">
   <WindowTitle entry={entry} caption={entry.data.name} />
   <div class="body">
     <div class="copy">
-      <h2 id="showcase-title" class="name"><a href={softwarePath(entry.id)}>{entry.data.name}</a> <NewBadge entry={entry} /></h2>
-      <p class="tagline">{entry.data.tagline}</p>
+      <h2 id="showcase-title" class="name"><a href={softwarePath(entry.id, locale)}>{entry.data.name}</a> <NewBadge entry={entry} /></h2>
+      <p class="tagline">{text.tagline}</p>
       <ReleaseFacts view={view} downloads={downloads} showDate />
       <DownloadButton entry={entry} view={view} />
-      <a class="more" href={softwarePath(entry.id)}>Voir comment l’installer</a>
+      <a class="more" href={softwarePath(entry.id, locale)}>{t.program.howToInstall}</a>
     </div>
     {
       screenshot !== undefined && (

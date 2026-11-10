@@ -1,7 +1,9 @@
 ---
 import SmartScreenSteps from './SmartScreenSteps.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 // One window per page, opened by any link or form marked with data-thanks once its download starts.
+const t = stringsFor(localeOf(Astro));
 ---
 
 <dialog class="thanks" aria-labelledby="thanks-title" aria-describedby="thanks-started" data-thanks-dialog>
@@ -11,16 +13,16 @@ import SmartScreenSteps from './SmartScreenSteps.astro';
         <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </span>
-    <h2 id="thanks-title">Merci d’avoir téléchargé !</h2>
+    <h2 id="thanks-title">{t.thanks.title}</h2>
   </header>
 
   <div class="thanks-body">
     <div class="started">
-      <p id="thanks-started">Le téléchargement de <strong data-thanks-name></strong> démarre.</p>
+      <p id="thanks-started">{t.thanks.startedBefore}<strong data-thanks-name></strong>{t.thanks.startedAfter}</p>
       <p class="file numbers" data-thanks-file></p>
     </div>
 
-    <p data-thanks-part="windows">Une fois le fichier téléchargé, ouvre-le pour lancer l’installation.</p>
+    <p data-thanks-part="windows">{t.thanks.windows}</p>
 
     <section class="part" data-thanks-part="smartscreen" aria-labelledby="thanks-smartscreen">
       <h3 id="thanks-smartscreen">
@@ -28,24 +30,22 @@ import SmartScreenSteps from './SmartScreenSteps.astro';
           <path d="M12 2 3 5.5v6c0 5 3.8 9.3 9 10.5 5.2-1.2 9-5.5 9-10.5v-6L12 2Z" fill="#2c86c9" />
           <path d="M12 7v6M12 16v.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
         </svg>
-        Si Windows t’avertit
+        {t.smartscreen.title}
       </h3>
       <SmartScreenSteps />
     </section>
 
     <section class="part" data-thanks-part="mod" aria-labelledby="thanks-mod">
-      <h3 id="thanks-mod">Pour l’installer</h3>
+      <h3 id="thanks-mod">{t.thanks.modTitle}</h3>
       <ol>
-        <li>Mets le fichier dans le dossier mods de ton serveur.</li>
-        <li>Installe aussi les mods qu’il demande : ils sont listés dans « Installer », sur cette page.</li>
-        <li>Redémarre le serveur.</li>
+        {t.thanks.modSteps.map((step) => <li>{step}</li>)}
       </ol>
     </section>
   </div>
 
   <footer class="thanks-foot">
-    <p class="retry">Rien ne se passe ? <a href="#" data-thanks-retry>Relance le téléchargement</a></p>
-    <button class="gel gel-aqua gel-small" type="button" data-thanks-close autofocus>C’est compris</button>
+    <p class="retry">{t.thanks.retry} <a href="#" data-thanks-retry>{t.thanks.retryLink}</a></p>
+    <button class="gel gel-aqua gel-small" type="button" data-thanks-close autofocus>{t.thanks.close}</button>
   </footer>
 </dialog>
 

@@ -4,6 +4,7 @@ import type { ReleaseView } from '../lib/catalog.ts';
 import { formatDate, formatSize, loaderName, minecraftBandLabel } from '../lib/format.ts';
 import { downloadPath, type SoftwareEntry } from '../server/software.ts';
 import IconDownload from './IconDownload.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
   entry: SoftwareEntry;
@@ -12,6 +13,8 @@ interface Props {
 
 const { entry, view } = Astro.props;
 const groups = view.state === 'ready' ? filesByLoader(view.modFiles) : [];
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
 const stores =
   entry.data.kind === 'minecraft-mod'
     ? [
@@ -25,8 +28,9 @@ const stores =
   {
     view.state === 'ready' && groups.length > 0 ? (
       <form class="picker-form" method="get" action={downloadPath(entry.id)} data-thanks={entry.data.name} data-thanks-kind="mod">
+        <input type="hidden" name="lang" value={locale} />
         <fieldset class="loaders">
-          <legend>1. Le loader de ton serveur</legend>
+          <legend>{t.mod.loader}</legend>
           <div class="loader-options">
             {groups.map(({ loader }) => (
               <label class="loader-option">
@@ -37,15 +41,15 @@ const stores =
           </div>
         </fieldset>
         <div class="versions">
-          <p class="step">2. La version de Minecraft de ton serveur</p>
-          <p class="hint">Choisis d’abord le loader.</p>
+          <p class="step">{t.mod.minecraft}</p>
+          <p class="hint">{t.mod.loaderFirst}</p>
           {groups.map(({ loader, files }) => (
             <label class="version-field" data-loader={loader}>
-              <span class="visually-hidden">Version de Minecraft pour {loaderName(loader)}</span>
+              <span class="visually-hidden">{t.mod.versionFor(loaderName(loader))}</span>
               <select name={`mc-${loader}`}>
                 {files.map((file) => (
-                  <option value={file.bandId} data-file={`${file.asset.name} · ${formatSize(file.asset.size)}`}>
-                    Minecraft {minecraftBandLabel(file.bandId)}
+                  <option value={file.bandId} data-file={`${file.asset.name} · ${formatSize(file.asset.size, locale)}`}>
+                    {t.mod.option(minecraftBandLabel(file.bandId, locale))}
                   </option>
                 ))}
               </select>
@@ -55,37 +59,36 @@ const stores =
         <button class="gel submit" type="submit">
           <span class="submit-action">
             <IconDownload />
-            Télécharger le mod
+            {t.mod.download}
           </span>
           <span class="submit-facts numbers ready-facts">
-            version {view.release.version}
-            {view.release.publishedAt !== null && ` · publiée le ${formatDate(view.release.publishedAt)}`}
+            {t.facts.version(view.release.version)}
+            {view.release.publishedAt !== null && ` · ${t.facts.published(formatDate(view.release.publishedAt, locale))}`}
           </span>
           <span class="submit-facts numbers file-facts" data-file-facts></span>
           <span class="submit-facts waiting-facts" aria-hidden="true">
-            Choisis d’abord le loader de ton serveur
+            {t.mod.waiting}
           </span>
         </button>
       </form>
     ) : view.state === 'none' ? (
-      <p>Aucune version n’est publiée pour l’instant.</p>
+      <p>{t.download.none}</p>
     ) : (
       <p>
-        Le choix de version est indisponible pour l’instant.
-        <a href={`${view.historyUrl}/latest`}>Prends le fichier directement sur GitHub</a> : son nom contient la
-        version de Minecraft et le loader.
+        {t.mod.unavailableBefore} <a href={`${view.historyUrl}/latest`}>{t.mod.unavailableLink}</a>
+        {t.mod.unavailableAfter}
       </p>
     )
   }
   <p class="server-only">
-    Ce mod s’installe seulement sur le serveur : les joueurs se connectent sans rien installer.
+    {t.mod.serverOnly}
   </p>
   <ul class="stores">
     {
       stores.map((store) => (
         <li>
           <a class="pill store" href={store.url}>
-            Aussi sur {store.label}
+            {t.mod.alsoOn(store.label)}
           </a>
         </li>
       ))

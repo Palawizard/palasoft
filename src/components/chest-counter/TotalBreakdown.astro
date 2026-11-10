@@ -1,37 +1,32 @@
 ---
+import { localeOf, stringsFor } from '../../i18n/index.ts';
+
 // How Chest Counter builds its total, with the figures of the example window shown on the page.
+const b = stringsFor(localeOf(Astro)).chestCounter.breakdown;
 ---
 
 <section class="glass breakdown" data-color="amber" aria-labelledby="breakdown-title">
   <div class="intro">
-    <h2 id="breakdown-title">Comment ton total se construit</h2>
-    <p>
-      Chest Counter sépare ce qu’il a lu dans tes replays de ce qu’il estime. Tu vois toujours quelle part du total
-      est mesurée.
-    </p>
-    <p class="example">Les nombres viennent de la fenêtre d’exemple, plus haut.</p>
+    <h2 id="breakdown-title">{b.title}</h2>
+    <p>{b.intro}</p>
+    <p class="example">{b.example}</p>
   </div>
 
   <dl class="sum numbers">
     <div class="line">
-      <dt>Lu dans les replays</dt>
-      <dd class="figure">2 748</dd>
-      <dd class="detail">
-        Les coffres ouverts dans les parties qui ont un replay. C’est ce nombre à comparer au compteur du jeu, dans
-        l’onglet Quêtes.
-      </dd>
+      <dt>{b.read}</dt>
+      <dd class="figure">{b.readFigure}</dd>
+      <dd class="detail">{b.readDetail}</dd>
     </div>
     <div class="line">
-      <dt>Estimé</dt>
-      <dd class="figure"><span class="plus" aria-hidden="true">+</span> 371</dd>
-      <dd class="detail">
-        Les parties sans replay, au rythme de tes 20 premières parties, et les coffres cassés sans être ouverts.
-      </dd>
+      <dt>{b.estimated}</dt>
+      <dd class="figure"><span class="plus" aria-hidden="true">+</span> {b.estimatedFigure}</dd>
+      <dd class="detail">{b.estimatedDetail}</dd>
     </div>
     <div class="line total">
-      <dt>Total estimé</dt>
-      <dd class="figure">3 119</dd>
-      <dd class="detail">Le grand nombre en haut de la fenêtre.</dd>
+      <dt>{b.total}</dt>
+      <dd class="figure">{b.totalFigure}</dd>
+      <dd class="detail">{b.totalDetail}</dd>
     </div>
   </dl>
 </section>
