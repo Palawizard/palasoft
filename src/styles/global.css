@@ -465,9 +465,15 @@ svg {
   animation-delay: calc(var(--order, 0) * 50ms);
 }
 
+/* The near-zero rotation keeps the browser from snapping this slow drift to whole pixels,
+   which made the bubbles move in visible one-pixel steps. */
 @keyframes drift {
+  from {
+    transform: translateY(0) rotate(0.01deg);
+  }
+
   to {
-    transform: translateY(-0.6rem);
+    transform: translateY(-0.6rem) rotate(0.01deg);
   }
 }
 
