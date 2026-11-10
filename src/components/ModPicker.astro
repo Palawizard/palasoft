@@ -24,7 +24,7 @@ const stores =
 <div class="picker">
   {
     view.state === 'ready' && groups.length > 0 ? (
-      <form class="picker-form" method="get" action={downloadPath(entry.id)}>
+      <form class="picker-form" method="get" action={downloadPath(entry.id)} data-thanks={entry.data.name} data-thanks-kind="mod">
         <fieldset class="loaders">
           <legend>1. Le loader de ton serveur</legend>
           <div class="loader-options">
