@@ -149,6 +149,15 @@ describe('pages on the built server', () => {
     for (const path of PAGES) expect(sitemap.body).toContain(`<loc>https://palawi.fr${path}</loc>`);
   });
 
+  it('leads back to palawi.fr from the header of every page', async () => {
+    const site = await start();
+    for (const path of PAGES) {
+      const { body } = await html(site, path);
+      const header = body.slice(body.indexOf('<header'), body.indexOf('</header>'));
+      expect(header, path).toMatch(/<a class="pill back-home"[^>]*href="https:\/\/palawi\.fr\/"/);
+    }
+  });
+
   it('keeps the missing page out of search results', async () => {
     const site = await start();
     const { status, body } = await html(site, '/software/nothing-here');

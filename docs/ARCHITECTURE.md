@@ -14,7 +14,7 @@ src/
     api/health.ts        health check
     dl/[slug].astro      redirect to the recommended file (or the mod jar chosen in the form)
     dl/[slug]/[file].astro  redirect to a named file of the latest release
-  layouts/Layout.astro   shared page shell: glass header, footer, font, sky and water scene
+  layouts/Layout.astro   shared page shell: glass header (back to palawi.fr, wordmark, links), footer, font, sky and water scene
   components/            shared UI pieces (quick download dock, showcase window, bubbles,
                          software rows, download button, mod picker, screenshot gallery,
                          SmartScreen help...)

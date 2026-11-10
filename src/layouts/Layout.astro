@@ -80,10 +80,18 @@ const shareUrl = new URL(share.src, Astro.site).href;
     <a class="skip" href="#contenu">Aller au contenu</a>
     <header class="page site-header">
       <nav class="glass bar" aria-label="Principal">
-        <a class="wordmark" href={homePath}>
-          <Logo class="logo" />
-          PalaSoft
-        </a>
+        <div class="brand">
+          <a class="pill back-home" href="https://palawi.fr/" title="Revenir sur palawi.fr">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            palawi.fr
+          </a>
+          <a class="wordmark" href={homePath}>
+            <Logo class="logo" />
+            PalaSoft
+          </a>
+        </div>
         <ul class="nav">
           <li><a href={`${homePath}#logiciels`}>Tous les logiciels</a></li>
           {mod !== undefined && <li><a href={softwarePath(mod.id)}>Mod Minecraft</a></li>}
@@ -145,6 +153,20 @@ const shareUrl = new URL(share.src, Astro.site).href;
     justify-content: space-between;
     gap: var(--space-1) var(--space-3);
     padding: 0.6rem 1rem 0.6rem 0.75rem;
+  }
+
+  /* The way back to Palawi's hub, then PalaSoft's own name. */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .back-home {
+    gap: 0.35rem;
+    min-height: 2.5rem;
+    padding: 0.3rem 0.9rem 0.3rem 0.6rem;
+    font-size: var(--text-small);
   }
 
   .wordmark {
