@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import AeroBubbles from '../components/AeroBubbles.astro';
+import Logo from '../components/Logo.astro';
 import { allSoftware, homePath, softwarePath } from '../server/software.ts';
 
 interface Props {
@@ -22,6 +23,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href={`${homePath}favicon.svg`} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={`${homePath}apple-touch-icon.png`} />
     <meta name="theme-color" content="#0b4fa3" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#050d1f" media="(prefers-color-scheme: dark)" />
   </head>
@@ -31,7 +34,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <header class="page site-header">
       <nav class="glass bar" aria-label="Principal">
         <a class="wordmark" href={homePath}>
-          <span class="orb" aria-hidden="true"></span>
+          <Logo class="logo" />
           PalaSoft
         </a>
         <ul class="nav">
@@ -107,15 +110,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     text-decoration: none;
   }
 
-  .orb {
-    width: 1.75rem;
-    height: 1.75rem;
-    border: 1px solid rgb(0 0 0 / 0.2);
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 50% 18%, rgb(255 255 255 / 0.95) 0 22%, transparent 46%),
-      radial-gradient(circle at 50% 75%, #8fe36d 0, #2f9a22 55%, #1b6312 100%);
-    box-shadow: 0 2px 5px rgb(6 48 74 / 0.35);
+  .wordmark :global(.logo) {
+    width: 2rem;
+    height: 2rem;
+    filter: drop-shadow(0 2px 3px rgb(6 48 74 / 0.3));
   }
 
   .nav {
