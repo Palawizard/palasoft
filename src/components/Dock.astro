@@ -1,6 +1,7 @@
 ---
 import type { SoftwareWithRelease } from '../server/software.ts';
 import { downloadPath, softwarePath } from '../server/software.ts';
+import IconChevron from './IconChevron.astro';
 import IconDownload from './IconDownload.astro';
 import SoftwareIcon from './SoftwareIcon.astro';
 
@@ -28,10 +29,15 @@ const offered = items.filter(({ view }) => view.state !== 'none');
                   {entry.data.name}
                 </span>
                 <span class="dock-meta numbers">
-                  {isMod ? 'choisir ta version' : view.state === 'ready' ? view.release.version : 'sur GitHub'}
+                  {view.state === 'ready' ? view.release.version : view.state === 'unavailable' ? 'sur GitHub' : ''}
+                  {isMod && <span class="visually-hidden">, choisis ta version de Minecraft</span>}
                 </span>
               </span>
-              {!isMod && (
+              {isMod ? (
+                <span class="gel-dot gel-dot-aqua">
+                  <IconChevron />
+                </span>
+              ) : (
                 <span class="gel-dot">
                   <IconDownload />
                 </span>
