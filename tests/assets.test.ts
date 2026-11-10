@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { findAsset, findModFile, modFiles, modMatrixSchema, pickInstaller } from '../src/lib/assets.ts';
+import { filesByLoader, findAsset, findModFile, modFiles, modMatrixSchema, pickInstaller } from '../src/lib/assets.ts';
 import { latestRelease, releasesSchema, type Release } from '../src/lib/github.ts';
 import { readFixture, releasesFixture } from './helpers/fixtures.ts';
 
@@ -78,6 +78,34 @@ describe('modFiles', () => {
     const remaining = modFiles(withoutOne, matrix);
     expect(remaining).toHaveLength(24);
     expect(findModFile(remaining, 'fabric', '26.1-26.2')).toBeUndefined();
+  });
+});
+
+describe('filesByLoader', () => {
+  const matrix = modMatrixSchema.parse(readFixture('github/palasitemclear-version-matrix-v0.1.2.json'));
+  const groups = filesByLoader(modFiles(latestOf('Palawizard/PalasItemClear'), matrix));
+
+  it('groups the jars by loader, in alphabetical order', () => {
+    expect(groups.map((group) => [group.loader, group.files.length])).toEqual([
+      ['fabric', 8],
+      ['forge', 9],
+      ['neoforge', 8],
+    ]);
+  });
+
+  it('lists the newest Minecraft versions first', () => {
+    const forge = groups.find((group) => group.loader === 'forge');
+    expect(forge?.files.map((file) => file.bandId)).toEqual([
+      '26.1-26.2',
+      '1.21.11',
+      '1.21.9-1.21.10',
+      '1.21.6-1.21.8',
+      '1.21.5',
+      '1.21-1.21.4',
+      '1.20.5-1.20.6',
+      '1.20.2-1.20.4',
+      '1.20.1',
+    ]);
   });
 });
 

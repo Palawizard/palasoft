@@ -46,3 +46,18 @@ export const findModFile = (
 
 export const findAsset = (assets: readonly Asset[], name: string): Asset | undefined =>
   assets.find((asset) => asset.name === name);
+
+export interface LoaderFiles {
+  loader: string;
+  files: ModFile[];
+}
+
+export const filesByLoader = (files: readonly ModFile[]): LoaderFiles[] => {
+  const groups = new Map<string, ModFile[]>();
+  for (const file of files) {
+    groups.set(file.loader, [...(groups.get(file.loader) ?? []), file]);
+  }
+  return [...groups]
+    .map(([loader, group]) => ({ loader, files: group.toReversed() }))
+    .toSorted((a, b) => a.loader.localeCompare(b.loader));
+};

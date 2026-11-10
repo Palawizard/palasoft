@@ -66,7 +66,26 @@ describe('download routes on the built server', () => {
   it('sends the mod button to its page, where the version is chosen', async () => {
     const response = await get(site, '/software/dl/palas-item-clear');
     expect(response.status).toBe(302);
-    expect(response.headers.get('location')).toBe('/software/palas-item-clear');
+    expect(response.headers.get('location')).toBe('/software/palas-item-clear#telecharger');
+  });
+
+  it.each([
+    ['forge', '1.21.5', 'palas-item-clear-1.21.5-forge-0.1.2.jar'],
+    ['forge', '1.21.6-1.21.8', 'palas-item-clear-1.21.8-forge-0.1.2.jar'],
+    ['fabric', '1.21.5-1.21.8', 'palas-item-clear-1.21.8-fabric-0.1.2.jar'],
+    ['neoforge', '1.20.1', 'palas-item-clear-1.20.1-neoforge-0.1.2.jar'],
+  ])('redirects the mod form for %s and Minecraft %s to its jar', async (loader, band, jar) => {
+    const query = new URLSearchParams({ loader, [`mc-${loader}`]: band, 'mc-other': 'ignored' });
+    const response = await get(site, `/software/dl/palas-item-clear?${query}`);
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe(`${DOWNLOAD}/PalasItemClear/releases/download/v0.1.2/${jar}`);
+  });
+
+  it('sends an impossible mod choice back to the picker', async () => {
+    const query = new URLSearchParams({ loader: 'fabric', 'mc-fabric': '1.21.5' });
+    const response = await get(site, `/software/dl/palas-item-clear?${query}`);
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe('/software/palas-item-clear#telecharger');
   });
 });
 

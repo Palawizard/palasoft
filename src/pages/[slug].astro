@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import DownloadPanel from '../components/DownloadPanel.astro';
+import ModPicker from '../components/ModPicker.astro';
 import RemoteDataNotice from '../components/RemoteDataNotice.astro';
 import Requirements from '../components/Requirements.astro';
 import SmartScreenHelp from '../components/SmartScreenHelp.astro';
@@ -25,7 +26,7 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
     </header>
     <RemoteDataNotice views={[view]} />
     <div id="telecharger" class="download-zone">
-      {data.kind === 'windows' && <DownloadPanel entry={entry} view={view} />}
+      {data.kind === 'windows' ? <DownloadPanel entry={entry} view={view} /> : <ModPicker entry={entry} view={view} />}
     </div>
     {data.kind === 'windows' && <Requirements items={data.requirements} />}
     <div class="prose">
