@@ -4,6 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY astro.config.mjs tsconfig.json ./
 COPY src ./src
+COPY public ./public
 RUN npm run build && npm prune --omit=dev
 
 FROM node:22-slim
