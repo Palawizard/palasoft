@@ -17,6 +17,7 @@ const date = view.state === 'ready' && view.release.publishedAt !== null ? forma
 {
   view.state === 'ready' ? (
     <span class="ticket numbers">
+      <span class="ticket-items">
       <span>
         version {view.release.version}
         {view.release.isBeta && <span class="badge">bêta</span>}
@@ -24,6 +25,7 @@ const date = view.state === 'ready' && view.release.publishedAt !== null ? forma
       {showSize && size !== undefined && <span>{size}</span>}
       {showDate && date !== undefined && <span>publiée le {date}</span>}
       {downloads !== undefined && <span>{formatDownloads(downloads)}</span>}
+      </span>
     </span>
   ) : view.state === 'none' ? (
     <span class="ticket">pas encore de version publiée</span>

@@ -16,7 +16,7 @@ const { name, shots } = Astro.props;
     {
       shots.map((shot) => (
         <li>
-          <figure class="shot frame">
+          <figure class="shot frame" style={`max-width: calc(${shot.src.width}px + 8px)`}>
             <Image src={shot.src} alt="" widths={[480, 720, 960]} sizes="(min-width: 64rem) 36rem, 85vw" />
             <figcaption>{shot.alt}</figcaption>
           </figure>
@@ -47,6 +47,7 @@ const { name, shots } = Astro.props;
 
   .strip li {
     display: grid;
+    justify-items: center;
   }
 
   .strip figure {

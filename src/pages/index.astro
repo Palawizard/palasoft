@@ -4,12 +4,17 @@ import Bubbles from '../components/Bubbles.astro';
 import Dock from '../components/Dock.astro';
 import RemoteDataNotice from '../components/RemoteDataNotice.astro';
 import Showcase from '../components/Showcase.astro';
-import SoftwareRow from '../components/SoftwareRow.astro';
+import SoftwareRow, { type RowLayout } from '../components/SoftwareRow.astro';
 import { allSoftwareWithReleases } from '../server/software.ts';
 
 const items = await allSoftwareWithReleases();
 const featured = items.find(({ entry }) => entry.data.screenshots.length > 0) ?? items[0];
 const others = items.filter((item) => item !== featured);
+const wideLayouts: RowLayout[] = ['overlap', 'stacked', 'overlap-flip'];
+const layoutOf = (item: (typeof items)[number], index: number): RowLayout => {
+  const shot = item.entry.data.screenshots[0];
+  return shot !== undefined && shot.src.height > shot.src.width ? 'compact' : (wideLayouts[index % wideLayouts.length] ?? 'overlap');
+};
 Astro.response.headers.set('Cache-Control', 'no-cache');
 ---
 
@@ -37,7 +42,7 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
     <section id="autres" class="all" aria-labelledby="all-title">
       <h2 id="all-title" class="all-title">Les autres logiciels</h2>
       <ul class="rows">
-        {others.map((item, index) => <SoftwareRow item={item} flip={index % 2 === 1} />)}
+        {others.map((item, index) => <SoftwareRow item={item} layout={layoutOf(item, index)} />)}
       </ul>
     </section>
   </div>
@@ -86,7 +91,8 @@ Astro.response.headers.set('Cache-Control', 'no-cache');
 
   .rows {
     display: grid;
-    gap: var(--space-4);
+    justify-items: stretch;
+    gap: var(--space-6);
     margin: 0;
     padding: 0;
     list-style: none;

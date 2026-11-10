@@ -7,21 +7,22 @@ import ReleaseFacts from './ReleaseFacts.astro';
 import { formatSize } from '../lib/format.ts';
 import SoftwareIcon from './SoftwareIcon.astro';
 
+export type RowLayout = 'overlap' | 'overlap-flip' | 'stacked' | 'compact';
+
 interface Props {
   item: SoftwareWithRelease;
-  flip: boolean;
+  layout: RowLayout;
 }
 
-const { item, flip } = Astro.props;
+const { item, layout } = Astro.props;
 const { entry, view, downloads } = item;
 const screenshot = entry.data.screenshots[0];
-const portrait = screenshot !== undefined && screenshot.src.height > screenshot.src.width;
 const installer = view.state === 'ready' ? view.installer : undefined;
 const isMod = entry.data.kind === 'minecraft-mod';
 ---
 
 <li>
-  <article class:list={['glass', 'row', { flip, portrait }]} data-color={entry.data.color} aria-labelledby={`row-${entry.id}`}>
+  <article class:list={['glass', 'row', layout]} data-color={entry.data.color} aria-labelledby={`row-${entry.id}`}>
     <div class="row-copy">
       <div class="row-head">
         <SoftwareIcon entry={entry} size={56} class="row-icon" />
@@ -59,7 +60,12 @@ const isMod = entry.data.kind === 'minecraft-mod';
       {
         screenshot !== undefined ? (
           <figure class="shot">
-            <Image src={screenshot.src} alt={screenshot.alt} widths={[400, 640, 880]} sizes="(min-width: 64rem) 34rem, 92vw" />
+            <Image
+              src={screenshot.src}
+              alt={screenshot.alt}
+              widths={layout === 'stacked' ? [640, 960, 1280] : [400, 640, 880]}
+              sizes={layout === 'stacked' ? '(min-width: 76rem) 70rem, 92vw' : '(min-width: 64rem) 38rem, 92vw'}
+            />
           </figure>
         ) : (
           <div class="no-shot">
@@ -75,45 +81,10 @@ const isMod = entry.data.kind === 'minecraft-mod';
 <style>
   .row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
     gap: var(--space-4);
     align-items: center;
     padding: var(--space-4);
-    overflow: hidden;
   }
-
-
-  .flip {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  }
-
-  .flip .row-copy {
-    order: 2;
-  }
-
-  .portrait,
-  .portrait.flip {
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  }
-
-  .portrait.flip {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-  }
-
-  .row-media {
-    display: grid;
-    justify-items: center;
-  }
-
-  .portrait .row-media .shot {
-    width: fit-content;
-  }
-
-  .portrait .row-media .shot :global(img) {
-    width: auto;
-    max-height: 22rem;
-  }
-
 
   .row-copy {
     display: grid;
@@ -155,7 +126,7 @@ const isMod = entry.data.kind === 'minecraft-mod';
   }
 
   .row-tagline {
-    max-width: 34ch;
+    max-width: 36ch;
     font-size: var(--text-lead);
     line-height: 1.4;
   }
@@ -171,6 +142,107 @@ const isMod = entry.data.kind === 'minecraft-mod';
     color: var(--ink-soft);
     font-size: var(--text-small);
     overflow-wrap: anywhere;
+  }
+
+  .row-media {
+    display: grid;
+    justify-items: center;
+  }
+
+  .overlap,
+  .overlap-flip {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);
+    margin-block: var(--space-4);
+  }
+
+  .overlap .row-media .shot {
+    margin: calc(var(--space-8) * -1) calc(var(--space-6) * -1) calc(var(--space-8) * -1) 0;
+    transform: perspective(90rem) rotateY(-5deg);
+    transform-origin: left center;
+  }
+
+  .overlap-flip {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr);
+  }
+
+  .overlap-flip .row-copy {
+    order: 2;
+  }
+
+  .overlap-flip .row-media .shot {
+    margin: calc(var(--space-8) * -1) 0 calc(var(--space-8) * -1) calc(var(--space-6) * -1);
+    transform: perspective(90rem) rotateY(5deg);
+    transform-origin: right center;
+  }
+
+  .stacked {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-areas:
+      'media media'
+      'copy copy';
+    padding-top: var(--space-3);
+  }
+
+  .stacked .row-media {
+    grid-area: media;
+  }
+
+  .stacked .row-copy {
+    grid-area: copy;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-areas:
+      'head facts'
+      'tagline actions'
+      'tagline file';
+    align-items: start;
+    column-gap: var(--space-6);
+    width: 100%;
+  }
+
+  .stacked .row-head {
+    grid-area: head;
+  }
+
+  .stacked .row-tagline {
+    grid-area: tagline;
+    max-width: 44ch;
+  }
+
+  .stacked .row-copy > :global(.ticket) {
+    grid-area: facts;
+    align-self: center;
+  }
+
+  .stacked .row-actions {
+    grid-area: actions;
+  }
+
+  .stacked .row-file {
+    grid-area: file;
+  }
+
+  .stacked .row-media .shot {
+    width: 100%;
+  }
+
+  .compact {
+    grid-template-columns: auto minmax(0, 1fr);
+    max-width: 58rem;
+    padding: var(--space-3);
+  }
+
+  .compact .row-media {
+    order: -1;
+  }
+
+  .compact .row-media .shot {
+    width: fit-content;
+    transform: rotate(-2deg);
+  }
+
+  .compact .row-media .shot :global(img) {
+    width: auto;
+    max-height: 15rem;
   }
 
   .no-shot {
@@ -192,13 +264,50 @@ const isMod = entry.data.kind === 'minecraft-mod';
   }
 
   @media (max-width: 56rem) {
-    .row {
+    .row,
+    .stacked,
+    .stacked .row-copy {
       grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: none;
+    }
+
+    .row {
+      margin-block: 0;
       padding: var(--space-3);
     }
 
-    .flip .row-copy {
+    .row .row-media {
+      order: -1;
+    }
+
+    .row .row-copy,
+    .stacked .row-copy > * {
       order: 0;
+      grid-area: auto;
+    }
+
+    .row .row-media .shot {
+      margin: calc(var(--space-6) * -1) 0 0;
+      transform: none;
+    }
+
+    .compact {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .compact .row-media .shot {
+      margin: 0;
+    }
+
+    .compact .row-media .shot :global(img) {
+      max-height: 9rem;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .compact {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

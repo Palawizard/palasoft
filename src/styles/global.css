@@ -361,21 +361,29 @@ svg {
 }
 
 .ticket {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem 0.5rem;
+  display: block;
+  overflow: hidden;
   font-size: var(--text-small);
   color: var(--ink-soft);
 }
 
-.ticket > * {
+.ticket-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 0.25rem;
+  margin-left: -1.1rem;
+}
+
+.ticket-items > * {
   white-space: nowrap;
 }
 
-.ticket > :not(:last-child)::after {
+.ticket-items > *::before {
   content: '·';
-  margin-left: 0.5rem;
+  display: inline-block;
+  width: 1.1rem;
+  text-align: center;
 }
 
 .ticket .badge {
