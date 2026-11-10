@@ -28,7 +28,7 @@ const software = await allSoftware();
 const mod = software.find((entry) => entry.data.kind === 'minecraft-mod');
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const share: ShareImage = image ?? {
-  src: `${homePath}og-palasoft.jpg`,
+  src: `${homePath}og-palasoft.jpg?v=2`,
   width: 1200,
   height: 630,
   alt: 'PalaSoft : les logiciels gratuits de Palawi, en un clic.',

@@ -12,6 +12,7 @@ const PAGES = [
   '/software/silence-splitter',
   '/software/timestamper',
   '/software/palas-item-clear',
+  '/software/chest-counter',
 ];
 
 const html = async (site: Site, path: string): Promise<{ status: number; body: string }> => {
@@ -166,6 +167,22 @@ describe('pages on the built server', () => {
     const mod = await html(site, '/software/palas-item-clear');
     expect(mod.body).toMatch(/<form class="picker-form"[^>]*data-thanks="Pala's Item Clear" data-thanks-kind="mod"/);
     await site.stop();
+  });
+
+  it('serves the own page of chest counter, featured first on the home', async () => {
+    github.down = false;
+    const site = await start();
+    const page = await html(site, '/software/chest-counter');
+    expect(page.status).toBe(200);
+    expect(page.body).toContain('Comment ton total se construit');
+    expect(page.body).toContain('Et les autres moyens de compter ?');
+    expect(page.body).toContain('Palawi.ChestCounter-win-Setup.exe');
+    // Velopack's RELEASES and releases.win.json are left out: 23 real downloads in the fixture.
+    expect(page.body).toContain('23 téléchargements');
+    expect(page.body).toContain('id="smartscreen-title"');
+    const home = await html(site, '/software/');
+    expect(home.body.indexOf('Chest Counter')).toBeLessThan(home.body.indexOf('PalaClips'));
+    expect(home.body).toMatch(/<h2 id="showcase-title"[^>]*><a href="\/software\/chest-counter"/);
   });
 
   it('leads back to palawi.fr from the header of every page', async () => {

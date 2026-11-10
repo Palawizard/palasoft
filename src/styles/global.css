@@ -43,6 +43,7 @@
   --tint-teal: #19b3a6;
   --tint-violet: #8a63f0;
   --tint-emerald: #3fbf5a;
+  --tint-amber: #e8a020;
   --notice: #f2a91c;
 
   --font: 'Source Sans 3 Variable', 'Segoe UI', system-ui, sans-serif;
@@ -445,6 +446,10 @@ svg {
 
 [data-color='emerald'] {
   --tint: var(--tint-emerald);
+}
+
+[data-color='amber'] {
+  --tint: var(--tint-amber);
 }
 
 .shot {
