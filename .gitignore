@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Runtime data (release snapshot written by the server)
+data/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Tests
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editors and OS
+.idea/
+.DS_Store
+Thumbs.db
