@@ -11,6 +11,8 @@ describe('isCountedDownload', () => {
     'slbs-soundboard_0.5.0_x64.msi.sig',
     'Silence-Splitter-1.0.0-beta.2-x64-setup.exe.blockmap',
     'release-checksums.txt',
+    'RELEASES',
+    'releases.win.json',
   ])('leaves out %s', (name) => {
     expect(isCountedDownload(name)).toBe(false);
   });
@@ -20,6 +22,9 @@ describe('isCountedDownload', () => {
     'slbs-soundboard_0.5.0_x64.msi',
     'Silence-Splitter-1.0.0-beta.2-x64-setup.exe',
     'palas-item-clear-1.21.8-fabric-0.1.2.jar',
+    'Palawi.ChestCounter-win-Setup.exe',
+    'Palawi.ChestCounter-win-Portable.zip',
+    'Palawi.ChestCounter-2.2.1-full.nupkg',
   ])('counts %s', (name) => {
     expect(isCountedDownload(name)).toBe(true);
   });

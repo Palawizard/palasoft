@@ -1,6 +1,9 @@
 import type { Release } from './github.ts';
 
-const NOT_A_DOWNLOAD = /^latest\.(json|ya?ml)$|\.sig$|\.blockmap$|checksum|\.(sha256|sha512|md5)$|^sha\d+sums/i;
+// Updater manifests (Tauri latest.json, Velopack RELEASES and releases.<channel>.json), signatures and checksums
+// are read by the apps themselves; installers, archives and update packages are real downloads.
+const NOT_A_DOWNLOAD =
+  /^latest\.(json|ya?ml)$|^RELEASES$|^releases\.[\w-]+\.json$|\.sig$|\.blockmap$|checksum|\.(sha256|sha512|md5)$|^sha\d+sums/i;
 
 export const isCountedDownload = (fileName: string): boolean => !NOT_A_DOWNLOAD.test(fileName);
 
