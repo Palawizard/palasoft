@@ -42,9 +42,7 @@ const missing = views.some((view) => view.state === 'unavailable');
     color: #b06f00;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .notice-icon {
-      color: var(--notice);
-    }
+  :global(:root[data-theme='dark']) .notice-icon {
+    color: var(--notice);
   }
 </style>

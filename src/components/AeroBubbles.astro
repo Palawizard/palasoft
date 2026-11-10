@@ -43,9 +43,9 @@ const bubbles = [
 
   .sun {
     position: absolute;
-    top: -27rem;
-    right: -23rem;
-    width: 58rem;
+    top: calc(var(--sun-y) - var(--sun-size) / 2);
+    right: calc(var(--sun-x) - var(--sun-size) / 2);
+    width: var(--sun-size);
     aspect-ratio: 1;
   }
 
@@ -83,24 +83,24 @@ const bubbles = [
   }
 
   .flare-1 {
-    top: 9rem;
-    right: 17rem;
+    top: calc(var(--sun-y) + 7rem);
+    right: calc(var(--sun-x) + 11rem);
     width: 3.5rem;
     height: 3.5rem;
     background: radial-gradient(circle, rgb(255 255 255 / 0.28), rgb(190 235 255 / 0.08) 70%, transparent 72%);
   }
 
   .flare-2 {
-    top: 15rem;
-    right: 25rem;
+    top: calc(var(--sun-y) + 13rem);
+    right: calc(var(--sun-x) + 19rem);
     width: 1.4rem;
     height: 1.4rem;
     background: rgb(220 245 255 / 0.3);
   }
 
   .flare-3 {
-    top: 19rem;
-    right: 31rem;
+    top: calc(var(--sun-y) + 17rem);
+    right: calc(var(--sun-x) + 25rem);
     width: 7rem;
     height: 7rem;
     background: radial-gradient(circle, transparent 58%, rgb(255 255 255 / 0.16) 68%, rgb(180 230 255 / 0.1) 72%, transparent 74%);
@@ -123,40 +123,32 @@ const bubbles = [
     animation: drift 6s ease-in-out infinite alternate;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .sun-rays,
-    .flare {
-      display: none;
-    }
+  :global(:root[data-theme='dark']) .sun-rays,
+  :global(:root[data-theme='dark']) .flare {
+    display: none;
+  }
 
-    .sun-core {
-      background: radial-gradient(
-        circle,
-        #eef6ff 0 2.6%,
-        rgb(214 232 255 / 0.55) 3.6%,
-        rgb(150 190 255 / 0.18) 9%,
-        rgb(120 170 255 / 0.06) 20%,
-        transparent 34%
-      );
-    }
+  :global(:root[data-theme='dark']) .sun-core {
+    background: radial-gradient(
+      circle,
+      #eef6ff 0 2.6%,
+      rgb(214 232 255 / 0.55) 3.6%,
+      rgb(150 190 255 / 0.18) 9%,
+      rgb(120 170 255 / 0.06) 20%,
+      transparent 34%
+    );
+  }
 
-    .waterline {
-      opacity: 0.45;
-    }
+  :global(:root[data-theme='dark']) .waterline {
+    opacity: 0.45;
+  }
 
-    .bubble {
-      border-color: rgb(170 214 255 / 0.35);
-      opacity: 0.7;
-    }
+  :global(:root[data-theme='dark']) .bubble {
+    border-color: rgb(170 214 255 / 0.35);
+    opacity: 0.7;
   }
 
   @media (max-width: 48rem) {
-    .sun {
-      top: -6rem;
-      right: -16rem;
-      width: 32rem;
-    }
-
     .flare {
       display: none;
     }
