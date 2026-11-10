@@ -479,15 +479,17 @@ svg {
   animation-delay: calc(var(--order, 0) * 50ms);
 }
 
-/* The near-zero rotation keeps the browser from snapping this slow drift to whole pixels,
-   which made the bubbles move in visible one-pixel steps. */
+/* Bubbles float up and sway. Firefox snaps a slow translation to whole pixels, so a drift of
+   a few pixels a second moved in visible steps (worst on high refresh rate screens); a near-zero
+   rotation did not prevent it there. A real sway of 6 degrees and 2rem of travel in 4.5s did:
+   picked by Palawi among twelve variants in Firefox at 147 Hz. */
 @keyframes drift {
   from {
-    transform: translateY(0) rotate(0.01deg);
+    transform: translateY(0) rotate(-6deg);
   }
 
   to {
-    transform: translateY(-0.6rem) rotate(0.01deg);
+    transform: translateY(-2rem) rotate(6deg);
   }
 }
 

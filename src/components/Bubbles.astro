@@ -47,8 +47,9 @@ const { items } = Astro.props;
     gap: 0.5rem;
     text-align: center;
     text-decoration: none;
+    transform-origin: 50% 3.75rem;
     will-change: transform;
-    animation: drift 5s ease-in-out infinite alternate;
+    animation: drift 4.5s ease-in-out infinite alternate;
   }
 
   .sphere {
@@ -111,6 +112,8 @@ const { items } = Astro.props;
       display: flex;
       gap: var(--space-2);
       overflow-x: auto;
+      /* Room for the float: a scrolling row also clips what rises above it. */
+      padding-top: 2.5rem;
       padding-bottom: var(--space-1);
       scroll-snap-type: x mandatory;
     }
@@ -122,6 +125,10 @@ const { items } = Astro.props;
 
     li:nth-child(even) {
       margin-top: 0;
+    }
+
+    .bubble {
+      transform-origin: 50% 2.75rem;
     }
 
     .sphere {
