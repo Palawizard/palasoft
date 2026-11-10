@@ -1,0 +1,334 @@
+---
+import SmartScreenSteps from './SmartScreenSteps.astro';
+
+// One window per page, opened by any link or form marked with data-thanks once its download starts.
+---
+
+<dialog class="thanks" aria-labelledby="thanks-title" aria-describedby="thanks-started" data-thanks-dialog>
+  <header class="thanks-bar">
+    <span class="thanks-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" focusable="false">
+        <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <h2 id="thanks-title">Merci d’avoir téléchargé !</h2>
+  </header>
+
+  <div class="thanks-body">
+    <div class="started">
+      <p id="thanks-started">Le téléchargement de <strong data-thanks-name></strong> démarre.</p>
+      <p class="file numbers" data-thanks-file></p>
+    </div>
+
+    <p data-thanks-part="windows">Une fois le fichier téléchargé, ouvre-le pour lancer l’installation.</p>
+
+    <section class="part" data-thanks-part="smartscreen" aria-labelledby="thanks-smartscreen">
+      <h3 id="thanks-smartscreen">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+          <path d="M12 2 3 5.5v6c0 5 3.8 9.3 9 10.5 5.2-1.2 9-5.5 9-10.5v-6L12 2Z" fill="#2c86c9" />
+          <path d="M12 7v6M12 16v.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Si Windows t’avertit
+      </h3>
+      <SmartScreenSteps />
+    </section>
+
+    <section class="part" data-thanks-part="mod" aria-labelledby="thanks-mod">
+      <h3 id="thanks-mod">Pour l’installer</h3>
+      <ol>
+        <li>Mets le fichier dans le dossier mods de ton serveur.</li>
+        <li>Installe aussi les mods qu’il demande : ils sont listés dans « Installer », sur cette page.</li>
+        <li>Redémarre le serveur.</li>
+      </ol>
+    </section>
+  </div>
+
+  <footer class="thanks-foot">
+    <p class="retry">Rien ne se passe ? <a href="#" data-thanks-retry>Relance le téléchargement</a></p>
+    <button class="gel gel-aqua gel-small" type="button" data-thanks-close autofocus>C’est compris</button>
+  </footer>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-thanks-dialog]');
+
+  if (dialog !== null) {
+    const name = dialog.querySelector<HTMLElement>('[data-thanks-name]');
+    const file = dialog.querySelector<HTMLElement>('[data-thanks-file]');
+    const retry = dialog.querySelector<HTMLAnchorElement>('[data-thanks-retry]');
+    const parts = [...dialog.querySelectorAll<HTMLElement>('[data-thanks-part]')];
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let trigger: HTMLElement | null = null;
+
+    interface Download {
+      name: string;
+      file: string;
+      kind: string;
+      smartscreen: boolean;
+      url: string;
+    }
+
+    const open = (download: Download, from: HTMLElement): void => {
+      trigger = from;
+      if (name !== null) name.textContent = download.name;
+      if (file !== null) {
+        file.textContent = download.file;
+        file.hidden = download.file === '';
+      }
+      if (retry !== null) retry.href = download.url;
+      for (const part of parts) {
+        const shown =
+          part.dataset['thanksPart'] === 'smartscreen' ? download.smartscreen : part.dataset['thanksPart'] === download.kind;
+        part.hidden = !shown;
+      }
+      dialog.classList.remove('closing');
+      if (!dialog.open) dialog.showModal();
+      dialog.querySelector('.thanks-body')?.scrollTo(0, 0);
+    };
+
+    const close = (): void => {
+      if (!dialog.open || dialog.classList.contains('closing')) return;
+      const done = (): void => {
+        dialog.classList.remove('closing');
+        dialog.close();
+        trigger?.focus();
+      };
+      if (reducedMotion.matches) {
+        done();
+        return;
+      }
+      dialog.classList.add('closing');
+      dialog.addEventListener('animationend', done, { once: true });
+    };
+
+    // The download starts as the browser follows the link or sends the form; the window opens right after.
+    document.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[data-thanks]');
+      if (link == null) return;
+      const download: Download = {
+        name: link.dataset['thanks'] ?? '',
+        file: link.dataset['thanksFile'] ?? '',
+        kind: link.dataset['thanksKind'] ?? '',
+        smartscreen: link.dataset['thanksSmartscreen'] === 'true',
+        url: link.href,
+      };
+      setTimeout(() => open(download, link), 0);
+    });
+
+    document.addEventListener('submit', (event) => {
+      const form = (event.target as Element | null)?.closest<HTMLFormElement>('form[data-thanks]');
+      if (form == null || event.defaultPrevented) return;
+      const query = new URLSearchParams();
+      for (const [key, value] of new FormData(form)) if (typeof value === 'string') query.append(key, value);
+      const download: Download = {
+        name: form.dataset['thanks'] ?? '',
+        file: form.querySelector('[data-file-facts]')?.textContent?.trim() ?? '',
+        kind: form.dataset['thanksKind'] ?? '',
+        smartscreen: false,
+        url: `${form.action}?${query.toString()}`,
+      };
+      const button = form.querySelector<HTMLElement>('[type="submit"]') ?? form;
+      setTimeout(() => open(download, button), 0);
+    });
+
+    dialog.querySelector('[data-thanks-close]')?.addEventListener('click', close);
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      close();
+    });
+    // A click on the dimmed page around the window closes it.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) close();
+    });
+  }
+</script>
+
+<style>
+  .thanks {
+    width: min(34rem, calc(100% - 2rem));
+    max-height: calc(100% - 2rem);
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--radius-window);
+    /* Opaque glass over the pill colour: no blur (it would be recomputed on every frame of the
+       bubbles moving behind) and nothing of the page showing through the text. */
+    background: linear-gradient(to bottom, var(--glass-strong), var(--glass-top)), var(--pill-1);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(255 255 255 / 0.7);
+    color: var(--ink);
+  }
+
+  /* Title and buttons stay in view; only the text in between scrolls on a short screen. */
+  .thanks[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .thanks::backdrop {
+    background: rgb(4 30 60 / 0.45);
+  }
+
+  .thanks[open] {
+    animation: thanks-in 240ms var(--ease-out);
+  }
+
+  .thanks[open]::backdrop {
+    animation: thanks-fade 240ms ease-out;
+  }
+
+  .thanks.closing {
+    animation: thanks-out 150ms ease-in forwards;
+  }
+
+  .thanks.closing::backdrop {
+    animation: thanks-fade 150ms ease-in reverse forwards;
+  }
+
+  .thanks-bar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.75rem;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--rule);
+    background: linear-gradient(to bottom, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0));
+  }
+
+  .thanks-mark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid rgb(0 0 0 / 0.25);
+    border-radius: 50%;
+    background: linear-gradient(to bottom, var(--gel-green-0) 0%, var(--gel-green-1) 49%, var(--gel-green-2) 50%, var(--gel-green-3) 100%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.65), 0 3px 8px -2px rgb(10 60 20 / 0.5);
+    color: #ffffff;
+  }
+
+  h2 {
+    font-size: var(--text-subtitle);
+    font-weight: 650;
+    line-height: 1.12;
+  }
+
+  .thanks-body {
+    display: grid;
+    gap: var(--space-3);
+    min-height: 0;
+    padding: var(--space-3);
+    overflow-y: auto;
+  }
+
+  .started {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .file {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    overflow-wrap: anywhere;
+  }
+
+  .part {
+    display: grid;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+
+  ol {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding-left: 1.4em;
+  }
+
+  .thanks-foot {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .retry {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  :global(:root[data-theme='dark']) .thanks {
+    box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(170 214 255 / 0.25);
+  }
+
+  :global(:root[data-theme='dark']) .thanks-bar {
+    background: linear-gradient(to bottom, rgb(170 214 255 / 0.12), rgb(170 214 255 / 0));
+  }
+
+  :global(:root[data-theme='dark']) .thanks::backdrop {
+    background: rgb(0 6 18 / 0.6);
+  }
+
+  @keyframes thanks-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.97);
+    }
+  }
+
+  @keyframes thanks-out {
+    to {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+    }
+  }
+
+  @keyframes thanks-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .thanks-bar,
+    .thanks-body {
+      padding-inline: var(--space-2);
+    }
+
+    .thanks-foot {
+      padding-inline: var(--space-2);
+    }
+
+    .thanks-foot .gel {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .thanks[open] {
+      animation-name: thanks-fade;
+    }
+
+    .thanks.closing {
+      animation: none;
+    }
+  }
+</style>
