@@ -4,6 +4,20 @@ tagline: Enregistre tes meilleurs moments en jeu après coup, avec une piste aud
 order: 1
 repo: Palawizard/PalaClips
 color: crimson
+icon: ../../assets/software/palaclips/icon.svg
+screenshots:
+  - src: ../../assets/software/palaclips/player.png
+    alt: "Le lecteur de PalaClips : la vidéo en haut, puis une ligne par piste audio (mix complet, micro, Discord, jeu)."
+  - src: ../../assets/software/palaclips/gallery.png
+    alt: "La galerie : tes clips rangés par jour, avec leur aperçu."
+  - src: ../../assets/software/palaclips/audio-sources.png
+    alt: "La page Audio : une piste par logiciel, avec son niveau sonore en direct."
+  - src: ../../assets/software/palaclips/compress.png
+    alt: "La compression : tu choisis la taille du fichier, par exemple 20 Mo pour Discord."
+  - src: ../../assets/software/palaclips/replay-quality.png
+    alt: "Les réglages du replay et de la qualité, avec la taille estimée de tes clips."
+  - src: ../../assets/software/palaclips/first-launch.png
+    alt: "Le premier lancement : PalaClips te pose ses questions une par une."
 kind: windows
 installerPattern: '^PalaClips_.+_x64-setup\.exe$'
 unsignedInstaller: true

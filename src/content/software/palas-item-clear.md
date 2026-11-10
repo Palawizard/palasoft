@@ -4,6 +4,12 @@ tagline: Nettoie les objets au sol pour réduire le lag de ton serveur, avec des
 order: 6
 repo: Palawizard/PalasItemClear
 color: emerald
+icon: ../../assets/software/palas-item-clear/icon.svg
+screenshots:
+  - src: ../../assets/software/palas-item-clear/chat-warnings.png
+    alt: "Les avertissements en couleur dans le chat avant chaque nettoyage, puis le nombre d’objets retirés."
+  - src: ../../assets/software/palas-item-clear/recovery-bin.png
+    alt: "La poubelle de récupération : un coffre où tu reprends les objets retirés."
 kind: minecraft-mod
 versionMatrix: versions/version-matrix.json
 modrinth: https://modrinth.com/mod/palas-item-clear

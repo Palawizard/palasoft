@@ -4,6 +4,7 @@ tagline: Joue des sons dans Discord et en jeu grâce à un micro virtuel, avec d
 order: 2
 repo: Palawizard/slbs-soundboard
 color: magenta
+icon: ../../assets/software/slbs-soundboard/icon.png
 kind: windows
 installerPattern: '^slbs-soundboard_.+_x64\.msi$'
 unsignedInstaller: true

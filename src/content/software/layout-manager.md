@@ -4,6 +4,7 @@ tagline: Ouvre et place tes applications sur tes écrans en un clic, avec des di
 order: 3
 repo: Palawizard/layout-manager-2
 color: cobalt
+icon: ../../assets/software/layout-manager/icon.svg
 kind: windows
 installerPattern: '^Layout\.Manager\.2_.+_x64-setup\.exe$'
 unsignedInstaller: true

@@ -4,6 +4,7 @@ tagline: Repère les silences de tes vidéos et prépare la coupe pour ton logic
 order: 4
 repo: Palawizard/silence-splitter
 color: teal
+icon: ../../assets/software/silence-splitter/icon.svg
 kind: windows
 installerPattern: '^Silence-Splitter-.+-x64-setup\.exe$'
 unsignedInstaller: true
