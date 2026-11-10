@@ -1,0 +1,34 @@
+name: palasoft
+
+services:
+  web:
+    build: .
+    image: palasoft:latest
+    container_name: palasoft-web
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4321
+      DATA_DIR: /app/data
+    volumes:
+      - palasoft-data:/app/data
+    networks:
+      - edge
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  edge:
+    name: ${PALASOFT_NETWORK:-palasoft-edge}
+    external: true
+
+volumes:
+  palasoft-data:
