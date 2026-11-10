@@ -14,11 +14,11 @@ const { entry, view, downloads } = Astro.props.item;
 const screenshot = entry.data.screenshots[0];
 ---
 
-<article class="glass showcase rise" data-color={entry.data.color} aria-labelledby="showcase-title">
+<article class="glass glass-still showcase rise" data-color={entry.data.color} aria-labelledby="showcase-title">
   <WindowTitle entry={entry} caption={entry.data.name} />
   <div class="body">
     <div class="copy">
-      <h2 id="showcase-title" class="name">{entry.data.name}</h2>
+      <h2 id="showcase-title" class="name"><a href={softwarePath(entry.id)}>{entry.data.name}</a></h2>
       <p class="tagline">{entry.data.tagline}</p>
       <ReleaseFacts view={view} downloads={downloads} showDate />
       <DownloadButton entry={entry} view={view} />
@@ -39,8 +39,6 @@ const screenshot = entry.data.screenshots[0];
     overflow: hidden;
   }
 
-
-
   .body {
     display: grid;
     grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
@@ -57,6 +55,16 @@ const screenshot = entry.data.screenshots[0];
 
   .name {
     font-size: var(--text-title);
+  }
+
+  .name a {
+    text-decoration: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .name a:hover {
+      text-decoration: underline;
+    }
   }
 
   .tagline {

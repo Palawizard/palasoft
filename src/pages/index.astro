@@ -10,7 +10,7 @@ import { allSoftwareWithReleases } from '../server/software.ts';
 const items = await allSoftwareWithReleases();
 const featured = items.find(({ entry }) => entry.data.screenshots.length > 0) ?? items[0];
 const others = items.filter((item) => item !== featured);
-const wideLayouts: RowLayout[] = ['overlap', 'stacked', 'overlap-flip'];
+const wideLayouts: RowLayout[] = ['overlap', 'overlap-flip'];
 const layoutOf = (item: (typeof items)[number], index: number): RowLayout => {
   const shot = item.entry.data.screenshots[0];
   return shot !== undefined && shot.src.height > shot.src.width ? 'compact' : (wideLayouts[index % wideLayouts.length] ?? 'overlap');
