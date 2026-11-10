@@ -9,9 +9,19 @@ const common = {
   repo: z.string().regex(/^Palawizard\/[\w.-]+$/),
 };
 
+const isValidRegExp = (pattern: string): boolean => {
+  try {
+    new RegExp(pattern);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const windowsApp = z.object({
   ...common,
   kind: z.literal('windows'),
+  installerPattern: z.string().min(1).refine(isValidRegExp, 'Must be a valid regular expression'),
   unsignedInstaller: z.boolean(),
   requirements: z
     .array(z.object({ label: z.string().min(1), url: z.url().optional() }))
@@ -21,6 +31,7 @@ const windowsApp = z.object({
 const minecraftMod = z.object({
   ...common,
   kind: z.literal('minecraft-mod'),
+  versionMatrix: z.string().regex(/^[\w./-]+\.json$/),
   modrinth: z.url(),
   curseforge: z.url(),
 });
