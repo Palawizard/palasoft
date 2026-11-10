@@ -4,6 +4,7 @@ tagline: Nettoie les objets au sol pour réduire le lag de ton serveur, avec des
 order: 6
 repo: Palawizard/PalasItemClear
 kind: minecraft-mod
+versionMatrix: versions/version-matrix.json
 modrinth: https://modrinth.com/mod/palas-item-clear
 curseforge: https://www.curseforge.com/minecraft/mc-mods/palas-item-clear
 ---

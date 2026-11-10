@@ -1,0 +1,123 @@
+{
+  "policy": "Each band compiles against the newest Minecraft patch in its range. For every loader, metadata version ranges must cover every patch between 1.20.1 and 26.2 with no gaps or overlaps; a band may omit a loader that another band covers.",
+  "bands": [
+    {
+      "id": "1.20.1",
+      "compileTarget": "1.20.1",
+      "minecraftRange": "[1.20.1]",
+      "java": 17,
+      "template": "architectury-root",
+      "loaders": {
+        "forge": { "path": "forge", "artifact": "palas-item-clear-1.20.1-forge" },
+        "fabric": { "path": "fabric", "artifact": "palas-item-clear-1.20.1-fabric" },
+        "neoforge": { "path": "versions/1.20.1-neoforge", "neoVersion": "1.20.1-47.1.106", "artifact": "palas-item-clear-1.20.1-neoforge" }
+      }
+    },
+    {
+      "id": "1.20.2-1.20.4",
+      "compileTarget": "1.20.4",
+      "minecraftRange": "[1.20.2,1.20.5)",
+      "java": 17,
+      "template": "neoforge-1.21",
+      "loaders": {
+        "neoforge": { "path": "versions/1.20.4-neoforge", "neoVersion": "20.4.246", "neoVersionRange": "[20.2,)", "artifact": "palas-item-clear-1.20.4-neoforge" },
+        "fabric": { "path": "versions/1.20.4-fabric", "loaderVersion": "0.16.9", "loomVersion": "1.10.455", "fabricApi": "0.97.3+1.20.4", "yarnMappings": "1.20.4+build.3", "artifact": "palas-item-clear-1.20.4-fabric" },
+        "forge": { "path": "versions/1.20.4-forge", "forgeVersion": "49.1.0", "loaderVersionRange": "[48,)", "artifact": "palas-item-clear-1.20.4-forge" }
+      }
+    },
+    {
+      "id": "1.20.5-1.20.6",
+      "compileTarget": "1.20.6",
+      "minecraftRange": "[1.20.5,1.21)",
+      "java": 21,
+      "template": "neoforge-1.21",
+      "loaders": {
+        "neoforge": { "path": "versions/1.20.6-neoforge", "neoVersion": "20.6.137", "neoVersionRange": "[20.5,)", "artifact": "palas-item-clear-1.20.6-neoforge" },
+        "fabric": { "path": "versions/1.20.6-fabric", "loaderVersion": "0.16.9", "loomVersion": "1.10.455", "fabricApi": "0.100.8+1.20.6", "yarnMappings": "1.20.6+build.3", "artifact": "palas-item-clear-1.20.6-fabric" },
+        "forge": { "path": "versions/1.20.6-forge", "forgeVersion": "50.1.0", "loaderVersionRange": "[50,)", "artifact": "palas-item-clear-1.20.6-forge" }
+      }
+    },
+    {
+      "id": "1.21-1.21.4",
+      "compileTarget": "1.21.1",
+      "minecraftRange": "[1.21,1.21.5)",
+      "java": 21,
+      "template": "neoforge-1.21",
+      "loaders": {
+        "neoforge": { "path": "versions/1.21.1-neoforge", "neoVersion": "21.1.235", "neoVersionRange": "[21.0,)", "artifact": "palas-item-clear-1.21.1-neoforge" },
+        "fabric": { "path": "versions/1.21.1-fabric", "loaderVersion": "0.16.9", "loomVersion": "1.10.455", "fabricApi": "0.102.0+1.21.1", "yarnMappings": "1.21.1+build.3", "artifact": "palas-item-clear-1.21.1-fabric" },
+        "forge": { "path": "versions/1.21.1-forge", "forgeVersion": "52.0.0", "loaderVersionRange": "[51,)", "artifact": "palas-item-clear-1.21.1-forge" }
+      }
+    },
+    {
+      "id": "1.21.5-1.21.8",
+      "compileTarget": "1.21.8",
+      "minecraftRange": "[1.21.5,1.21.9)",
+      "java": 21,
+      "template": "neoforge-1.21",
+      "note": "Forge has no JAR here: Forge 55 (1.21.5) predates EventBus 7, so Forge uses the 1.21.5 and 1.21.6-1.21.8 bands.",
+      "loaders": {
+        "neoforge": { "path": "versions/1.21.8-neoforge", "neoVersion": "21.8.57", "neoVersionRange": "[21.5,)", "artifact": "palas-item-clear-1.21.8-neoforge" },
+        "fabric": { "path": "versions/1.21.8-fabric", "loaderVersion": "0.19.3", "loomVersion": "1.11.456", "fabricApi": "0.136.1+1.21.8", "yarnMappings": "1.21.8+build.1", "artifact": "palas-item-clear-1.21.8-fabric" }
+      }
+    },
+    {
+      "id": "1.21.5",
+      "compileTarget": "1.21.5",
+      "minecraftRange": "[1.21.5,1.21.6)",
+      "java": 21,
+      "template": "neoforge-1.21",
+      "note": "Forge only. Fabric and NeoForge use the 1.21.5-1.21.8 band.",
+      "loaders": {
+        "forge": { "path": "versions/1.21.5-forge", "forgeVersion": "55.1.0", "loaderVersionRange": "[55,)", "artifact": "palas-item-clear-1.21.5-forge" }
+      }
+    },
+    {
+      "id": "1.21.6-1.21.8",
+      "compileTarget": "1.21.8",
+      "minecraftRange": "[1.21.6,1.21.9)",
+      "java": 21,
+      "template": "neoforge-1.21",
+      "note": "Forge only (EventBus 7). Fabric and NeoForge use the 1.21.5-1.21.8 band.",
+      "loaders": {
+        "forge": { "path": "versions/1.21.8-forge", "forgeVersion": "58.1.0", "loaderVersionRange": "[56,)", "artifact": "palas-item-clear-1.21.8-forge" }
+      }
+    },
+    {
+      "id": "1.21.9-1.21.10",
+      "compileTarget": "1.21.10",
+      "minecraftRange": "[1.21.9,1.21.11)",
+      "java": 21,
+      "template": "neoforge-1.21",
+      "loaders": {
+        "neoforge": { "path": "versions/1.21.10-neoforge", "neoVersion": "21.10.64", "neoVersionRange": "[21.9,)", "artifact": "palas-item-clear-1.21.10-neoforge" },
+        "fabric": { "path": "versions/1.21.10-fabric", "loaderVersion": "0.19.3", "loomVersion": "1.11.456", "fabricApi": "0.138.4+1.21.10", "yarnMappings": "1.21.10+build.3", "artifact": "palas-item-clear-1.21.10-fabric" },
+        "forge": { "path": "versions/1.21.10-forge", "forgeVersion": "60.0.0", "loaderVersionRange": "[59,)", "artifact": "palas-item-clear-1.21.10-forge" }
+      }
+    },
+    {
+      "id": "1.21.11",
+      "compileTarget": "1.21.11",
+      "minecraftRange": "[1.21.11,26.1)",
+      "java": 21,
+      "template": "neoforge-modern",
+      "loaders": {
+        "neoforge": { "path": "versions/1.21.11-neoforge", "neoVersion": "21.11.42", "artifact": "palas-item-clear-1.21.11-neoforge" },
+        "fabric": { "path": "versions/1.21.11-fabric", "loaderVersion": "0.19.3", "loomVersion": "1.13.469", "fabricApi": "0.141.4+1.21.11", "yarnMappings": "1.21.11+build.6", "artifact": "palas-item-clear-1.21.11-fabric" },
+        "forge": { "path": "versions/1.21.11-forge", "forgeVersion": "61.1.8", "loaderVersionRange": "[61,)", "artifact": "palas-item-clear-1.21.11-forge" }
+      }
+    },
+    {
+      "id": "26.1-26.2",
+      "compileTarget": "26.2",
+      "minecraftRange": "[26.1,26.3)",
+      "java": 25,
+      "template": "calendar-26",
+      "loaders": {
+        "neoforge": { "path": "versions/26.2-neoforge", "neoVersion": "26.2.0.8-beta", "neoVersionRange": "[26.1,)", "artifact": "palas-item-clear-26.2-neoforge" },
+        "fabric": { "path": "versions/26.2-fabric", "loaderVersion": "0.19.3", "loomVersion": "1.17.13", "fabricApi": "0.154.2+26.2", "artifact": "palas-item-clear-26.2-fabric" },
+        "forge": { "path": "versions/26.2-forge", "forgeVersion": "65.0.1", "loaderVersionRange": "[62,)", "artifact": "palas-item-clear-26.2-forge" }
+      }
+    }
+  ]
+}

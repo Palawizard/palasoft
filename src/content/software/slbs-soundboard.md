@@ -4,6 +4,7 @@ tagline: Joue des sons dans Discord et en jeu grâce à un micro virtuel, et par
 order: 2
 repo: Palawizard/slbs-soundboard
 kind: windows
+installerPattern: '^slbs-soundboard_.+_x64\.msi$'
 unsignedInstaller: true
 requirements:
   - label: VB-CABLE, le câble audio virtuel qui sert de micro

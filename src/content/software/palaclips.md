@@ -4,5 +4,6 @@ tagline: Enregistre tes meilleurs moments en jeu après coup, avec une piste aud
 order: 1
 repo: Palawizard/PalaClips
 kind: windows
+installerPattern: '^PalaClips_.+_x64-setup\.exe$'
 unsignedInstaller: true
 ---

@@ -28,9 +28,10 @@ The site is served under the `/software` base path, so open `http://localhost:43
 | `npm run check` | Type and content checks |
 | `npm test` | Unit tests |
 | `npm run build` | Checks, then production build in `dist/` |
+| `npm run test:e2e` | End-to-end tests against the build in `dist/` (run `npm run build` first) |
 | `npm start` | Runs the production build |
 
-Health check: `GET /software/api/health`.
+Health check: `GET /software/api/health`. Download links: `/software/dl/<slug>` for the recommended file, `/software/dl/<slug>/<file>` for a given file of the latest release.
 
 ## Adding a program
 
