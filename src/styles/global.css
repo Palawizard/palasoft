@@ -1,7 +1,7 @@
 @import '@fontsource-variable/source-sans-3/wght.css';
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
   --sky-0: #0b4fa3;
   --sky-1: #1a74cf;
@@ -67,35 +67,55 @@
   --measure: 66ch;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Sun (moon at dusk): size, distance of its centre from the right edge and from the top. */
+  --sun-size: 58rem;
+  --sun-x: 6rem;
+  --sun-y: 9rem;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Wide screens: the sun sits in the corner, clear of the header bar. */
+@media (min-width: 95rem) {
   :root {
-    --sky-0: #050d1f;
-    --sky-1: #0a1f42;
-    --sky-2: #143a6e;
-    --sky-3: #3a4a86;
-    --horizon: #8a6589;
-    --water-0: #1e5a74;
-    --water-1: #0b3a50;
-    --water-2: #072a3b;
-    --water-3: #041b27;
-
-    --ink: #eaf6ff;
-    --ink-soft: #a8c7df;
-    --rule: rgb(234 246 255 / 0.16);
-
-    --glass-top: rgb(16 40 72 / 0.82);
-    --glass-bottom: rgb(10 28 52 / 0.74);
-    --glass-edge: rgb(170 214 255 / 0.32);
-    --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 18px 40px -8px rgb(0 0 0 / 0.55);
-    --glass-strong: rgb(14 34 62 / 0.95);
-    --frame: #cfe6f7;
-
-    --pill-0: #2a4f7c;
-    --pill-1: #1c3d66;
-    --pill-2: #15304f;
+    --sun-y: 2rem;
   }
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --sun-size: 32rem;
+    --sun-x: 3rem;
+    --sun-y: 10rem;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --sky-0: #050d1f;
+  --sky-1: #0a1f42;
+  --sky-2: #143a6e;
+  --sky-3: #3a4a86;
+  --horizon: #8a6589;
+  --water-0: #1e5a74;
+  --water-1: #0b3a50;
+  --water-2: #072a3b;
+  --water-3: #041b27;
+
+  --ink: #eaf6ff;
+  --ink-soft: #a8c7df;
+  --rule: rgb(234 246 255 / 0.16);
+
+  --glass-top: rgb(16 40 72 / 0.82);
+  --glass-bottom: rgb(10 28 52 / 0.74);
+  --glass-edge: rgb(170 214 255 / 0.32);
+  --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 18px 40px -8px rgb(0 0 0 / 0.55);
+  --glass-strong: rgb(14 34 62 / 0.95);
+  --frame: #cfe6f7;
+
+  --pill-0: #2a4f7c;
+  --pill-1: #1c3d66;
+  --pill-2: #15304f;
 }
 
 *,
@@ -138,24 +158,22 @@ body {
   caret-color: currentColor;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    background:
-      radial-gradient(60rem 28rem at 82% -6rem, rgb(120 170 255 / 0.22), transparent 60%),
-      radial-gradient(90rem 14rem at 30% 72%, rgb(255 170 120 / 0.22), transparent 70%),
-      linear-gradient(
-        to bottom,
-        var(--sky-0) 0,
-        var(--sky-1) 22rem,
-        var(--sky-2) 46rem,
-        var(--sky-3) 62%,
-        var(--horizon) 72%,
-        var(--water-0) 73%,
-        var(--water-1) 82%,
-        var(--water-2) 92%,
-        var(--water-3) 100%
-      );
-  }
+:root[data-theme='dark'] body {
+  background:
+    radial-gradient(60rem 28rem at 82% -6rem, rgb(120 170 255 / 0.22), transparent 60%),
+    radial-gradient(90rem 14rem at 30% 72%, rgb(255 170 120 / 0.22), transparent 70%),
+    linear-gradient(
+      to bottom,
+      var(--sky-0) 0,
+      var(--sky-1) 22rem,
+      var(--sky-2) 46rem,
+      var(--sky-3) 62%,
+      var(--horizon) 72%,
+      var(--water-0) 73%,
+      var(--water-1) 82%,
+      var(--water-2) 92%,
+      var(--water-3) 100%
+    );
 }
 
 ::selection {
@@ -254,14 +272,12 @@ svg {
     linear-gradient(to bottom, var(--glass-top), var(--glass-bottom));
 }
 
-@media (prefers-color-scheme: dark) {
-  .glass {
-    box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(170 214 255 / 0.25);
-  }
+:root[data-theme='dark'] .glass {
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(170 214 255 / 0.25);
+}
 
-  .glass::before {
-    background: linear-gradient(to bottom, rgb(170 214 255 / 0.14), rgb(170 214 255 / 0));
-  }
+:root[data-theme='dark'] .glass::before {
+  background: linear-gradient(to bottom, rgb(170 214 255 / 0.14), rgb(170 214 255 / 0));
 }
 
 .gel {
@@ -360,11 +376,9 @@ svg {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .pill {
-    border-color: rgb(170 214 255 / 0.3);
-    box-shadow: inset 0 1px 0 rgb(170 214 255 / 0.35), 0 3px 8px -3px rgb(0 0 0 / 0.5);
-  }
+:root[data-theme='dark'] .pill {
+  border-color: rgb(170 214 255 / 0.3);
+  box-shadow: inset 0 1px 0 rgb(170 214 255 / 0.35), 0 3px 8px -3px rgb(0 0 0 / 0.5);
 }
 
 .ticket {
@@ -519,4 +533,11 @@ svg {
 .gel-dot .icon {
   width: 1rem;
   height: 1rem;
+}
+
+/* Theme switch: the new theme spreads in a circle from the sun (see SkyToggle). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import AeroBubbles from '../components/AeroBubbles.astro';
 import Logo from '../components/Logo.astro';
+import SkyToggle from '../components/SkyToggle.astro';
 import { allSoftware, homePath, softwarePath } from '../server/software.ts';
 
 interface Props {
@@ -25,11 +26,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={`${homePath}favicon.svg?v=2`} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={`${homePath}apple-touch-icon.png?v=2`} />
-    <meta name="theme-color" content="#0b4fa3" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#050d1f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0b4fa3" />
+    <script is:inline>
+      (() => {
+        let choice = null;
+        try {
+          choice = localStorage.getItem('palasoft-theme');
+        } catch {}
+        const system = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const theme = choice === 'light' || choice === 'dark' ? choice : system;
+        document.documentElement.dataset.theme = theme;
+        if (theme === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#050d1f');
+      })();
+    </script>
   </head>
   <body>
     <AeroBubbles />
+    <SkyToggle />
     <a class="skip" href="#contenu">Aller au contenu</a>
     <header class="page site-header">
       <nav class="glass bar" aria-label="Principal">
