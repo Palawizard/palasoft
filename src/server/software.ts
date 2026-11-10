@@ -23,13 +23,14 @@ export const allSoftware = async (): Promise<SoftwareEntry[]> =>
 
 const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
 
+export const homePath = `${base}/`;
+
 export const softwarePath = (slug: string): string => `${base}/${slug}`;
+
+export const downloadPath = (slug: string, file?: string): string =>
+  file === undefined ? `${base}/dl/${slug}` : `${base}/dl/${slug}/${encodeURIComponent(file)}`;
 
 export const redirect = (location: string): Response =>
   new Response(null, { status: 302, headers: { Location: location, 'Cache-Control': 'no-store' } });
 
-export const notFound = (): Response =>
-  new Response('Fichier introuvable.', {
-    status: 404,
-    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' },
-  });
+export const notFound = (): Response => new Response(null, { status: 404 });

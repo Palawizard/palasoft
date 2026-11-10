@@ -1,0 +1,242 @@
+@import '@fontsource-variable/open-sans/wght.css';
+
+:root {
+  color-scheme: light dark;
+
+  --neutral-0: #ffffff;
+  --neutral-50: #f2f2f2;
+  --neutral-150: #d9d9d9;
+  --neutral-400: #8a8a8a;
+  --neutral-600: #595959;
+  --neutral-650: #a6a6a6;
+  --neutral-850: #262626;
+  --neutral-900: #1a1a1a;
+  --neutral-1000: #000000;
+
+  --tile-crimson: #a20025;
+  --tile-magenta: #d80073;
+  --tile-cobalt: #0050ef;
+  --tile-teal: #007f7c;
+  --tile-violet: #6a00ff;
+  --tile-emerald: #007a33;
+  --brand: #a4c400;
+  --on-brand: #000000;
+  --on-tile: #ffffff;
+
+  --ground: var(--neutral-0);
+  --ink: var(--neutral-1000);
+  --ink-soft: var(--neutral-600);
+  --rule: var(--neutral-150);
+  --panel: var(--neutral-50);
+
+  --font: 'Open Sans Variable', 'Segoe UI', system-ui, sans-serif;
+  --text-display: clamp(3rem, 2rem + 6vw, 6rem);
+  --text-title: clamp(2rem, 1.6rem + 2vw, 3rem);
+  --text-subtitle: 1.5rem;
+  --text-body: 1.0625rem;
+  --text-small: 0.875rem;
+
+  --cell: 0.5rem;
+  --gap: calc(var(--cell) * 1);
+  --space-1: calc(var(--cell) * 1);
+  --space-2: calc(var(--cell) * 2);
+  --space-3: calc(var(--cell) * 3);
+  --space-4: calc(var(--cell) * 4);
+  --space-6: calc(var(--cell) * 6);
+  --space-8: calc(var(--cell) * 8);
+  --space-12: calc(var(--cell) * 12);
+  --page-width: 75rem;
+  --page-pad: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --measure: 68ch;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: var(--neutral-1000);
+    --ink: var(--neutral-0);
+    --ink-soft: var(--neutral-650);
+    --rule: var(--neutral-850);
+    --panel: var(--neutral-900);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-color: var(--neutral-400) var(--ground);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  caret-color: var(--ink);
+}
+
+::selection {
+  background: var(--brand);
+  color: var(--on-brand);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+.page {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.numbers {
+  font-variant-numeric: tabular-nums;
+}
+
+.tile {
+  --tile: var(--tile-cobalt);
+  display: flex;
+  flex-direction: column;
+  background: var(--tile);
+  color: var(--on-tile);
+  text-decoration: none;
+  transform-origin: center;
+  transition: transform 200ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile[data-pressed] {
+  transition-duration: 90ms;
+}
+
+.tile[data-color='crimson'] {
+  --tile: var(--tile-crimson);
+}
+
+.tile[data-color='magenta'] {
+  --tile: var(--tile-magenta);
+}
+
+.tile[data-color='cobalt'] {
+  --tile: var(--tile-cobalt);
+}
+
+.tile[data-color='teal'] {
+  --tile: var(--tile-teal);
+}
+
+.tile[data-color='violet'] {
+  --tile: var(--tile-violet);
+}
+
+.tile[data-color='emerald'] {
+  --tile: var(--tile-emerald);
+}
+
+.tile ::selection {
+  background: var(--on-tile);
+  color: var(--tile);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.tile:hover {
+    box-shadow: inset 0 0 0 3px rgb(255 255 255 / 0.45);
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 0.4em;
+  border: 1px solid currentColor;
+  font-size: var(--text-small);
+  font-weight: 600;
+  line-height: 1.6;
+  text-transform: lowercase;
+}
+
+.notice {
+  padding: var(--space-2) var(--space-3);
+  background: var(--panel);
+  font-size: var(--text-small);
+}
+
+@keyframes tile-enter {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+@keyframes fade-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+.enter {
+  animation: tile-enter 280ms var(--ease-out) backwards;
+  animation-delay: calc(var(--order, 0) * 40ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tile[data-pressed] {
+    transform: none !important;
+    transition: none;
+  }
+
+  .enter {
+    animation-name: fade-enter;
+  }
+}
