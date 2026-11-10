@@ -1,7 +1,7 @@
 ---
 import type { ReleaseView } from '../lib/catalog.ts';
 import { formatSize } from '../lib/format.ts';
-import { downloadPath, type SoftwareEntry } from '../server/software.ts';
+import { downloadPath, thanksAttributes, type SoftwareEntry } from '../server/software.ts';
 import IconDownload from './IconDownload.astro';
 
 interface Props {
@@ -20,7 +20,7 @@ const installer = view.state === 'ready' ? view.installer : undefined;
     <p class="none">Aucune version n’est publiée pour l’instant.</p>
   ) : (
     <div class="download">
-      <a class:list={['gel', { 'gel-small': compact }]} href={downloadPath(entry.id)}>
+      <a class:list={['gel', { 'gel-small': compact }]} href={downloadPath(entry.id)} {...thanksAttributes(entry, view)}>
         <IconDownload />
         {view.state === 'unavailable' ? 'Télécharger sur GitHub' : `Télécharger ${compact ? '' : entry.data.name}`.trim()}
       </a>

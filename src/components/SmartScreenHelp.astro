@@ -1,3 +1,7 @@
+---
+import SmartScreenSteps from './SmartScreenSteps.astro';
+---
+
 <section class="glass smartscreen" aria-labelledby="smartscreen-title">
   <header class="dialog-bar">
     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
@@ -7,16 +11,7 @@
     <h2 id="smartscreen-title">Si Windows t’avertit</h2>
   </header>
   <div class="dialog-body">
-    <p>
-      Ce logiciel n’a pas de signature numérique payante. Windows ne le connaît donc pas encore et peut ouvrir une
-      fenêtre d’avertissement au lancement de l’installation. C’est fréquent pour les petits logiciels gratuits.
-    </p>
-    <ol>
-      <li>Dans la fenêtre d’avertissement, clique sur le petit lien sous le message pour afficher plus d’infos.</li>
-      <li>Un bouton apparaît en bas pour lancer l’installation quand même : clique dessus.</li>
-      <li>L’installation continue normalement.</li>
-    </ol>
-    <p class="note">Ne fais ça que pour un fichier téléchargé ici ou sur la page GitHub de Palawi.</p>
+    <SmartScreenSteps />
   </div>
 </section>
 
@@ -38,20 +33,6 @@
   }
 
   .dialog-body {
-    display: grid;
-    gap: var(--space-2);
     padding: var(--space-3);
-  }
-
-  ol {
-    display: grid;
-    gap: var(--space-1);
-    margin: 0;
-    padding-left: 1.4em;
-  }
-
-  .note {
-    color: var(--ink-soft);
-    font-size: var(--text-small);
   }
 </style>

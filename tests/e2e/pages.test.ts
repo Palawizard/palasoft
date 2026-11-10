@@ -49,6 +49,8 @@ describe('pages on the built server', () => {
       expect(status, path).toBe(200);
       expect(body, path).toContain('ne répond pas en ce moment');
       expect(body, path).not.toContain('téléchargements');
+      // Without release details the buttons lead to GitHub pages: no thank-you window.
+      expect(body, path).not.toMatch(/<a [^>]*data-thanks=/);
     }
     const home = await html(site, '/software/');
     expect(home.body).toContain("version indisponible pour l’instant");
@@ -68,7 +70,7 @@ describe('pages on the built server', () => {
     const page = await html(site, '/software/palaclips');
     expect(page.body).toContain('publiée le 28 octobre 2026');
     expect(page.body).toContain('href="/software/dl/palaclips"');
-    expect(page.body).toContain("Si Windows t’avertit");
+    expect(page.body).toContain('id="smartscreen-title"');
     expect(home.body).toContain('33 téléchargements');
     expect(page.body).toContain('33 téléchargements');
     const mod = await html(site, '/software/palas-item-clear');
@@ -77,7 +79,7 @@ describe('pages on the built server', () => {
     expect(github.requests.some((path) => path.startsWith('/curseforge'))).toBe(false);
     expect(mod.body).toContain('name="mc-forge"');
     expect(mod.body).toContain('value="1.21.6-1.21.8"');
-    expect(mod.body).not.toContain("Si Windows t’avertit");
+    expect(mod.body).not.toContain('id="smartscreen-title"');
     await site.stop();
   });
 
@@ -147,6 +149,23 @@ describe('pages on the built server', () => {
     const sitemap = await html(site, '/software/sitemap.xml');
     expect(sitemap.status).toBe(200);
     for (const path of PAGES) expect(sitemap.body).toContain(`<loc>https://palawi.fr${path}</loc>`);
+  });
+
+  it('opens the thank-you window only from links and forms that start a download', async () => {
+    github.down = false;
+    const site = await start();
+    for (const path of PAGES) {
+      const { body } = await html(site, path);
+      expect(body, path).toContain('<dialog class="thanks"');
+      expect(body, path).toContain('Merci d’avoir téléchargé !');
+    }
+    const program = await html(site, '/software/palaclips');
+    expect(program.body).toMatch(
+      /<a class="gel" href="\/software\/dl\/palaclips" data-thanks="PalaClips" data-thanks-kind="windows" data-thanks-file="[^"]+\.exe · [^"]+" data-thanks-smartscreen="true"/,
+    );
+    const mod = await html(site, '/software/palas-item-clear');
+    expect(mod.body).toMatch(/<form class="picker-form"[^>]*data-thanks="Pala's Item Clear" data-thanks-kind="mod"/);
+    await site.stop();
   });
 
   it('leads back to palawi.fr from the header of every page', async () => {

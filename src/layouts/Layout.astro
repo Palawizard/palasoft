@@ -3,6 +3,7 @@ import '../styles/global.css';
 import AeroBubbles from '../components/AeroBubbles.astro';
 import Logo from '../components/Logo.astro';
 import SkyToggle from '../components/SkyToggle.astro';
+import DownloadThanks from '../components/DownloadThanks.astro';
 import { allSoftware, homePath, softwarePath } from '../server/software.ts';
 import { SITE_NAME, serializeJsonLd, type JsonLd } from '../lib/seo.ts';
 
@@ -121,6 +122,7 @@ const shareUrl = new URL(share.src, Astro.site).href;
         </nav>
       </div>
     </footer>
+    <DownloadThanks />
   </body>
 </html>
 

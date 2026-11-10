@@ -1,5 +1,6 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { createCatalog, type ReleaseView, type SoftwareSource } from '../lib/catalog.ts';
+import { formatSize } from '../lib/format.ts';
 import { readConfig } from '../lib/config.ts';
 import { modrinthSlug } from '../lib/stores.ts';
 
@@ -60,3 +61,15 @@ export const redirect = (location: string): Response =>
   new Response(null, { status: 302, headers: { Location: location, 'Cache-Control': 'no-store' } });
 
 export const notFound = (): Response => new Response(null, { status: 404 });
+
+// Data attributes that open the thank-you window (components/DownloadThanks.astro) when the link starts a download.
+// Empty when the link leads to a page instead (GitHub down, no installer in the release).
+export const thanksAttributes = (entry: SoftwareEntry, view: ReleaseView): Record<string, string> => {
+  if (entry.data.kind !== 'windows' || view.state !== 'ready' || view.installer === undefined) return {};
+  return {
+    'data-thanks': entry.data.name,
+    'data-thanks-kind': 'windows',
+    'data-thanks-file': `${view.installer.name} · ${formatSize(view.installer.size)}`,
+    'data-thanks-smartscreen': String(entry.data.unsignedInstaller),
+  };
+};
