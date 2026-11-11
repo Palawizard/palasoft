@@ -6,6 +6,7 @@ newUntil: 2026-12-10
 repo: Palawizard/chest-counter
 color: amber
 category: UtilitiesApplication
+languages: ['fr', 'en']
 icon: ../../assets/software/chest-counter/icon.svg
 screenshots:
   - src: ../../assets/software/chest-counter/window-light.png

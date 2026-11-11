@@ -1,0 +1,115 @@
+---
+import type { CompanionProgram } from '../server/dependencies.ts';
+import IconDownload from './IconDownload.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+// A program from another publisher that this one needs (VB-CABLE for SLB's Soundboard), right under
+// the download button, and with its install steps in the thank-you window.
+interface Props {
+  companion: CompanionProgram;
+  steps?: boolean;
+  headingLevel?: 'p' | 'h3';
+}
+
+const { companion, steps = false, headingLevel = 'p' } = Astro.props;
+const t = stringsFor(localeOf(Astro));
+const Heading = headingLevel;
+---
+
+<div class:list={['companion', { 'with-steps': steps }]}>
+  <Heading class="companion-title">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M9 3v4M15 3v4M7 7h10v4a5 5 0 0 1-10 0V7ZM12 16v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    {t.companion.needs(companion.name)}
+  </Heading>
+  <p class="companion-text">{t.companion.vbCable}</p>
+  <div class="companion-action">
+    <a class="pill companion-link" href={companion.download.url}>
+      <IconDownload />
+      {t.companion.download(companion.name)}
+    </a>
+    <p class="companion-facts">
+      <span class="numbers">{companion.download.file}</span> · {t.companion.free} ·{' '}
+      <a href={companion.pageUrl}>{t.companion.site(companion.publisher)}</a>
+    </p>
+  </div>
+  {
+    steps && (
+      <ol class="companion-steps">
+        {t.companion.vbCableSteps.map((step) => (
+          <li>{step}</li>
+        ))}
+      </ol>
+    )
+  }
+</div>
+
+<style>
+  .companion {
+    display: grid;
+    gap: var(--space-1);
+    max-width: 30rem;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .companion-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .with-steps .companion-title {
+    font-size: 1.25rem;
+    font-weight: 650;
+  }
+
+  .companion-title svg {
+    flex: none;
+    color: var(--gel-aqua-1);
+  }
+
+  .companion-text {
+    color: var(--ink-soft);
+  }
+
+  .companion-action {
+    display: grid;
+    justify-items: start;
+    gap: 0.35rem;
+    margin-top: 0.25rem;
+  }
+
+  .companion-link {
+    padding-right: 1.15rem;
+  }
+
+  .companion-link :global(.icon) {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--gel-aqua-1);
+  }
+
+  .companion-facts {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    overflow-wrap: anywhere;
+  }
+
+  .companion-steps {
+    display: grid;
+    gap: var(--space-1);
+    margin: var(--space-1) 0 0;
+    padding-left: 1.4em;
+  }
+
+  :global(:root[data-theme='dark']) .companion-title svg,
+  :global(:root[data-theme='dark']) .companion-link :global(.icon) {
+    color: var(--gel-aqua-0);
+  }
+</style>

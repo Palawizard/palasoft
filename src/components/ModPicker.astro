@@ -4,6 +4,8 @@ import type { ReleaseView } from '../lib/catalog.ts';
 import { formatDate, formatSize, loaderName, minecraftBandLabel } from '../lib/format.ts';
 import { downloadPath, type SoftwareEntry } from '../server/software.ts';
 import IconDownload from './IconDownload.astro';
+import CompanionMods from './CompanionMods.astro';
+import { modCompanions } from '../server/dependencies.ts';
 import { localeOf, stringsFor } from '../i18n/index.ts';
 
 interface Props {
@@ -15,6 +17,7 @@ const { entry, view } = Astro.props;
 const groups = view.state === 'ready' ? filesByLoader(view.modFiles) : [];
 const locale = localeOf(Astro);
 const t = stringsFor(locale);
+const companions = await modCompanions(entry, view);
 const stores =
   entry.data.kind === 'minecraft-mod'
     ? [
@@ -70,6 +73,9 @@ const stores =
             {t.mod.waiting}
           </span>
         </button>
+        {companions.map((band) => (
+          <CompanionMods band={band} />
+        ))}
       </form>
     ) : view.state === 'none' ? (
       <p>{t.download.none}</p>
@@ -99,10 +105,15 @@ const stores =
 <script>
   for (const form of document.querySelectorAll<HTMLFormElement>('.picker-form')) {
     const target = form.querySelector<HTMLElement>('[data-file-facts]');
+    const companions = [...form.querySelectorAll<HTMLElement>('[data-companions]')];
     const update = (): void => {
       const loader = form.querySelector<HTMLInputElement>('input[name="loader"]:checked')?.value;
       const select = loader === undefined ? null : form.querySelector<HTMLSelectElement>(`select[name="mc-${loader}"]`);
       const file = select?.selectedOptions[0]?.dataset['file'];
+      // The mods to add for this choice show under the button (and in the thank-you window).
+      for (const block of companions) {
+        block.hidden = block.dataset['loader'] !== loader || block.dataset['band'] !== select?.value;
+      }
       if (target === null) return;
       target.textContent = file ?? '';
       form.classList.toggle('has-file', file !== undefined);

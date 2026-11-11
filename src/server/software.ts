@@ -103,5 +103,6 @@ export const thanksAttributes = (entry: SoftwareEntry, view: ReleaseView, locale
     'data-thanks-kind': 'windows',
     'data-thanks-file': `${view.installer.name} · ${formatSize(view.installer.size, locale)}`,
     'data-thanks-smartscreen': String(entry.data.unsignedInstaller),
+    ...(entry.data.companion === undefined ? {} : { 'data-thanks-companion': entry.id }),
   };
 };

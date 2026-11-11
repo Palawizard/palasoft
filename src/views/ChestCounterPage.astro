@@ -6,6 +6,7 @@ import Comparison from '../components/chest-counter/Comparison.astro';
 import TotalBreakdown from '../components/chest-counter/TotalBreakdown.astro';
 import DownloadButton from '../components/DownloadButton.astro';
 import NewBadge from '../components/NewBadge.astro';
+import LanguageBadge from '../components/LanguageBadge.astro';
 import ReleaseFacts from '../components/ReleaseFacts.astro';
 import RemoteDataNotice from '../components/RemoteDataNotice.astro';
 import Requirements from '../components/Requirements.astro';
@@ -48,7 +49,7 @@ const [light, dark] = text.screenshots;
             <SoftwareIcon entry={entry} size={88} class="hero-icon" />
             <div>
               <h1 id="software-title">{data.name}</h1>
-              <p class="kind">{t.program.forWindows} <NewBadge entry={entry} /></p>
+              <p class="kind">{t.program.forWindows} <NewBadge entry={entry} /> <LanguageBadge entry={entry} /></p>
             </div>
           </div>
           <p class="tagline">{text.tagline}</p>

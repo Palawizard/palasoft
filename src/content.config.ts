@@ -17,6 +17,9 @@ const common = {
   newUntil: z.date().optional(),
   // schema.org application category, for search engines.
   category: z.enum(['MultimediaApplication', 'UtilitiesApplication', 'DesktopEnhancementApplication', 'GameApplication']),
+  // Languages of the program's own interface (for the mod, of its chat messages). The English site
+  // marks the programs that have English.
+  languages: z.array(z.enum(['fr', 'en'])).min(1),
 };
 
 const isValidRegExp = (pattern: string): boolean => {
@@ -35,6 +38,9 @@ const windowsApp = (context: SchemaContext) =>
   kind: z.literal('windows'),
   installerPattern: z.string().min(1).refine(isValidRegExp, 'Must be a valid regular expression'),
   unsignedInstaller: z.boolean(),
+  // A free program from another publisher that this one needs, offered next to the download button
+  // and in the thank-you window (see src/server/dependencies.ts).
+  companion: z.enum(['vb-cable']).optional(),
   requirements: z
     .array(z.object({ label: z.string().min(1), url: z.url().optional() }))
     .default([]),
@@ -49,6 +55,18 @@ const minecraftMod = (context: SchemaContext) =>
   modrinth: z.url(),
   curseforge: z.url(),
   curseforgeId: z.number().int().positive().optional(),
+  // Mods the server also needs, downloaded from Modrinth for the chosen loader and Minecraft version.
+  // `bands` limits a companion to some lines of the version matrix (all of them when absent).
+  companions: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        modrinth: z.string().regex(/^[\w-]+$/),
+        loaders: z.array(z.string().min(1)).min(1),
+        bands: z.array(z.string().min(1)).optional(),
+      }),
+    )
+    .default([]),
 });
 
 const software = defineCollection({
