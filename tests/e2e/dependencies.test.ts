@@ -89,10 +89,15 @@ describe('what a program needs next to it', () => {
   it('marks the programs with an English interface on the English site only', async () => {
     const english = await html(site, '/software/en/');
     expect(english.match(/class="language-badge"/g)).toHaveLength(5);
+    expect(english.match(/class="language-badge french-only"/g)).toHaveLength(2);
     expect(await html(site, '/software/')).not.toContain('class="language-badge"');
     expect(await html(site, '/software/en/timestamper')).toContain('Available in English');
-    expect(await html(site, '/software/en/layout-manager')).not.toContain('Available in English');
-    expect(await html(site, '/software/en/slbs-soundboard')).not.toContain('Available in English');
+    for (const slug of ['layout-manager', 'slbs-soundboard']) {
+      const page = await html(site, `/software/en/${slug}`);
+      expect(page).not.toContain('Available in English');
+      expect(page).toContain('Only in French for now');
+    }
+    expect(await html(site, '/software/layout-manager')).not.toContain('En français seulement');
   });
 });
 
