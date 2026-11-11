@@ -175,7 +175,8 @@ describe('pages on the built server', () => {
     const page = await html(site, '/software/chest-counter');
     expect(page.status).toBe(200);
     expect(page.body).toContain('Comment ton total se construit');
-    expect(page.body).toContain('Et les autres moyens de compter ?');
+    expect(page.body).toContain('Et les autres compteurs de coffres ?');
+    expect(page.body.match(/<td class="(?:yes|no|partial)"/g)).toHaveLength(16);
     expect(page.body).toContain('Palawi.ChestCounter-win-Setup.exe');
     // Velopack's RELEASES and releases.win.json are left out: 23 real downloads in the fixture.
     expect(page.body).toContain('23 téléchargements');

@@ -162,17 +162,18 @@ export const en: typeof fr = {
       note: 'Played before installing the app? Enter how many matches in “Matches without a replay”. New versions install themselves.',
     },
     comparison: {
-      title: 'What about the other ways to count?',
-      lead: 'The in-game counter stays the reference: compare it with the “Read from replays” line. Chest Counter also shows how that number is reached, and you can keep it open next to the game.',
-      columns: ['Chest Counter', 'In-game counter (Quests tab)', 'Stats sites (Fortnite Tracker and others)'],
+      title: 'What about the other chest counters?',
+      columns: ['Chest Counter', 'Similar apps', 'Manual counters', 'In-game counter'],
       rows: [
-        { label: 'Counts chests opened', answers: ['Yes', 'Yes, as one total', 'No chest counter found'] },
-        { label: 'Detail per match', answers: ['Yes', 'No', 'Not for chests'] },
-        { label: 'Keeps measured and estimated apart', answers: ['Yes', 'No', 'No'] },
-        { label: 'No game running, no account', answers: ['Yes', 'No, in game', 'No, public stats needed'] },
-        { label: 'Works offline', answers: ['Yes', 'No', 'No'] },
+        { label: 'Counts on its own', answers: ['Yes', 'Yes', 'No, you press +1 after each chest', 'Yes'] },
+        { label: 'Counts the chests you break', answers: ['Yes, estimated on a separate line', 'Yes, for most of them', 'Only if you press +1 for them too', 'No, only the chests you open'] },
+        { label: 'Keeps counting past 1,000 chests', answers: ['Yes', 'Yes', 'Yes', 'No, players report it stops at the 1,000-chest stage'] },
+        {
+          label: 'Makes up for matches whose replay is gone',
+          answers: ['Yes, estimated on a separate line', 'No, for most of them', 'No', 'Yes, it counts every match'],
+        },
       ],
-      asOf: 'Compared in November 2026.',
+      asOf: 'Compared in November 2026. The in-game counter is the official number: compare it with the “Read from replays” line, not with the estimated total.',
     },
   },
 };

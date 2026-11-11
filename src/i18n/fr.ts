@@ -161,17 +161,18 @@ export const fr = {
       note: 'Tu as joué avant d’installer l’app ? Indique combien de parties dans « Parties sans replay ». Les nouvelles versions s’installent toutes seules.',
     },
     comparison: {
-      title: 'Et les autres moyens de compter ?',
-      lead: 'Le compteur du jeu reste la référence : compare-le à la ligne « Lu dans les replays ». Chest Counter montre en plus comment ce nombre est atteint, et tu peux le garder ouvert à côté du jeu.',
-      columns: ['Chest Counter', 'Compteur du jeu (onglet Quêtes)', 'Sites de stats (Fortnite Tracker et autres)'],
+      title: 'Et les autres compteurs de coffres ?',
+      columns: ['Chest Counter', 'Autres applis du genre', 'Compteurs à la main', 'Compteur du jeu'],
       rows: [
-        { label: 'Compte les coffres ouverts', answers: ['Oui', 'Oui, en un seul total', 'Aucun compteur de coffres trouvé'] },
-        { label: 'Détail par partie', answers: ['Oui', 'Non', 'Pas pour les coffres'] },
-        { label: 'Sépare le mesuré de l’estimé', answers: ['Oui', 'Non', 'Non'] },
-        { label: 'Sans lancer le jeu ni créer de compte', answers: ['Oui', 'Non, dans le jeu', 'Non, stats publiques à activer'] },
-        { label: 'Marche sans internet', answers: ['Oui', 'Non', 'Non'] },
+        { label: 'Compte tout seul', answers: ['Oui', 'Oui', 'Non : tu appuies sur +1 à chaque coffre', 'Oui'] },
+        { label: 'Compte les coffres cassés', answers: ['Oui, estimés à part', 'Oui, pour la plupart', 'Seulement si tu appuies aussi pour eux', 'Non : seulement les coffres ouverts'] },
+        { label: 'Continue après 1 000 coffres', answers: ['Oui', 'Oui', 'Oui', 'Non : d’après les joueurs, il s’arrête au palier des 1 000'] },
+        {
+          label: 'Rattrape les parties dont le replay a disparu',
+          answers: ['Oui, estimées à part', 'Non, pour la plupart', 'Non', 'Oui, il compte toutes les parties'],
+        },
       ],
-      asOf: 'Comparaison faite en novembre 2026.',
+      asOf: 'Comparé en novembre 2026. Le compteur du jeu reste le chiffre officiel : compare-le à la ligne « Lu dans les replays », pas au total estimé.',
     },
   },
 };
