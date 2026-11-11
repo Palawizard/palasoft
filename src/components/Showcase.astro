@@ -7,6 +7,7 @@ import DownloadButton from './DownloadButton.astro';
 import ReleaseFacts from './ReleaseFacts.astro';
 import WindowTitle from './WindowTitle.astro';
 import NewBadge from './NewBadge.astro';
+import LanguageBadge from './LanguageBadge.astro';
 
 interface Props {
   item: SoftwareWithRelease;
@@ -23,7 +24,7 @@ const screenshot = text.screenshots[0];
   <WindowTitle entry={entry} caption={entry.data.name} />
   <div class="body">
     <div class="copy">
-      <h2 id="showcase-title" class="name"><a href={softwarePath(entry.id, locale)}>{entry.data.name}</a> <NewBadge entry={entry} /></h2>
+      <h2 id="showcase-title" class="name"><a href={softwarePath(entry.id, locale)}>{entry.data.name}</a> <NewBadge entry={entry} /> <LanguageBadge entry={entry} /></h2>
       <p class="tagline">{text.tagline}</p>
       <ReleaseFacts view={view} downloads={downloads} showDate />
       <DownloadButton entry={entry} view={view} />
