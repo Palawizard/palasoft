@@ -46,6 +46,7 @@ export const fr = {
     installHelp: 'Comment l’installer',
     file: 'Fichier : ',
     newBadge: 'Nouveau',
+    inEnglish: 'Disponible en anglais',
   },
   download: {
     none: 'Aucune version n’est publiée pour l’instant.',
@@ -91,6 +92,24 @@ export const fr = {
     serverOnly: 'Ce mod s’installe seulement sur le serveur : les joueurs se connectent sans rien installer.',
     alsoOn: (store: string) => `Aussi sur ${store}`,
   },
+  companion: {
+    needs: (name: string) => `Il te faut aussi ${name}`,
+    vbCable: 'Le câble audio virtuel gratuit de VB-Audio : c’est lui qui fait passer tes sons dans Discord et dans tes jeux.',
+    download: (name: string) => `Télécharger ${name}`,
+    free: 'gratuit (donationware)',
+    site: (publisher: string) => `site de ${publisher}`,
+    stepsTitle: 'Pour l’installer',
+    vbCableSteps: [
+      'Décompresse le zip : clic droit dessus, puis « Extraire tout ». Ne lance rien depuis le zip.',
+      'Dans le dossier obtenu, clic droit sur VBCABLE_Setup_x64, puis « Exécuter en tant qu’administrateur ».',
+      'Clique sur Install Driver. La fenêtre peut se figer quelques secondes : attends le message de fin.',
+      'Redémarre ton PC.',
+    ],
+    mods: 'Il te faut aussi',
+    pickRelease: 'Choisis ta version exacte de Minecraft :',
+    forRelease: (name: string) => `${name} pour Minecraft `,
+    otherVersions: (name: string) => `Toutes les versions de ${name} sur Modrinth`,
+  },
   thanks: {
     title: 'Merci d’avoir téléchargé !',
     startedBefore: 'Le téléchargement de ',
@@ -99,7 +118,7 @@ export const fr = {
     modTitle: 'Pour l’installer',
     modSteps: [
       'Mets le fichier dans le dossier mods de ton serveur.',
-      'Installe aussi les mods qu’il demande : ils sont listés dans « Installer », sur cette page.',
+      'Ajoute aussi dans ce dossier les mods demandés ci-dessous.',
       'Redémarre le serveur.',
     ],
     retry: 'Rien ne se passe ?',

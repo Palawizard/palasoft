@@ -48,6 +48,7 @@ export const en: typeof fr = {
     installHelp: 'How to install it',
     file: 'File: ',
     newBadge: 'New',
+    inEnglish: 'Available in English',
   },
   download: {
     none: 'No version has been published yet.',
@@ -93,6 +94,24 @@ export const en: typeof fr = {
     serverOnly: 'This mod goes on the server only: players join without installing anything.',
     alsoOn: (store: string) => `Also on ${store}`,
   },
+  companion: {
+    needs: (name: string) => `You also need ${name}`,
+    vbCable: 'The free virtual audio cable from VB-Audio: it carries your sounds into Discord and your games.',
+    download: (name: string) => `Download ${name}`,
+    free: 'free (donationware)',
+    site: (publisher: string) => `${publisher} website`,
+    stepsTitle: 'To install it',
+    vbCableSteps: [
+      'Unzip it: right-click it, then “Extract All”. Don’t run anything from inside the zip.',
+      'In the new folder, right-click VBCABLE_Setup_x64, then “Run as administrator”.',
+      'Click Install Driver. The window may freeze for a few seconds: wait for the message saying it’s done.',
+      'Restart your PC.',
+    ],
+    mods: 'You also need',
+    pickRelease: 'Pick your exact Minecraft version:',
+    forRelease: (name: string) => `${name} for Minecraft `,
+    otherVersions: (name: string) => `Every version of ${name} on Modrinth`,
+  },
   thanks: {
     title: 'Thanks for downloading!',
     startedBefore: 'Your download of ',
@@ -101,7 +120,7 @@ export const en: typeof fr = {
     modTitle: 'To install it',
     modSteps: [
       'Put the file in your server’s mods folder.',
-      'Also install the mods it needs: they are listed under “Install” on this page.',
+      'Add the required mods below to the same folder.',
       'Restart the server.',
     ],
     retry: 'Nothing happening?',
