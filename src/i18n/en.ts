@@ -49,6 +49,7 @@ export const en: typeof fr = {
     file: 'File: ',
     newBadge: 'New',
     inEnglish: 'Available in English',
+    frenchOnly: 'Only in French for now',
   },
   download: {
     none: 'No version has been published yet.',

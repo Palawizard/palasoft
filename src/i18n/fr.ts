@@ -47,6 +47,7 @@ export const fr = {
     file: 'Fichier : ',
     newBadge: 'Nouveau',
     inEnglish: 'Disponible en anglais',
+    frenchOnly: 'En français seulement pour l’instant',
   },
   download: {
     none: 'Aucune version n’est publiée pour l’instant.',
