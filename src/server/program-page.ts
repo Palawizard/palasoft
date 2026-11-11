@@ -3,7 +3,7 @@ import type { ReleaseView } from '../lib/catalog.ts';
 import { SITE_NAME, breadcrumbJsonLd, softwareJsonLd, type JsonLd } from '../lib/seo.ts';
 import { stringsFor } from '../i18n/index.ts';
 import type { Locale } from '../lib/locale.ts';
-import { downloadPath, downloadsOf, homePath, localText, releaseOf, softwarePath, type LocalText, type SoftwareEntry } from './software.ts';
+import { assetPath, downloadPath, downloadsOf, homePath, localText, releaseOf, softwarePath, type LocalText, type SoftwareEntry } from './software.ts';
 
 export interface ShareImage {
   src: string;
@@ -29,17 +29,21 @@ export const programPage = async (entry: SoftwareEntry, locale: Locale, site: UR
   const t = stringsFor(locale);
   const [mainShot] = text.screenshots;
 
-  // A landscape first screenshot is the picture of a shared link (never enlarged, JPEG so every network can read it);
-  // otherwise the PalaSoft card is.
+  // The picture of a shared link: the program's own card when it has one (in the page's language), else a landscape
+  // first screenshot (never enlarged, JPEG so every network can read it), else the PalaSoft card (layout default).
   const shareSource = mainShot !== undefined && mainShot.src.width > mainShot.src.height ? mainShot : undefined;
   const shareShot =
     shareSource === undefined
       ? undefined
       : await getImage({ src: shareSource.src, width: Math.min(1200, shareSource.src.width), format: 'jpeg', quality: 85 });
-  const shareImage =
+  const screenshot =
     shareSource === undefined || shareShot === undefined
       ? undefined
       : { src: shareShot.src, width: Number(shareShot.attributes.width), height: Number(shareShot.attributes.height), alt: shareSource.alt };
+  const shareImage: ShareImage | undefined =
+    data.shareCard === undefined
+      ? screenshot
+      : { src: `${assetPath(`og/${entry.id}-${locale}.jpg`)}?v=${data.shareCard}`, width: 1200, height: 630, alt: t.program.shareCardAlt(data.name) };
 
   const absolute = (path: string): string => new URL(path, site).href;
   const pageUrl = absolute(softwarePath(entry.id, locale));
@@ -54,7 +58,7 @@ export const programPage = async (entry: SoftwareEntry, locale: Locale, site: UR
       kind: data.kind,
       version: view.state === 'ready' ? view.release.version : undefined,
       downloadUrl: !isMod && view.state === 'ready' && view.installer !== undefined ? absolute(downloadPath(entry.id)) : undefined,
-      screenshot: shareImage === undefined ? undefined : absolute(shareImage.src),
+      screenshot: screenshot === undefined ? undefined : absolute(screenshot.src),
       sameAs: [`https://github.com/${data.repo}`, ...(isMod ? [data.modrinth, data.curseforge] : [])],
       language: locale,
     }),

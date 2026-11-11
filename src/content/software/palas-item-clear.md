@@ -6,6 +6,7 @@ repo: Palawizard/PalasItemClear
 color: emerald
 category: GameApplication
 languages: ['en']
+shareCard: 1
 icon: ../../assets/software/palas-item-clear/icon.svg
 screenshots:
   - src: ../../assets/software/palas-item-clear/recovery-bin.png
