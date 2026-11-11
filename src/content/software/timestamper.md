@@ -6,6 +6,7 @@ repo: Palawizard/timestamper
 color: violet
 category: UtilitiesApplication
 languages: ['en']
+shareCard: 1
 icon: ../../assets/software/timestamper/icon.svg
 screenshots:
   - src: ../../assets/software/timestamper/live-marks.png

@@ -6,6 +6,7 @@ repo: Palawizard/slbs-soundboard
 color: magenta
 category: MultimediaApplication
 languages: ['fr']
+shareCard: 1
 icon: ../../assets/software/slbs-soundboard/icon.svg
 screenshots:
   - src: ../../assets/software/slbs-soundboard/soundboard.png

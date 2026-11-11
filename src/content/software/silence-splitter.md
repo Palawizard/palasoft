@@ -6,6 +6,7 @@ repo: Palawizard/silence-splitter
 color: teal
 category: MultimediaApplication
 languages: ['fr', 'en']
+shareCard: 1
 icon: ../../assets/software/silence-splitter/icon.svg
 screenshots:
   - src: ../../assets/software/silence-splitter/timeline-preview.png
