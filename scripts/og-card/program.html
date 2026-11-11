@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+  Share card of one program (1200 x 630), the picture shown when a link to its page is shared
+  (Discord, social networks). Open program.html?card=<slug>-<fr|en> in Chrome at
+  1200 x 630, screenshot the page, save it as public/og/<slug>-<fr|en>.jpg (JPEG, quality 88), then
+  bump `shareCard` in the program's content file so Discord fetches the new picture.
+  Taglines are copied from src/content/software*/<slug>.md: render again when they change.
+-->
+<html><head><meta charset="utf-8"><style>
+@font-face{font-family:S;src:url("../../node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2") format("woff2-variations");font-weight:200 900}
+*{box-sizing:border-box}html,body{margin:0}
+.c{position:relative;width:1200px;height:630px;overflow:hidden;font-family:S;color:#fff;
+background:radial-gradient(520px 360px at 1080px 40px,rgb(255 251 224/.75),rgb(255 251 224/0) 70%),
+linear-gradient(to bottom,#0b4fa3 0,#1a74cf 26%,#4aa8ea 48%,#a9dcf8 62%,#e6f6ff 66.6%,#fff 67%,#6fd0dd 67.6%,#1c9bb3 84%,#0b6d88 100%)}
+.sun{position:absolute;right:20px;top:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,#fff 0 30%,rgb(255 248 214/.9) 42%,rgb(255 244 200/0) 70%)}
+.wave{position:absolute;left:0;right:0;top:404px;height:40px}
+.head{position:absolute;left:72px;top:56px;display:flex;align-items:center;gap:26px}
+.b{display:grid;flex:none;place-items:center;width:116px;height:116px;border:2px solid rgb(255 255 255/.85);border-radius:50%;
+background:radial-gradient(circle at 34% 24%,rgb(255 255 255/.95) 0 9%,rgb(255 255 255/.2) 26%,transparent 46%),
+radial-gradient(circle at 50% 60%,color-mix(in srgb,var(--t) 35%,rgb(255 255 255/.5)),color-mix(in srgb,var(--t) 55%,rgb(20 90 160/.4)));
+box-shadow:inset 0 -8px 18px rgb(255 255 255/.35),0 22px 36px -14px rgb(6 48 74/.65)}
+.b img{width:62px;height:62px;border-radius:14px;box-shadow:0 4px 10px rgb(6 48 74/.35)}
+.b img.round{width:76px;height:76px;border-radius:50%;box-shadow:none;filter:drop-shadow(0 4px 8px rgb(6 48 74/.35))}
+.name{margin:0;font-size:var(--name,88px);font-weight:700;letter-spacing:-.015em;line-height:1;text-shadow:0 2px 3px rgb(6 48 74/.4),0 10px 30px rgb(6 48 74/.35)}
+.tag{position:absolute;left:74px;top:206px;width:var(--tagw,560px);margin:0;font-size:var(--tag,36px);font-weight:600;line-height:1.24;text-wrap:pretty;text-shadow:0 2px 4px rgb(6 48 74/.55)}
+.pill{position:absolute;left:72px;top:470px;display:inline-flex;align-items:center;gap:12px;padding:10px 24px 10px 14px;border:1px solid rgb(11 42 68/.18);border-radius:999px;
+background:linear-gradient(to bottom,#fff 0%,#eef7fd 50%,#d7ecf9 51%,#eef7fd 100%);box-shadow:inset 0 1px 0 rgb(255 255 255/.9),0 8px 18px -6px rgb(6 48 74/.5);color:#0b2a44;font-size:27px;font-weight:650}
+.pill i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgb(0 0 0/.25);
+background:linear-gradient(to bottom,#74d257 0%,#2f9a22 49%,#237f17 50%,#45b232 100%);box-shadow:inset 0 1px 0 rgb(255 255 255/.65)}
+.sig{position:absolute;left:74px;bottom:34px;display:flex;align-items:center;gap:14px;font-size:30px;font-weight:650;text-shadow:0 2px 4px rgb(6 48 74/.6)}
+.sig svg{width:46px;height:46px;filter:drop-shadow(0 4px 6px rgb(6 48 74/.45))}
+.shot{position:absolute;margin:0;padding:6px;border-radius:10px;background:#fff;
+box-shadow:0 3px 6px rgb(6 48 74/.22),0 30px 50px -16px rgb(6 48 74/.6)}
+.shot img{display:block;border-radius:5px}
+</style></head><body><div class="c" id="card"><div class="sun"></div>
+<svg class="wave" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 C 150 10, 300 34, 450 22 S 750 10, 900 22 S 1100 32, 1200 20" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="3"/><path d="M0 30 C 160 20, 320 40, 480 30 S 800 20, 960 30 S 1120 38, 1200 28" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/></svg>
+<div class="head"><span class="b" id="bubble"><img id="icon" src="../../src/assets/software/chest-counter/icon.svg" alt=""></span><h1 class="name" id="name"></h1></div>
+<p class="tag" id="tag"></p>
+<span class="pill"><i><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span id="kind"></span></span>
+<span class="sig"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><radialGradient id="body" cx="50%" cy="72%" r="62%"><stop offset="0" stop-color="#9be87a"/><stop offset=".55" stop-color="#2f9a22"/><stop offset="1" stop-color="#195f10"/></radialGradient><linearGradient id="shine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity=".08"/></linearGradient><linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fd0dd" stop-opacity=".9"/><stop offset="1" stop-color="#1c9bb3" stop-opacity=".95"/></linearGradient><clipPath id="o"><circle cx="32" cy="32" r="29"/></clipPath></defs><circle cx="32" cy="32" r="29" fill="url(#body)"/><g clip-path="url(#o)"><path d="M0 45 C 10 41, 20 49, 32 45 S 54 41, 64 45 V64 H0Z" fill="url(#water)"/><path d="M0 45 C 10 41, 20 49, 32 45 S 54 41, 64 45" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.6"/></g><path d="M32 15 V37 M22.5 28.5 L32 38 L41.5 28.5" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="32" cy="16" rx="21" ry="11.5" fill="url(#shine)"/><circle cx="32" cy="32" r="28.5" fill="none" stroke="#0b3d10" stroke-opacity=".45" stroke-width="1"/></svg>palawi.fr/software</span>
+<div id="shots"></div></div>
+<script>
+const assets = '../../src/assets/software/';
+// Two landscape captures: the main one in front and lower, another behind it.
+const landscape = (back, front) => [
+  { file: back, width: 460, left: 712, top: 42, turn: 4 },
+  { file: front, width: 500, left: 650, top: 262, turn: -3 },
+];
+const programs = {
+  'chest-counter': {
+    name: 'Chest Counter', tint: '#e8a020', round: true, nameSize: '80px', nameMax: 700,
+    tagline: {
+      fr: 'Compte les coffres que tu ouvres dans Fortnite, partie par partie, à partir des replays déjà sur ton PC.',
+      en: 'Counts the chests you open in Fortnite, match by match, from the replays already on your PC.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    // The two windows of the program page (light behind, dark in front), example data.
+    shots: [
+      { file: 'window-light.png', width: 344, left: 736, top: 96, turn: -5 },
+      { file: 'window-dark.png', width: 344, left: 826, top: 46, turn: 4 },
+    ],
+  },
+  'palas-item-clear': {
+    name: 'Pala’s Item Clear', tint: '#3fbf5a', round: false, nameSize: '76px', tagSize: '34px', nameMax: 770,
+    tagline: {
+      fr: 'Nettoie les objets au sol pour réduire le lag de ton serveur, avec des avertissements et une poubelle de récupération.',
+      en: 'Clears items lying on the ground to reduce lag on your server, with warnings and a recovery bin.',
+    },
+    kind: { fr: 'Mod Minecraft gratuit pour serveur', en: 'Free Minecraft server mod' },
+    shots: [
+      { file: 'recovery-bin.png', width: 336, left: 812, top: 48, turn: 4 },
+      { file: 'chat-warnings.png', width: 540, left: 640, top: 438, turn: -3 },
+    ],
+  },
+  palaclips: {
+    name: 'PalaClips', tint: '#e0475f',
+    tagline: {
+      fr: 'Enregistre tes meilleurs moments en jeu après coup, avec une piste audio séparée pour chaque logiciel.',
+      en: 'Saves your best in-game moments after they happen, with a separate audio track for each app.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    shots: landscape('gallery.png', 'player.png'),
+  },
+  'slbs-soundboard': {
+    name: 'SLB\u2019s Soundboard', tint: '#d64ea8',
+    tagline: {
+      fr: 'Joue des sons dans Discord et en jeu grâce à un micro virtuel, avec des raccourcis clavier.',
+      en: 'Plays sounds in Discord and in games through a virtual mic, with keyboard shortcuts.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    shots: landscape('sound-settings.png', 'soundboard.png'),
+  },
+  'layout-manager': {
+    name: 'Layout Manager 2', tint: '#3a7bf0',
+    tagline: {
+      fr: 'Ouvre et place tes applications sur tes écrans en un clic, avec des dispositions que tu enregistres.',
+      en: 'Opens your apps and places them on your screens in one click, with layouts you save.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    shots: landscape('layout-editor.png', 'layouts-list.png'),
+  },
+  'silence-splitter': {
+    name: 'Silence Splitter', tint: '#19b3a6',
+    tagline: {
+      fr: 'Repère les silences de tes vidéos et prépare la coupe pour ton logiciel de montage.',
+      en: 'Finds the silences in your videos and prepares the cut for your editing software.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    shots: landscape('presets-and-tracks.png', 'timeline-preview.png'),
+  },
+  timestamper: {
+    name: 'Timestamper', tint: '#8a63f0',
+    tagline: {
+      fr: 'Note les moments forts de ton stream Twitch avec un raccourci, puis exporte-les.',
+      en: 'Marks the highlights of your Twitch stream with a shortcut, then exports them.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    shots: landscape('stream-history.png', 'live-marks.png'),
+  },
+};
+const [slug, lang] = (() => {
+  const card = new URLSearchParams(location.search).get('card') ?? 'chest-counter-fr';
+  const at = card.lastIndexOf('-');
+  return [card.slice(0, at), card.slice(at + 1)];
+})();
+const p = programs[slug];
+document.documentElement.lang = lang;
+document.getElementById('name').textContent = p.name;
+document.getElementById('tag').textContent = p.tagline[lang];
+document.getElementById('kind').textContent = p.kind[lang];
+const card = document.getElementById('card');
+if (p.nameSize) card.style.setProperty('--name', p.nameSize);
+if (p.tagSize) card.style.setProperty('--tag', p.tagSize);
+document.getElementById('bubble').style.setProperty('--t', p.tint);
+const icon = document.getElementById('icon');
+icon.src = `${assets}${slug}/icon.svg`;
+if (p.round) icon.className = 'round';
+// Names and taglines of different lengths: shrink the name until it ends before the captures, and the
+// tagline until it ends above the line of the horizon, where white text would get lost.
+const shrink = (element, property, start, fits) => {
+  let size = start;
+  while (!fits() && size > 40) {
+    size -= 2;
+    card.style.setProperty(property, `${size}px`);
+  }
+};
+const nameEl = document.getElementById('name');
+const tagEl = document.getElementById('tag');
+// Measured once the font is in: the fallback font has other widths.
+document.fonts.ready.then(() => {
+  shrink(nameEl, '--name', parseInt(getComputedStyle(nameEl).fontSize), () => nameEl.getBoundingClientRect().right <= (p.nameMax ?? 660));
+  shrink(tagEl, '--tag', parseInt(getComputedStyle(tagEl).fontSize), () => tagEl.getBoundingClientRect().bottom <= 388);
+  document.body.dataset.ready = 'true';
+});
+for (const shot of p.shots) {
+  const frame = document.createElement('figure');
+  frame.className = 'shot';
+  frame.style.cssText = `left:${shot.left}px;top:${shot.top}px;transform:rotate(${shot.turn}deg)`;
+  const img = document.createElement('img');
+  img.src = `${assets}${slug}/${shot.file}`;
+  img.width = shot.width;
+  frame.append(img);
+  document.getElementById('shots').append(frame);
+}
+</script></body></html>
