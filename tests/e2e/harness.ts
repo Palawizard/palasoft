@@ -1,5 +1,5 @@
 import { spawn, type ChildProcess } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { fileURLToPath } from 'node:url';
@@ -33,14 +33,25 @@ const fixtureFor = (path: string, ref: string | null, withoutReleases: Set<strin
     return readFixture('github/palasitemclear-version-matrix-v0.1.2.json');
   }
   if (path === '/modrinth/v2/project/palas-item-clear') return readFixture('modrinth/project-palas-item-clear.json');
+  // Companion mods: one recorded answer per project, whatever the versions asked.
+  if (path === '/modrinth/v2/tag/game_version') return readFixture('modrinth/tag-game-version.json');
+  if (path === '/modrinth/v2/project/fabric-api/version') return readFixture('modrinth/fabric-api-fabric-1.21.5-1.21.8.json');
+  if (path === '/modrinth/v2/project/architectury-api/version') return readFixture('modrinth/architectury-api-forge-1.20.1.json');
   return undefined;
 };
+
+const vbCablePage = readFileSync(new URL('../fixtures/vb-audio/cable-page-excerpt.html', import.meta.url), 'utf8');
 
 export const startFakeGitHub = async (): Promise<FakeGitHub> => {
   const fake: Omit<FakeGitHub, 'url' | 'close'> = { down: false, withoutReleases: new Set(), requests: [] };
   const server = createServer((request, response) => {
     const url = new URL(request.url ?? '/', 'http://fake.test');
     fake.requests.push(url.pathname);
+    if (url.pathname === '/vb-audio/Cable/' && !fake.down) {
+      response.writeHead(200, { 'content-type': 'text/html' });
+      response.end(vbCablePage);
+      return;
+    }
     const body = fake.down ? undefined : fixtureFor(url.pathname, url.searchParams.get('ref'), fake.withoutReleases);
     response.writeHead(fake.down ? 503 : body === undefined ? 404 : 200, { 'content-type': 'application/json' });
     response.end(JSON.stringify(body ?? { message: fake.down ? 'Service Unavailable' : 'Not Found' }));
@@ -92,6 +103,7 @@ export const startSite = async (env: Record<string, string>): Promise<Site> => {
         : {
             MODRINTH_API_URL: `${env['GITHUB_API_URL']}/modrinth/v2`,
             CURSEFORGE_API_URL: `${env['GITHUB_API_URL']}/curseforge`,
+            VB_CABLE_PAGE_URL: `${env['GITHUB_API_URL']}/vb-audio/Cable/`,
           }),
       ...env,
     },
