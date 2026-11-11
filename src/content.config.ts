@@ -20,6 +20,10 @@ const common = {
   // Languages of the program's own interface (for the mod, of its chat messages). The English site
   // marks the programs that have English.
   languages: z.array(z.enum(['fr', 'en'])).min(1),
+  // Version of the program's own share card, public/og/<slug>-<fr|en>.jpg (rendered from
+  // scripts/og-card/program.html): bump it when the card changes so Discord fetches the new picture.
+  // Without it, a landscape first screenshot or the PalaSoft card is shared.
+  shareCard: z.number().int().positive().optional(),
 };
 
 const isValidRegExp = (pattern: string): boolean => {

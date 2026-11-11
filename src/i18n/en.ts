@@ -48,6 +48,7 @@ export const en: typeof fr = {
     installHelp: 'How to install it',
     file: 'File: ',
     newBadge: 'New',
+    shareCardAlt: (name: string) => `${name} on PalaSoft: its icon, what it does and its screenshots.`,
     inEnglish: 'Available in English',
     frenchOnly: 'Only in French for now',
   },

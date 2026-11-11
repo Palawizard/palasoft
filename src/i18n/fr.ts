@@ -46,6 +46,7 @@ export const fr = {
     installHelp: 'Comment l’installer',
     file: 'Fichier : ',
     newBadge: 'Nouveau',
+    shareCardAlt: (name: string) => `${name} sur PalaSoft : son icône, ce qu’il fait et ses captures.`,
     inEnglish: 'Disponible en anglais',
     frenchOnly: 'En français seulement pour l’instant',
   },
