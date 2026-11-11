@@ -157,7 +157,7 @@ export const fr = {
         'Lance l’installateur. Il s’installe pour ton compte Windows, sans droits d’administrateur, avec un raccourci dans le menu Démarrer et sur le bureau.',
         'Si Windows t’avertit au lancement, suis les étapes de l’encadré « Si Windows t’avertit ».',
         'Dans Fortnite, active l’enregistrement des replays : réglages, section Replays.',
-        'Laisse Chest Counter ouvert ou réduit pendant que tu joues. Chaque partie est comptée une fois finie : le jeu chiffre le replay d’une partie en cours.',
+        'Laisse Chest Counter ouvert pendant que tu joues : si tu fermes la fenêtre, il reste près de l’horloge. Chaque partie est comptée une fois finie : le jeu chiffre le replay d’une partie en cours.',
       ],
       note: 'Tu as joué avant d’installer l’app ? Indique combien de parties dans « Parties sans replay ». Les nouvelles versions s’installent toutes seules.',
     },

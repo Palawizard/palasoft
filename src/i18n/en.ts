@@ -158,7 +158,7 @@ export const en: typeof fr = {
         'Run the installer. It installs for your Windows account, without administrator rights, with a shortcut in the Start menu and on the desktop.',
         'If Windows warns you when it starts, follow the steps in the “If Windows warns you” box.',
         'In Fortnite, turn on replay recording: settings, Replays section.',
-        'Leave Chest Counter open or minimized while you play. Each match is counted once it ends: the game encrypts the replay of a match in progress.',
+        'Leave Chest Counter running while you play: if you close the window, it stays by the clock. Each match is counted once it ends: the game encrypts the replay of a match in progress.',
       ],
       note: 'Played before installing the app? Enter how many matches in “Matches without a replay”. New versions install themselves.',
     },
