@@ -15,7 +15,17 @@ Every chest you open yourself: regular, rare, buried, relic and bounty chests, a
 
 ## After each match
 
-Under the big number, you see your average per match: the estimated total divided by all your matches. “Last match” shows the chests of your latest match, opened plus broken estimated, when it ended, today’s chests and your best match. “See all matches” lists every counted match with the same total and its opened chests by type. A Windows notification also tells you how many chests each match added; you can turn it off at the bottom of the list.
+Under the big number, you see your average per match: the estimated total divided by all your matches. “Last match” shows the chests of your latest match, opened plus broken estimated, when it ended, today’s chests with your average for the day, and your best match. “See all matches” lists every counted match with the same total and its opened chests by type. A Windows notification also tells you how many chests each match added; you can turn it off in the settings.
+
+## While you play and stream
+
+The button at the top right of the window opens the settings:
+
+- **Overlay while Fortnite runs**: the total and your last match over the game, in fullscreen or windowed mode. Your clicks go through it. Ctrl+Shift+O hides or shows it, Ctrl+Shift+L lets you move it, then locks it again. The “Overlay” and “Move” buttons at the top of the window do the same.
+- **Page for OBS**: an address such as `http://127.0.0.1:28470/`, to add as a Browser source in OBS. The page is transparent and updates every few seconds.
+- **Open with Fortnite**: a small process starts with Windows, waits quietly and opens Chest Counter by the clock when Fortnite starts.
+
+Closing the window keeps Chest Counter running by the clock, so the overlay, the OBS page and the notifications keep working. To quit, right-click its icon by the clock, then choose “Quit”.
 
 ## The limits
 
@@ -31,6 +41,6 @@ Version 2.3 counts more accurately. Before, a chest you opened, then saw again l
 
 ## Your data
 
-Chest Counter only reads your replays folder and never changes it. No account, no connection to Epic or to stats sites: your replays stay on your PC. The app only goes online to look for its updates on GitHub.
+Chest Counter only reads your replays folder and never changes it. No account, no connection to Epic or to stats sites: your replays stay on your PC. The app only goes online to look for its updates on GitHub. The OBS page, when you turn it on, can only be reached from your own PC. “Open with Fortnite” adds a startup entry for your Windows account only, without administrator rights, and uninstalling removes it.
 
 Chest Counter is not affiliated with or endorsed by Epic Games. Fortnite is a trademark of Epic Games, Inc.
