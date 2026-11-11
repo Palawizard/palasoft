@@ -150,11 +150,12 @@ describe('pages on the built server', () => {
     // Every program has its own card, in the language of the page.
     for (const slug of ['chest-counter', 'palaclips', 'slbs-soundboard', 'layout-manager', 'silence-splitter', 'timestamper', 'palas-item-clear']) {
       for (const [path, image] of [
-        [`/software/${slug}`, `/software/og/${slug}-fr.jpg?v=1`],
-        [`/software/en/${slug}`, `/software/og/${slug}-en.jpg?v=1`],
+        [`/software/${slug}`, `/software/og/${slug}-fr.jpg`],
+        [`/software/en/${slug}`, `/software/og/${slug}-en.jpg`],
       ] as const) {
         const { body } = await html(site, path);
-        expect(body, path).toContain(`<meta property="og:image" content="https://palawi.fr${image}"`);
+        // The ?v= follows shareCard in the content file, raised each time a card is rendered again.
+        expect(body, path).toMatch(new RegExp(`<meta property="og:image" content="https://palawi\\.fr${image.replaceAll('.', '\\.')}\\?v=\\d+"`));
         expect(body, path).toContain('<meta property="og:image:width" content="1200"');
         const file = await get(site, image);
         expect(file.status, image).toBe(200);
