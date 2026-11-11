@@ -1,53 +1,25 @@
 ---
 import { localeOf, stringsFor } from '../../i18n/index.ts';
 
-// Chest Counter against the other chest counters, as checked on 11 November 2026 from each tool's own
-// page (the detail, app by app, is in Chest Counter's README). The verdict of each cell stays here;
-// the words come from the dictionaries, in the same order.
+// Chest Counter against the other kinds of chest counters, as checked in November 2026 (same table as
+// the README of Chest Counter). The verdict of each cell stays here; the words come from the
+// dictionaries, in the same order.
 type Verdict = 'yes' | 'no' | 'partial';
 const c = stringsFor(localeOf(Astro)).chestCounter.comparison;
 const verdicts: Verdict[][] = [
-  ['yes', 'yes', 'no', 'yes', 'partial'],
-  ['yes', 'no', 'yes', 'yes', 'yes'],
-  ['yes', 'yes', 'partial', 'partial', 'partial'],
-  ['yes', 'partial', 'partial', 'partial', 'partial'],
-  ['no', 'no', 'no', 'yes', 'no'],
-  ['yes', 'yes', 'yes', 'yes', 'no'],
+  ['yes', 'yes', 'no', 'yes'],
+  ['yes', 'yes', 'partial', 'no'],
+  ['yes', 'yes', 'yes', 'no'],
+  ['yes', 'no', 'no', 'yes'],
 ];
 const rows = c.rows.map((row, index) => ({
   label: row.label,
   answers: row.answers.map((text, column) => ({ text, verdict: verdicts[index]?.[column] ?? 'partial' })),
 }));
-const examples = [
-  {
-    kind: c.kinds.manual,
-    tools: [
-      { name: 'Loot Counter', url: 'https://lootcounter.com/' },
-      { name: 'Pirate Token Tracker', url: 'https://pirateshoptoken.com/pirate-token-tracker/' },
-    ],
-  },
-  {
-    kind: c.kinds.apps,
-    tools: [
-      { name: 'Fortnite-ChestCounter', url: 'https://github.com/LED-N/Fortnite-ChestCounter' },
-      { name: 'fortnite-chest-counter', url: 'https://github.com/rossalv/fortnite-chest-counter' },
-      { name: 'chest-tracker', url: 'https://github.com/thedackss/chest-tracker' },
-      { name: 'Fortnite Chest Tracker', url: 'https://github.com/ayman-studio/fortnite-chest-tracker' },
-    ],
-  },
-  {
-    kind: c.kinds.sites,
-    tools: [
-      { name: 'How Many Chests', url: 'https://howmanychests.com/' },
-      { name: 'Chest Tracker', url: 'https://chesttracker.xyz/' },
-    ],
-  },
-];
 ---
 
 <section class="glass comparison" aria-labelledby="comparison-title">
   <h2 id="comparison-title">{c.title}</h2>
-  <p class="lead-in">{c.lead}</p>
   <div class="scroll" role="region" aria-labelledby="comparison-title" tabindex="0">
     <table>
       <thead>
@@ -83,32 +55,7 @@ const examples = [
       </tbody>
     </table>
   </div>
-  <p class="reference">{c.reference}</p>
-  <div class="examples">
-    <h3>{c.examplesTitle}</h3>
-    <div class="kinds">
-      {
-        examples.map((group) => (
-          <div class="kind">
-            <p class="kind-name">{group.kind}</p>
-            <ul>
-              {group.tools.map((tool) => (
-                <li>
-                  <a href={tool.url} rel="noopener">
-                    {tool.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-  </div>
-  <p class="as-of">
-    {c.detailBefore}<a href="https://github.com/Palawizard/chest-counter#how-it-compares">{c.detailLink}</a>{c.detailAfter}{' '}
-    {c.asOf}
-  </p>
+  <p class="as-of">{c.asOf}</p>
 </section>
 
 <style>
@@ -122,10 +69,6 @@ const examples = [
     font-size: var(--text-subtitle);
   }
 
-  .lead-in {
-    max-width: var(--measure);
-  }
-
   .scroll {
     overflow-x: auto;
     margin-top: var(--space-1);
@@ -134,7 +77,7 @@ const examples = [
 
   table {
     width: 100%;
-    min-width: 54rem;
+    min-width: 44rem;
     border-collapse: collapse;
   }
 
@@ -196,43 +139,6 @@ const examples = [
   :global(:root[data-theme='dark']) thead th:first-of-type,
   :global(:root[data-theme='dark']) tbody td:nth-child(2) {
     background: color-mix(in srgb, var(--tint-amber) 20%, transparent);
-  }
-
-  .reference {
-    max-width: var(--measure);
-    font-weight: 600;
-  }
-
-  .examples {
-    display: grid;
-    gap: var(--space-1);
-    padding-top: var(--space-2);
-    border-top: 1px solid var(--rule);
-  }
-
-  h3 {
-    font-size: 1.0625rem;
-    font-weight: 700;
-  }
-
-  .kinds {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-    gap: var(--space-2) var(--space-3);
-  }
-
-  .kind-name {
-    color: var(--ink-soft);
-    font-size: var(--text-small);
-    font-weight: 650;
-  }
-
-  .kind ul {
-    display: grid;
-    gap: 0.15rem;
-    margin: 0.25rem 0 0;
-    padding: 0;
-    list-style: none;
   }
 
   .as-of {

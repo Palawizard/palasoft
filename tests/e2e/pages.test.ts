@@ -176,12 +176,7 @@ describe('pages on the built server', () => {
     expect(page.status).toBe(200);
     expect(page.body).toContain('Comment ton total se construit');
     expect(page.body).toContain('Et les autres compteurs de coffres ?');
-    // The comparison names the other counters and links to the detail in the README.
-    for (const tool of ['https://github.com/LED-N/Fortnite-ChestCounter', 'https://howmanychests.com/', 'https://lootcounter.com/']) {
-      expect(page.body).toContain(`href="${tool}"`);
-    }
-    expect(page.body).toContain('href="https://github.com/Palawizard/chest-counter#how-it-compares"');
-    expect(page.body.match(/<td class="(?:yes|no|partial)"/g)).toHaveLength(30);
+    expect(page.body.match(/<td class="(?:yes|no|partial)"/g)).toHaveLength(16);
     expect(page.body).toContain('Palawi.ChestCounter-win-Setup.exe');
     // Velopack's RELEASES and releases.win.json are left out: 23 real downloads in the fixture.
     expect(page.body).toContain('23 téléchargements');
