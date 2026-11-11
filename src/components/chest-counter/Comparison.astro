@@ -1,20 +1,48 @@
 ---
 import { localeOf, stringsFor } from '../../i18n/index.ts';
 
-// Chest Counter against the other ways to know how many chests you opened, as checked in November 2026.
-// Which answers are a yes stays here; the words come from the dictionaries.
+// Chest Counter against the other chest counters, as checked on 11 November 2026 from each tool's own
+// page (the detail, app by app, is in Chest Counter's README). The verdict of each cell stays here;
+// the words come from the dictionaries, in the same order.
+type Verdict = 'yes' | 'no' | 'partial';
 const c = stringsFor(localeOf(Astro)).chestCounter.comparison;
-const yes: boolean[][] = [
-  [true, true, false],
-  [true, false, false],
-  [true, false, false],
-  [true, false, false],
-  [true, false, false],
+const verdicts: Verdict[][] = [
+  ['yes', 'yes', 'no', 'yes', 'partial'],
+  ['yes', 'no', 'yes', 'yes', 'yes'],
+  ['yes', 'yes', 'partial', 'partial', 'partial'],
+  ['yes', 'partial', 'partial', 'partial', 'partial'],
+  ['no', 'no', 'no', 'yes', 'no'],
+  ['yes', 'yes', 'yes', 'yes', 'no'],
 ];
 const rows = c.rows.map((row, index) => ({
   label: row.label,
-  answers: row.answers.map((text, column) => ({ text, ok: yes[index]?.[column] ?? false })),
+  answers: row.answers.map((text, column) => ({ text, verdict: verdicts[index]?.[column] ?? 'partial' })),
 }));
+const examples = [
+  {
+    kind: c.kinds.manual,
+    tools: [
+      { name: 'Loot Counter', url: 'https://lootcounter.com/' },
+      { name: 'Pirate Token Tracker', url: 'https://pirateshoptoken.com/pirate-token-tracker/' },
+    ],
+  },
+  {
+    kind: c.kinds.apps,
+    tools: [
+      { name: 'Fortnite-ChestCounter', url: 'https://github.com/LED-N/Fortnite-ChestCounter' },
+      { name: 'fortnite-chest-counter', url: 'https://github.com/rossalv/fortnite-chest-counter' },
+      { name: 'chest-tracker', url: 'https://github.com/thedackss/chest-tracker' },
+      { name: 'Fortnite Chest Tracker', url: 'https://github.com/ayman-studio/fortnite-chest-tracker' },
+    ],
+  },
+  {
+    kind: c.kinds.sites,
+    tools: [
+      { name: 'How Many Chests', url: 'https://howmanychests.com/' },
+      { name: 'Chest Tracker', url: 'https://chesttracker.xyz/' },
+    ],
+  },
+];
 ---
 
 <section class="glass comparison" aria-labelledby="comparison-title">
@@ -33,14 +61,16 @@ const rows = c.rows.map((row, index) => ({
           rows.map((row) => (
             <tr>
               <th scope="row">{row.label}</th>
-              {row.answers.map((answer) => (
-                <td class:list={{ yes: answer.ok }}>
+              {row.answers.map((answer, column) => (
+                <td class={answer.verdict} data-column={c.columns[column]}>
                   <span class="answer">
                     <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-                      {answer.ok ? (
+                      {answer.verdict === 'yes' ? (
                         <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-                      ) : (
+                      ) : answer.verdict === 'no' ? (
                         <path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                      ) : (
+                        <path d="M6 12h12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
                       )}
                     </svg>
                     {answer.text}
@@ -53,7 +83,32 @@ const rows = c.rows.map((row, index) => ({
       </tbody>
     </table>
   </div>
-  <p class="as-of">{c.asOf}</p>
+  <p class="reference">{c.reference}</p>
+  <div class="examples">
+    <h3>{c.examplesTitle}</h3>
+    <div class="kinds">
+      {
+        examples.map((group) => (
+          <div class="kind">
+            <p class="kind-name">{group.kind}</p>
+            <ul>
+              {group.tools.map((tool) => (
+                <li>
+                  <a href={tool.url} rel="noopener">
+                    {tool.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <p class="as-of">
+    {c.detailBefore}<a href="https://github.com/Palawizard/chest-counter#how-it-compares">{c.detailLink}</a>{c.detailAfter}{' '}
+    {c.asOf}
+  </p>
 </section>
 
 <style>
@@ -79,7 +134,7 @@ const rows = c.rows.map((row, index) => ({
 
   table {
     width: 100%;
-    min-width: 38rem;
+    min-width: 54rem;
     border-collapse: collapse;
   }
 
@@ -103,6 +158,7 @@ const rows = c.rows.map((row, index) => ({
   }
 
   tbody th {
+    width: 11rem;
     font-weight: 600;
   }
 
@@ -142,9 +198,111 @@ const rows = c.rows.map((row, index) => ({
     background: color-mix(in srgb, var(--tint-amber) 20%, transparent);
   }
 
+  .reference {
+    max-width: var(--measure);
+    font-weight: 600;
+  }
+
+  .examples {
+    display: grid;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+
+  .kinds {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .kind-name {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    font-weight: 650;
+  }
+
+  .kind ul {
+    display: grid;
+    gap: 0.15rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
   .as-of {
     color: var(--ink-soft);
     font-size: var(--text-small);
+  }
+
+  /* On a phone, five columns would only scroll sideways: each criterion becomes a short list where
+     every answer carries the name of its column. */
+  @media (max-width: 40rem) {
+    .comparison {
+      padding: var(--space-3) var(--space-2);
+    }
+
+    .scroll {
+      overflow: visible;
+    }
+
+    table,
+    tbody,
+    tr,
+    th,
+    td {
+      display: block;
+    }
+
+    table {
+      min-width: 0;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    tbody tr:last-child {
+      border-bottom: 0;
+    }
+
+    tbody th,
+    tbody td {
+      width: auto;
+      padding: 0.3rem 0.5rem;
+      border-bottom: 0;
+    }
+
+    tbody th {
+      padding-bottom: 0.4rem;
+      font-size: 1.0625rem;
+      font-weight: 700;
+    }
+
+    tbody td {
+      display: grid;
+      grid-template-columns: 8.5rem 1fr;
+      gap: 0.75rem;
+      border-radius: 8px;
+    }
+
+    tbody td::before {
+      content: attr(data-column);
+      color: var(--ink-soft);
+      font-size: var(--text-small);
+      font-weight: 650;
+      line-height: 1.5;
+    }
   }
 
   :global(:root[data-theme='dark']) .yes .answer svg {
