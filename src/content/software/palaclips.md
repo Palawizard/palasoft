@@ -5,6 +5,7 @@ order: 1
 repo: Palawizard/PalaClips
 color: crimson
 category: MultimediaApplication
+languages: ['en', 'fr']
 icon: ../../assets/software/palaclips/icon.svg
 screenshots:
   - src: ../../assets/software/palaclips/player.png

@@ -1,0 +1,158 @@
+---
+import { formatSize } from '../lib/format.ts';
+import { missingPatches, type BandCompanions } from '../server/dependencies.ts';
+import IconDownload from './IconDownload.astro';
+import { localeOf, stringsFor } from '../i18n/index.ts';
+
+// The mods the server also needs for one loader and Minecraft line. The mod picker shows the block
+// of the current choice under its button; the thank-you window shows a copy of it.
+interface Props {
+  band: BandCompanions;
+}
+
+const { band } = Astro.props;
+const locale = localeOf(Astro);
+const t = stringsFor(locale);
+---
+
+<div class="companions" data-companions data-loader={band.loader} data-band={band.bandId} hidden>
+  <p class="companions-title">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M9 3v4M15 3v4M7 7h10v4a5 5 0 0 1-10 0V7ZM12 16v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    {t.companion.mods}
+  </p>
+  <ul class="companion-list">
+    {
+      band.mods.map((mod) => {
+        const missing = missingPatches(mod);
+        const [only] = mod.files;
+        return (
+          <li class="companion-mod">
+            {mod.files.length === 1 && missing.length === 0 && only !== undefined ? (
+              <>
+                <a class="pill companion-link" href={only.url}>
+                  <IconDownload />
+                  {t.companion.download(mod.name)}
+                </a>
+                <p class="companion-facts numbers">
+                  {only.file} · {formatSize(only.size, locale)}
+                </p>
+              </>
+            ) : (
+              <>
+                <p class="companion-name">{mod.name}</p>
+                {mod.files.length > 0 && (
+                  <>
+                    <p class="companion-hint">{t.companion.pickRelease}</p>
+                    <ul class="patches">
+                      {mod.files.map((file) => (
+                        <li>
+                          <a class="pill patch numbers" href={file.url} title={`${file.file} · ${formatSize(file.size, locale)}`}>
+                            <IconDownload />
+                            <span class="visually-hidden">{t.companion.forRelease(mod.name)}</span>
+                            {file.patches.join(' · ')}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                {(missing.length > 0 || mod.files.length === 0) && (
+                  <a class="more" href={mod.pageUrl}>
+                    {t.companion.otherVersions(mod.name)}
+                  </a>
+                )}
+              </>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</div>
+
+<style>
+  .companions {
+    display: grid;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .companions[hidden] {
+    display: none;
+  }
+
+  .companions-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+  }
+
+  .companions-title svg {
+    flex: none;
+    color: var(--gel-aqua-1);
+  }
+
+  .companion-list {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .companion-mod {
+    display: grid;
+    justify-items: start;
+    gap: 0.35rem;
+  }
+
+  .companion-name {
+    font-weight: 650;
+  }
+
+  .companion-hint,
+  .companion-facts {
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    overflow-wrap: anywhere;
+  }
+
+  .companion-link {
+    padding-right: 1.15rem;
+  }
+
+  .patches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .patch {
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem 0.4rem 0.6rem;
+  }
+
+  .companion-link :global(.icon),
+  .patch :global(.icon) {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--gel-aqua-1);
+  }
+
+  .more {
+    font-size: var(--text-small);
+  }
+
+  :global(:root[data-theme='dark']) .companions-title svg,
+  :global(:root[data-theme='dark']) .companion-link :global(.icon),
+  :global(:root[data-theme='dark']) .patch :global(.icon) {
+    color: var(--gel-aqua-0);
+  }
+</style>

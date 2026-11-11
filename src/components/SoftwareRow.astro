@@ -4,6 +4,7 @@ import type { SoftwareWithRelease } from '../server/software.ts';
 import { localText, softwarePath } from '../server/software.ts';
 import { localeOf, stringsFor } from '../i18n/index.ts';
 import DownloadButton from './DownloadButton.astro';
+import LanguageBadge from './LanguageBadge.astro';
 import ReleaseFacts from './ReleaseFacts.astro';
 import { formatSize } from '../lib/format.ts';
 import SoftwareIcon from './SoftwareIcon.astro';
@@ -34,7 +35,7 @@ const isMod = entry.data.kind === 'minecraft-mod';
           <h3 id={`row-${entry.id}`} class="row-name">
             <a href={softwarePath(entry.id, locale)}>{entry.data.name}</a>
           </h3>
-          <p class="row-kind">{isMod ? t.program.forServer : t.program.forWindows}</p>
+          <p class="row-kind">{isMod ? t.program.forServer : t.program.forWindows} <LanguageBadge entry={entry} /></p>
         </div>
       </div>
       <p class="row-tagline">{text.tagline}</p>

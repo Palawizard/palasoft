@@ -1,9 +1,17 @@
 ---
 import SmartScreenSteps from './SmartScreenSteps.astro';
+import CompanionProgram from './CompanionProgram.astro';
 import { localeOf, stringsFor } from '../i18n/index.ts';
+import { companionProgram } from '../server/dependencies.ts';
+import { allSoftware } from '../server/software.ts';
 
 // One window per page, opened by any link or form marked with data-thanks once its download starts.
 const t = stringsFor(localeOf(Astro));
+// What a program needs next to it (VB-CABLE), ready for any of its download links, the quick
+// download dock included. The mod's companion mods come from its form when it is sent.
+const companions = (
+  await Promise.all((await allSoftware()).map(async (entry) => ({ slug: entry.id, companion: await companionProgram(entry) })))
+).filter((item) => item.companion !== undefined);
 ---
 
 <dialog class="thanks" aria-labelledby="thanks-title" aria-describedby="thanks-started" data-thanks-dialog>
@@ -24,6 +32,15 @@ const t = stringsFor(localeOf(Astro));
 
     <p data-thanks-part="windows">{t.thanks.windows}</p>
 
+    <section class="part" data-thanks-part="mod" aria-labelledby="thanks-mod">
+      <h3 id="thanks-mod">{t.thanks.modTitle}</h3>
+      <ol>
+        {t.thanks.modSteps.map((step, index) => (index === 1 ? <li data-thanks-companions-step>{step}</li> : <li>{step}</li>))}
+      </ol>
+    </section>
+
+    <div class="extra" data-thanks-extra></div>
+
     <section class="part" data-thanks-part="smartscreen" aria-labelledby="thanks-smartscreen">
       <h3 id="thanks-smartscreen">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
@@ -35,13 +52,18 @@ const t = stringsFor(localeOf(Astro));
       <SmartScreenSteps />
     </section>
 
-    <section class="part" data-thanks-part="mod" aria-labelledby="thanks-mod">
-      <h3 id="thanks-mod">{t.thanks.modTitle}</h3>
-      <ol>
-        {t.thanks.modSteps.map((step) => <li>{step}</li>)}
-      </ol>
-    </section>
+
   </div>
+
+  {
+    companions.map(({ slug, companion }) =>
+      companion === undefined ? null : (
+        <template data-thanks-companion-for={slug}>
+          <CompanionProgram companion={companion} steps headingLevel="h3" />
+        </template>
+      ),
+    )
+  }
 
   <footer class="thanks-foot">
     <p class="retry">{t.thanks.retry} <a href="#" data-thanks-retry>{t.thanks.retryLink}</a></p>
@@ -57,6 +79,8 @@ const t = stringsFor(localeOf(Astro));
     const file = dialog.querySelector<HTMLElement>('[data-thanks-file]');
     const retry = dialog.querySelector<HTMLAnchorElement>('[data-thanks-retry]');
     const parts = [...dialog.querySelectorAll<HTMLElement>('[data-thanks-part]')];
+    const extra = dialog.querySelector<HTMLElement>('[data-thanks-extra]');
+    const companionsStep = dialog.querySelector<HTMLElement>('[data-thanks-companions-step]');
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     let trigger: HTMLElement | null = null;
 
@@ -66,7 +90,22 @@ const t = stringsFor(localeOf(Astro));
       kind: string;
       smartscreen: boolean;
       url: string;
+      // What to install next to it: a copy of a block of the page, or nothing.
+      extra: Node | null;
     }
+
+    const companionFor = (slug: string | undefined): Node | null => {
+      if (slug === undefined) return null;
+      const template = dialog.querySelector<HTMLTemplateElement>(`template[data-thanks-companion-for="${CSS.escape(slug)}"]`);
+      return template === null ? null : template.content.cloneNode(true);
+    };
+
+    const copyOfShown = (block: HTMLElement | null): Node | null => {
+      if (block === null) return null;
+      const copy = block.cloneNode(true) as HTMLElement;
+      copy.hidden = false;
+      return copy;
+    };
 
     const open = (download: Download, from: HTMLElement): void => {
       trigger = from;
@@ -76,6 +115,8 @@ const t = stringsFor(localeOf(Astro));
         file.hidden = download.file === '';
       }
       if (retry !== null) retry.href = download.url;
+      extra?.replaceChildren(...(download.extra === null ? [] : [download.extra]));
+      if (companionsStep !== null) companionsStep.hidden = download.extra === null;
       for (const part of parts) {
         const shown =
           part.dataset['thanksPart'] === 'smartscreen' ? download.smartscreen : part.dataset['thanksPart'] === download.kind;
@@ -112,6 +153,7 @@ const t = stringsFor(localeOf(Astro));
         kind: link.dataset['thanksKind'] ?? '',
         smartscreen: link.dataset['thanksSmartscreen'] === 'true',
         url: link.href,
+        extra: companionFor(link.dataset['thanksCompanion']),
       };
       setTimeout(() => open(download, link), 0);
     });
@@ -127,6 +169,7 @@ const t = stringsFor(localeOf(Astro));
         kind: form.dataset['thanksKind'] ?? '',
         smartscreen: false,
         url: `${form.action}?${query.toString()}`,
+        extra: copyOfShown(form.querySelector<HTMLElement>('[data-companions]:not([hidden])')),
       };
       const button = form.querySelector<HTMLElement>('[type="submit"]') ?? form;
       setTimeout(() => open(download, button), 0);
@@ -231,6 +274,16 @@ const t = stringsFor(localeOf(Astro));
     color: var(--ink-soft);
     font-size: var(--text-small);
     overflow-wrap: anywhere;
+  }
+
+  .extra:empty {
+    display: none;
+  }
+
+  /* The copy of the mod picker's block reads as a part of the window, like « Pour l'installer ». */
+  .extra :global(.companions-title) {
+    font-size: 1.25rem;
+    font-weight: 650;
   }
 
   .part {

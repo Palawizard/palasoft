@@ -5,6 +5,7 @@ order: 6
 repo: Palawizard/PalasItemClear
 color: emerald
 category: GameApplication
+languages: ['en']
 icon: ../../assets/software/palas-item-clear/icon.svg
 screenshots:
   - src: ../../assets/software/palas-item-clear/recovery-bin.png
@@ -16,6 +17,14 @@ versionMatrix: versions/version-matrix.json
 modrinth: https://modrinth.com/mod/palas-item-clear
 curseforge: https://www.curseforge.com/minecraft/mc-mods/palas-item-clear
 curseforgeId: 1601947
+companions:
+  - name: Fabric API
+    modrinth: fabric-api
+    loaders: [fabric]
+  - name: Architectury API
+    modrinth: architectury-api
+    loaders: [forge, fabric]
+    bands: ['1.20.1']
 ---
 
 ## Ce que ça fait
@@ -32,7 +41,7 @@ Pala's Item Clear retire régulièrement les objets qui traînent au sol sur ton
 
 1. Choisis le loader et la version de Minecraft de ton serveur, puis télécharge le fichier.
 2. Mets le fichier dans le dossier mods du serveur.
-3. Avec Fabric, installe aussi Fabric API. En 1.20.1 avec Forge ou Fabric, installe aussi Architectury API.
+3. Avec Fabric, installe aussi Fabric API. En 1.20.1 avec Forge ou Fabric, installe aussi Architectury API. Les boutons pour les télécharger apparaissent sous Télécharger une fois ton choix fait.
 4. Démarre le serveur une fois : il crée le fichier de réglages config/palasitemclear.json.
 
 Après avoir modifié ce fichier, lance /palasitemclear reload. Les messages du chat sont en anglais au départ, et tu peux tous les changer.

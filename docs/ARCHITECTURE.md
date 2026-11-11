@@ -29,7 +29,8 @@ src/
 public/                  PalaSoft site icons (favicon.svg, apple-touch-icon.png) and the share card (og-palasoft.jpg); the same logo is inlined in the header by components/Logo.astro
 scripts/og-card/card.html  source of og-palasoft.jpg
   server/                glue between Astro and lib/ (catalog instance, entry lookup, localized paths and texts, responses,
-                         program-page.ts: release, title, share picture and structured data of a program page)
+                         program-page.ts: release, title, share picture and structured data of a program page,
+                         dependencies.ts: cached links to VB-CABLE and companion mods)
   lib/                   code that does not depend on Astro
     config.ts            environment variables
     locale.ts            the two languages, Accept-Language reading, cookie name
@@ -39,6 +40,7 @@ scripts/og-card/card.html  source of og-palasoft.jpg
     catalog.ts           release data of one program, ready for the pages
     counts.ts            GitHub download count, without update manifests, signatures and checksums
     stores.ts            Modrinth and CurseForge download counts
+    dependencies.ts      links to what a program needs: newest VB-CABLE package, Minecraft releases of a band, companion mod files on Modrinth
     format.ts            French and English formatting of sizes, dates, counts and Minecraft versions
     seo.ts               schema.org structured data (program, breadcrumb, site and program list)
   styles/                global styles and design tokens
@@ -52,10 +54,10 @@ docs/                    project documentation
 
 Each file in `src/content/software/` describes one program. The file name is its slug, used in its URL. Two kinds exist:
 
-- `windows`: a Windows program installed from a GitHub release. `installerPattern` is a regular expression matched against the file names of the release: the first match is the file offered for download. `unsignedInstaller` says whether Windows SmartScreen shows a warning, `requirements` lists what must be installed first.
-- `minecraft-mod`: a Minecraft mod, also published on Modrinth and CurseForge. `versionMatrix` is the path, in the mod repository, of the JSON file that lists the Minecraft version bands and their loaders. It is read at the tag of the latest release.
+- `windows`: a Windows program installed from a GitHub release. `installerPattern` is a regular expression matched against the file names of the release: the first match is the file offered for download. `unsignedInstaller` says whether Windows SmartScreen shows a warning, `requirements` lists what must be installed first. `companion` (only `vb-cable` for now) names a free program from another publisher that it needs, offered with a download button (see Dependencies).
+- `minecraft-mod`: a Minecraft mod, also published on Modrinth and CurseForge. `versionMatrix` is the path, in the mod repository, of the JSON file that lists the Minecraft version bands and their loaders. It is read at the tag of the latest release. `companions` lists the mods the server also needs (`name`, Modrinth project slug, `loaders`, and `bands` to limit it to some lines of the matrix): Fabric API for every Fabric line, Architectury API for Forge and Fabric 1.20.1, as in the mod's `docs/SUPPORT.md`.
 
-Every entry has a display name, a one-line tagline in French (also the meta description of its page), a sort order, its schema.org `category` (`MultimediaApplication`, `UtilitiesApplication`, `DesktopEnhancementApplication` or `GameApplication`, for search engines), its GitHub repository (`Palawizard/<repo>`), a colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`, `amber`, used as the tint of its bubble and window), an optional `newUntil` date (a « Nouveau » badge next to its name in the dock, the showcase and its page until that date, midnight UTC; pages render on each request so it goes away on its own), an `icon` and a list of `screenshots` (`src` and `alt`), both paths into `src/assets/software/<slug>/` checked at build time. The first screenshot is the one shown next to the download button and in the home lists; the others form the gallery of the program page. The Markdown body of the file is the text of the program page. `requirements` is shown in the "Ce qu'il te faut" block next to the text.
+Every entry has a display name, a one-line tagline in French (also the meta description of its page), a sort order, its schema.org `category` (`MultimediaApplication`, `UtilitiesApplication`, `DesktopEnhancementApplication` or `GameApplication`, for search engines), its GitHub repository (`Palawizard/<repo>`), a colour (`crimson`, `magenta`, `cobalt`, `teal`, `violet`, `emerald`, `amber`, used as the tint of its bubble and window), an optional `newUntil` date (a « Nouveau » badge next to its name in the dock, the showcase and its page until that date, midnight UTC; pages render on each request so it goes away on its own), `languages`, the languages of its own interface (`fr`, `en`; for the mod, of its chat messages), an `icon` and a list of `screenshots` (`src` and `alt`), both paths into `src/assets/software/<slug>/` checked at build time. The first screenshot is the one shown next to the download button and in the home lists; the others form the gallery of the program page. The Markdown body of the file is the text of the program page. `requirements` is shown in the "Ce qu'il te faut" block next to the text.
 
 Icons come from each program's repository at its published tag. Screenshots of PalaClips and Pala's Item Clear come from their repositories; the other four were captured from each program's own interface, run in a browser with example data. Each image file carries its origin in its metadata.
 
@@ -75,6 +77,13 @@ Mod jars are named `<artifact>-<version>.jar`, where `artifact` comes from the m
 
 The count shown for a program is the sum of the `download_count` of its GitHub files, over every published release (the client follows the `Link` pagination of the releases list, up to 10 pages, on the API host only). Update manifests (`latest.json`, `latest.yml`, Velopack's `RELEASES` and `releases.<channel>.json`), signatures (`.sig`), `.blockmap` files and checksum files are never counted: the auto-updaters fetch them on every start. For the mod, the Modrinth project `downloads` is added (slug read from the `modrinth` link of the entry), and the CurseForge `downloadCount` only when `CURSEFORGE_API_KEY` is set and the entry has a `curseforgeId`. Store counts use the same cache and saved copies as the releases (`DATA_DIR/modrinth-<slug>.json`, `DATA_DIR/curseforge-<id>.json`); a store that fails is left out of the sum without any message. Without release data, no count is shown.
 
+## Dependencies
+
+What a program needs next to it is offered with a direct download, from its publisher's servers (never served by PalaSoft). `server/dependencies.ts` resolves the links and caches them for 6 hours, with a copy on disk like the releases (`DATA_DIR/vb-cable.json`, `DATA_DIR/modrinth-minecraft-releases.json`, `DATA_DIR/modrinth-<project>-<loader>-<band>.json`); when a source does not answer, the last copy is used, then a fallback.
+
+- VB-CABLE: the newest `VBCABLE_Driver_Pack<n>.zip` linked on `https://vb-audio.com/Cable/` (the page also links an old package). Fallback: Pack46, the package linked on 2026-11-11 (VB-Audio keeps old packages online). `components/CompanionProgram.astro` shows it under the download button of the program page (button, file name, « gratuit (donationware) », link to VB-Audio's site), and, with its install steps (unzip first, `VBCABLE_Setup_x64` as administrator, Install Driver, restart: from the package readme and VB-Audio's forum), in the thank-you window of every download of the program, the quick download dock included (`data-thanks-companion` on the link, a `<template>` per program in the window).
+- Companion mods: the Minecraft releases of each line are the Modrinth releases (no snapshots) inside the line's `minecraftRange` (Maven range); for each one, the newest stable file of the project for that loader. One release: a « Télécharger <mod> » button; several: one button per release (`components/CompanionMods.astro`), releases sharing a file grouped. Releases without a file (Modrinth down, file not published yet) get a link to the project's versions page on Modrinth. The mod picker shows the block of the current loader and line under its button; when the form is sent, the thank-you window shows a copy of it.
+
 ## Downloads
 
 Files are never served by this site. `/software/dl/<slug>` answers `302` to the GitHub download URL of the recommended installer, and `/software/dl/<slug>/<file>` to a file of the latest release, checked against its file list (`404` otherwise). The mod has no single recommended file: its short link leads to its page. When GitHub is down and nothing is saved, both routes send the visitor to the GitHub releases page of the program.
@@ -90,6 +99,7 @@ Files are never served by this site. `/software/dl/<slug>` answers `302` to the 
 | `GITHUB_API_URL` | GitHub API base URL (default `https://api.github.com`), pointed at a local fake by the end-to-end tests |
 | `MODRINTH_API_URL` | Modrinth API base URL (default `https://api.modrinth.com/v2`), same use |
 | `CURSEFORGE_API_URL` | CurseForge API base URL (default `https://api.curseforge.com`), same use |
+| `VB_CABLE_PAGE_URL` | page read to find the newest VB-CABLE package (default `https://vb-audio.com/Cable/`), same use |
 
 ## Pages
 
@@ -114,6 +124,8 @@ When GitHub is down, every page still renders: with a saved copy it shows the sa
 The site is in French and in English. French pages keep their addresses (`/software/...`), English pages live under `/software/en/...`, so each language has its own address for search engines and for shared links. Every page links to both versions with `hreflang` (`x-default` is the French one), and the sitemap lists both.
 
 `middleware.ts` reads the language from the address and puts it in `Astro.locals`. On a French address, a visitor without a saved choice whose browser asks for English, or for another language before French, is sent to the English page with a 302 (`Vary: Accept-Language, Cookie`, not cached). A bare `*` or no `Accept-Language` at all, which is how search engine crawlers ask, gets the French page; an English address is never redirected by the browser language. The header switch (`components/LanguageSwitch.astro`) links to `/software/lang/<fr|en>?next=<page>`, which saves the choice in the `palasoft-lang` cookie (one year, path `/software/`) and goes back to the same page in that language; it works without JavaScript and only accepts a `next` inside `/software/`. A saved choice wins over the browser language on every address. The mod form sends `lang` so that its redirects come back to the page in the right language.
+
+On the English site, a program whose `languages` include `en` carries an « Available in English » badge (`components/LanguageBadge.astro`) in the showcase, its home row and its page; the French site shows none.
 
 Every visible string lives in `src/i18n/fr.ts` and `src/i18n/en.ts` (same keys, checked by a unit test); dates, sizes and counts go through `lib/format.ts` with the page language. Screenshots stay the French captures.
 
