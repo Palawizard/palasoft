@@ -19,7 +19,7 @@ Pala's Item Clear regularly removes the items lying on the ground on your Minecr
 
 1. Choose your server’s loader and Minecraft version, then download the file.
 2. Put the file in the server’s mods folder.
-3. With Fabric, also install Fabric API. On 1.20.1 with Forge or Fabric, also install Architectury API.
+3. With Fabric, also install Fabric API. On 1.20.1 with Forge or Fabric, also install Architectury API. Their download buttons show up under Download once you have made your choice.
 4. Start the server once: it creates the settings file config/palasitemclear.json.
 
 After editing that file, run /palasitemclear reload. Chat messages are in English by default, and you can change all of them.

@@ -5,6 +5,7 @@ order: 3
 repo: Palawizard/layout-manager-2
 color: cobalt
 category: DesktopEnhancementApplication
+languages: ['fr']
 icon: ../../assets/software/layout-manager/icon.svg
 screenshots:
   - src: ../../assets/software/layout-manager/layouts-list.png

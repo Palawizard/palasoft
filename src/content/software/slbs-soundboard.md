@@ -5,6 +5,7 @@ order: 2
 repo: Palawizard/slbs-soundboard
 color: magenta
 category: MultimediaApplication
+languages: ['fr']
 icon: ../../assets/software/slbs-soundboard/icon.svg
 screenshots:
   - src: ../../assets/software/slbs-soundboard/soundboard.png
@@ -16,6 +17,7 @@ screenshots:
 kind: windows
 installerPattern: '^slbs-soundboard_.+_x64\.msi$'
 unsignedInstaller: true
+companion: vb-cable
 requirements:
   - label: VB-CABLE, le câble audio virtuel qui sert de micro
     url: https://vb-audio.com/Cable/
@@ -33,7 +35,7 @@ SLB's Soundboard mélange ton micro et tes sons, puis envoie le tout dans un câ
 
 ## Installer
 
-1. Installe d’abord VB-CABLE, un câble audio virtuel gratuit de VB-Audio (lien dans « ce qu’il te faut »).
+1. Installe d’abord VB-CABLE, un câble audio virtuel gratuit de VB-Audio, avec le bouton sous Télécharger : décompresse le zip, clic droit sur VBCABLE_Setup_x64, « Exécuter en tant qu’administrateur », clique sur Install Driver, puis redémarre ton PC.
 2. Télécharge SLB's Soundboard avec le bouton Télécharger, puis ouvre le fichier pour l’installer.
 3. Dans l’onglet Audio du logiciel, choisis ton micro, puis CABLE Input (VB-Audio Virtual Cable) comme câble virtuel.
 4. Dans Discord ou dans ton jeu, choisis CABLE Output (VB-Audio Virtual Cable) comme micro.

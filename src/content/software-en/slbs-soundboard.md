@@ -17,10 +17,11 @@ SLB's Soundboard mixes your mic and your sounds, then sends everything into a vi
 - You also hear your sounds live, and you can set that volume or mute it.
 - It can start with Windows (Settings tab).
 - It checks for new versions every time it starts and offers to install them.
+- The interface is in French.
 
 ## Install
 
-1. First install VB-CABLE, a free virtual audio cable from VB-Audio (link under “What you need”).
+1. First install VB-CABLE, a free virtual audio cable from VB-Audio, with the button under Download: unzip it, right-click VBCABLE_Setup_x64, “Run as administrator”, click Install Driver, then restart your PC.
 2. Download SLB's Soundboard with the Download button, then open the file to install it.
 3. In the app’s Audio tab, choose your mic, then CABLE Input (VB-Audio Virtual Cable) as the virtual cable.
 4. In Discord or in your game, choose CABLE Output (VB-Audio Virtual Cable) as your mic.
