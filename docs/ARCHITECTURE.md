@@ -125,7 +125,7 @@ The site is in French and in English. French pages keep their addresses (`/softw
 
 `middleware.ts` reads the language from the address and puts it in `Astro.locals`. On a French address, a visitor without a saved choice whose browser asks for English, or for another language before French, is sent to the English page with a 302 (`Vary: Accept-Language, Cookie`, not cached). A bare `*` or no `Accept-Language` at all, which is how search engine crawlers ask, gets the French page; an English address is never redirected by the browser language. The header switch (`components/LanguageSwitch.astro`) links to `/software/lang/<fr|en>?next=<page>`, which saves the choice in the `palasoft-lang` cookie (one year, path `/software/`) and goes back to the same page in that language; it works without JavaScript and only accepts a `next` inside `/software/`. A saved choice wins over the browser language on every address. The mod form sends `lang` so that its redirects come back to the page in the right language.
 
-On the English site, a program whose `languages` include `en` carries an « Available in English » badge (`components/LanguageBadge.astro`) in the showcase, its home row and its page; the French site shows none.
+On the English site, a program whose `languages` include `en` carries an « Available in English » badge (`components/LanguageBadge.astro`) in the showcase, its home row and its page; the others carry « Only in French for now » at the same places, in the soft ink. The French site shows neither.
 
 Every visible string lives in `src/i18n/fr.ts` and `src/i18n/en.ts` (same keys, checked by a unit test); dates, sizes and counts go through `lib/format.ts` with the page language. Screenshots stay the French captures.
 
