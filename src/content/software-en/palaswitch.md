@@ -30,6 +30,7 @@ palaswitch switches the profile of your Logitech gaming mouse without opening G 
 - A wireless mouse that hasn’t moved for a few minutes goes to sleep and stops answering: move it, then try again.
 - Tested with a G502 X PLUS, with the cable and with the wireless receiver. Other Logitech mice that keep their profiles in their own memory should work, but none has been tried yet.
 - Shortcuts don’t work in a game run as administrator.
-- It updates itself: once a day, it checks for a new version and offers it in its menu. That’s the only time it goes online.
+- Some antivirus programs block the installer or the small launcher it puts in the install folder, because they aren’t signed. If yours does, allow the `%LOCALAPPDATA%\palaswitch` folder.
+- Updates: once a day, it checks for a new version and offers it in its menu. Pick it and it installs the update and restarts. That’s the only time it goes online.
 - The interface follows the language of Windows: French or English.
 - To uninstall it: Settings, Apps, Installed apps. Your settings stay in `%APPDATA%\palaswitch`; delete that folder to remove them too.

@@ -44,6 +44,7 @@ palaswitch change le profil de ta souris de jeu Logitech sans ouvrir G HUB : un 
 - Une souris sans fil qui n’a pas bougé depuis quelques minutes se met en veille et ne répond plus : bouge-la, puis réessaie.
 - Testé avec une G502 X PLUS, avec le câble et avec le récepteur sans fil. Les autres souris Logitech qui gardent leurs profils dans leur mémoire devraient marcher, mais aucune n’a encore été essayée.
 - Les raccourcis ne marchent pas dans un jeu lancé en administrateur.
-- Il se met à jour tout seul : une fois par jour, il regarde s’il existe une nouvelle version et te la propose dans son menu. C’est le seul moment où il va sur internet.
+- Certains antivirus bloquent l’installateur ou le petit lanceur qu’il pose dans le dossier d’installation, parce qu’ils ne sont pas signés. Si le tien le fait, autorise le dossier `%LOCALAPPDATA%\palaswitch`.
+- Mises à jour : une fois par jour, il regarde s’il existe une nouvelle version et te la propose dans son menu. Tu la choisis, il l’installe et redémarre. C’est le seul moment où il va sur internet.
 - L’interface suit la langue de Windows : français ou anglais.
 - Pour le désinstaller : Paramètres, Applications, Applications installées. Tes réglages restent dans `%APPDATA%\palaswitch` ; supprime ce dossier pour les effacer aussi.
