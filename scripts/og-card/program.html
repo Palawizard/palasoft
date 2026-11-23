@@ -117,6 +117,19 @@ const programs = {
     kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
     shots: landscape('stream-history.png', 'live-marks.png'),
   },
+  palaswitch: {
+    name: 'palaswitch', tint: '#f26b38',
+    tagline: {
+      fr: 'Change le profil de ta souris Logitech d’un clic ou d’un raccourci clavier, sans ouvrir G HUB.',
+      en: 'Switches the profile of your Logitech mouse with a click or a keyboard shortcut, without opening G HUB.',
+    },
+    kind: { fr: 'Pour Windows · gratuit', en: 'For Windows · free' },
+    // The settings window behind, and in front the tray menu with its icon on the taskbar.
+    shots: [
+      { file: 'settings-window.png', width: 500, left: 660, top: 54, turn: 3 },
+      { file: 'tray-menu.png', width: 300, left: 846, top: 318, turn: -4 },
+    ],
+  },
 };
 const [slug, lang] = (() => {
   const card = new URLSearchParams(location.search).get('card') ?? 'chest-counter-fr';
