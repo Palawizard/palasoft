@@ -24,6 +24,7 @@ describe('pickInstaller', () => {
     ['layout-manager', 'Palawizard/layout-manager-2', 'Layout.Manager.2_0.1.0-beta.2_x64-setup.exe', 4613312],
     ['silence-splitter', 'Palawizard/silence-splitter', 'Silence-Splitter-1.0.0-beta.2-x64-setup.exe', 184160999],
     ['timestamper', 'Palawizard/timestamper', 'Timestamper_0.1.0-beta.1_x64-setup.exe', 3023641],
+    ['palaswitch', 'Palawizard/palaswitch', 'palaswitch-win-Setup.exe', 12232003],
   ])('picks the installer of %s from its entry rule', (slug, repo, name, size) => {
     const installer = pickInstaller(latestOf(repo), installerPatternOf(slug));
     expect(installer?.name).toBe(name);

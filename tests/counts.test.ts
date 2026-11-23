@@ -38,6 +38,7 @@ describe('githubDownloads', () => {
     ['Palawizard/silence-splitter', 2],
     ['Palawizard/timestamper', 2],
     ['Palawizard/PalasItemClear', 168],
+    ['Palawizard/palaswitch', 3],
   ])('adds up the real downloads of every release of %s', (repo, expected) => {
     expect(githubDownloads(releasesSchema.parse(releasesFixture(repo)))).toBe(expected);
   });
