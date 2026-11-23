@@ -88,7 +88,7 @@ describe('what a program needs next to it', () => {
 
   it('marks the programs with an English interface on the English site only', async () => {
     const english = await html(site, '/software/en/');
-    expect(english.match(/class="language-badge"/g)).toHaveLength(5);
+    expect(english.match(/class="language-badge"/g)).toHaveLength(6);
     expect(english.match(/class="language-badge french-only"/g)).toHaveLength(2);
     expect(await html(site, '/software/')).not.toContain('class="language-badge"');
     expect(await html(site, '/software/en/timestamper')).toContain('Available in English');

@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { get, startFakeGitHub, startSite, type FakeGitHub, type Site } from './harness.ts';
 
-const SLUGS = ['', 'palaclips', 'slbs-soundboard', 'layout-manager', 'silence-splitter', 'timestamper', 'palas-item-clear', 'chest-counter'];
+const SLUGS = ['', 'palaclips', 'slbs-soundboard', 'layout-manager', 'silence-splitter', 'timestamper', 'palas-item-clear', 'chest-counter', 'palaswitch'];
 const french = (slug: string): string => `/software/${slug}`;
 const english = (slug: string): string => (slug === '' ? '/software/en/' : `/software/en/${slug}`);
 

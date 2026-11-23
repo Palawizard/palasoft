@@ -13,6 +13,7 @@ const PAGES = [
   '/software/timestamper',
   '/software/palas-item-clear',
   '/software/chest-counter',
+  '/software/palaswitch',
 ];
 
 const html = async (site: Site, path: string): Promise<{ status: number; body: string }> => {
@@ -148,7 +149,7 @@ describe('pages on the built server', () => {
     expect(card.status).toBe(200);
     expect(card.headers.get('content-type')).toContain('image/jpeg');
     // Every program has its own card, in the language of the page.
-    for (const slug of ['chest-counter', 'palaclips', 'slbs-soundboard', 'layout-manager', 'silence-splitter', 'timestamper', 'palas-item-clear']) {
+    for (const slug of ['chest-counter', 'palaclips', 'slbs-soundboard', 'layout-manager', 'silence-splitter', 'timestamper', 'palas-item-clear', 'palaswitch']) {
       for (const [path, image] of [
         [`/software/${slug}`, `/software/og/${slug}-fr.jpg`],
         [`/software/en/${slug}`, `/software/og/${slug}-en.jpg`],
@@ -163,7 +164,7 @@ describe('pages on the built server', () => {
       }
     }
     // The home page keeps the PalaSoft card.
-    expect((await html(site, '/software/')).body).toContain('<meta property="og:image" content="https://palawi.fr/software/og-palasoft.jpg?v=2"');
+    expect((await html(site, '/software/')).body).toContain('<meta property="og:image" content="https://palawi.fr/software/og-palasoft.jpg?v=3"');
     const sitemap = await html(site, '/software/sitemap.xml');
     expect(sitemap.status).toBe(200);
     for (const path of PAGES) expect(sitemap.body).toContain(`<loc>https://palawi.fr${path}</loc>`);

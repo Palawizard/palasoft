@@ -38,7 +38,7 @@ const software = await allSoftware();
 const mod = software.find((entry) => entry.data.kind === 'minecraft-mod');
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const share: ShareImage = image ?? {
-  src: assetPath('og-palasoft.jpg?v=2'),
+  src: assetPath('og-palasoft.jpg?v=3'),
   width: 1200,
   height: 630,
   alt: t.layout.shareAlt,
